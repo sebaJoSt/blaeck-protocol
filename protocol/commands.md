@@ -34,4 +34,12 @@ For example, `ACTIVATE` with 1000 ms:
 
 ## Device Response
 
-While commands are ASCII text, the device responds with binary [frames](frame-format). Each response is wrapped in the standard envelope (`<BLAECK:` … `/BLAECK>`) and identified by a [Message Key](frames). The specific frame types are listed in the Response column above.
+While commands are ASCII text, the device responds with binary [frames](frame-format). For example, requesting signal schema with Message ID `1`:
+
+```
+Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
+Response: <BLAECK: B0 : 01 00 00 00 : … /BLAECK>\r\n
+                   Key  Message ID    Frame
+```
+
+The device echoes the Message ID back, allowing the host to correlate requests with responses. See [Frames](frames) for all frame types.
