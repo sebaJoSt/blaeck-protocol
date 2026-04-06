@@ -27,7 +27,7 @@ Parameters are comma-separated integers. All built-in commands use a 4-byte Mess
 All built-in commands encode their uint32 parameter as four comma-separated bytes in little-endian order:
 
 ```
-<COMMAND,Byte0,Byte1,Byte2,Byte3>
+<BLAECK.COMMAND,Byte0,Byte1,Byte2,Byte3>
 ```
 
 For commands that take a Message ID, the device echoes it back in the response [frame](frame-format), allowing the host to correlate requests with responses.
