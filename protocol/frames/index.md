@@ -34,4 +34,4 @@ Each frame type is identified by its message key — a single byte in the [frame
 
 | Key | Hex | Description |
 |-----|-----|-------------|
-| [C0](control#c0--restart-notification-0xc0) | `0xC0` | Sent when a device restarts |
+| [C0](control#c0--restart-notification-0xc0) | `0xC0` | Notifies that a device restarted |

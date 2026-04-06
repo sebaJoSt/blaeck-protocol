@@ -6,7 +6,7 @@ sidebar_position: 4
 
 ## C0 — Restart Notification (`0xC0`)
 
-Sent when a device restarts. Allows the host to re-request the symbol list and reset state. Payload follows the same layout as [B3](devices#b3--devices-0xb3):
+Notifies that a device restarted. Same layout as [B3](devices#b3--devices-0xb3).
 
 ```mermaid
 ---
