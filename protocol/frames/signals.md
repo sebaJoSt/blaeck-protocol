@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## B0 — Symbol List (`0xB0`)
 
-Enumerates all signals the device exposes. Sent in response to a host request.
+Signal schema: names, types, master/slave config.
 
 ```mermaid
 ---

@@ -10,7 +10,7 @@ Each frame type is identified by its message key — a single byte in the [frame
 
 | Key | Hex | Description |
 |-----|-----|-------------|
-| [B0](signals#b0--symbol-list-0xb0) | `0xB0` | Enumerates all signals the device exposes |
+| [B0](signals#b0--symbol-list-0xb0) | `0xB0` | Signal schema: names, types, master/slave config |
 
 ## Devices
 
