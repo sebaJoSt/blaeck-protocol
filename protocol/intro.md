@@ -22,7 +22,7 @@ Every Blaeck message is wrapped in a fixed binary envelope:
 
 - **Header** (`<BLAECK:`) and **footer** (`/BLAECK>\r\n`) are ASCII delimiters.
 - **Message Key** identifies the payload type (e.g., `0xD2` for data with 8-byte timestamps).
-- **Message ID** is a uint32 (little-endian) echoed from the host request or set by the implementor.
+- **Message ID** is a uint32 (little-endian) echoed from the host request or set by the application.
 - **Elements** carry the key-specific payload.
 
 See [Frame Format](frame-format) for the full binary layout, and [Message Keys](message-keys) for all key definitions.
