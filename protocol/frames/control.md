@@ -25,7 +25,7 @@ packet-beta
   16-19: "LibName"
 ```
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | MasterSlaveConfig | 1 byte | uint8 |
 | SlaveID | 1 byte | uint8 |

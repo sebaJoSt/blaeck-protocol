@@ -24,7 +24,7 @@ packet-beta
 
 **Element layout:**
 
-| Field | Size | Type | Notes |
+| Element | Size | Type | Notes |
 |-------|------|------|-------|
 | **SymbolID** | 2 bytes | uint16 | |
 | **DATA** | variable | Per [DTYPE](../datatypes) | |
@@ -56,7 +56,7 @@ packet-beta
 
 **Element layout:**
 
-| Field | Size | Type | Notes |
+| Element | Size | Type | Notes |
 |-------|------|------|-------|
 | RestartFlag | 1 byte | uint8 | `0x01` on first frame after restart |
 | TimestampMode | 1 byte | uint8 | `0` = none, `1` = micros, `2` = RTC/UNIX |
@@ -93,7 +93,7 @@ packet-beta
 
 **Element layout:**
 
-| Field | Size | Type | Notes |
+| Element | Size | Type | Notes |
 |-------|------|------|-------|
 | RestartFlag | 1 byte | uint8 | `0x01` on first frame after restart |
 | SchemaHash | 2 bytes | uint16 | [CRC16-CCITT](../schema-hash) over signal schema |

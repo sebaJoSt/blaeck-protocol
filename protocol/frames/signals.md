@@ -24,7 +24,7 @@ packet-beta
 
 **Element layout** (repeated per signal):
 
-| Field | Size | Type | Notes |
+| Element | Size | Type | Notes |
 |-------|------|------|-------|
 | MasterSlaveConfig | 1 byte | uint8 | `0x01` = master/local, `0x02` = slave/upstream |
 | SlaveID | 1 byte | uint8 | `0x00` for master |

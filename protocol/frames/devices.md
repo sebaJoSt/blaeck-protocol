@@ -26,7 +26,7 @@ packet-beta
 
 **Element layout** (repeated per device):
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | MasterSlaveConfig | 1 byte | uint8 |
 | SlaveID | 1 byte | uint8 |
@@ -60,7 +60,7 @@ packet-beta
 
 **Element layout** (repeated per device):
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | MasterSlaveConfig | 1 byte | uint8 |
 | SlaveID | 1 byte | uint8 |
@@ -99,7 +99,7 @@ packet-beta
 
 **Element layout** (repeated per device):
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | SlaveID_hi | 1 byte | uint8 (always `0x00`) |
 | SlaveID_lo | 1 byte | uint8 (always `0x00`) |
@@ -139,7 +139,7 @@ packet-beta
 
 **Element layout** (repeated per device):
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | SlaveID_hi | 1 byte | uint8 (always `0x00`) |
 | SlaveID_lo | 1 byte | uint8 (always `0x00`) |
@@ -182,7 +182,7 @@ packet-beta
 
 **Element layout** (repeated per device):
 
-| Field | Size | Type |
+| Element | Size | Type |
 |-------|------|------|
 | SlaveID_hi | 1 byte | uint8 (always `0x00`) |
 | SlaveID_lo | 1 byte | uint8 (always `0x00`) |
