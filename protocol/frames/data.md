@@ -13,13 +13,13 @@ Data message without timestamps.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 10
 ---
 packet-beta
-  0-2: "SymbolID"
-  3-8: "DATA (var)"
-  9-11: "Status"
-  12-15: "CRC32"
+  0-1: "SymbolID"
+  2-3: "DATA"
+  4-6: "StatusByte"
+  7-8: "CRC32"
 ```
 
 | Element | Size | Type | Notes |
@@ -40,16 +40,16 @@ Data message with 4-byte timestamps.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 10
 ---
 packet-beta
-  0-2: "Restart"
-  3-5: "TsMode"
-  6-9: "Timestamp (4B)"
-  10-12: "SymbolID"
-  13-15: "DATA (var)"
-  16-18: "Status"
-  19-22: "CRC32"
+  0-2: "RestartFlag"
+  3-6: "TimestampMode"
+  7-9: "Timestamp"
+  10-11: "SymbolID"
+  12-13: "DATA"
+  14-16: "StatusByte"
+  17-18: "CRC32"
 ```
 
 | Element | Size | Type | Notes |
@@ -73,18 +73,18 @@ Data message with 8-byte timestamps, schema hash, and status payload.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 13
 ---
 packet-beta
-  0-2: "Restart"
+  0-2: "RestartFlag"
   3-5: "SchemaHash"
-  6-8: "TsMode"
-  9-12: "Timestamp (8B)"
-  13-15: "SymbolID"
-  16-19: "DATA (var)"
-  20-22: "Status"
-  23-26: "StatusPayload"
-  27-30: "CRC32"
+  6-9: "TimestampMode"
+  10-12: "Timestamp"
+  13-14: "SymbolID"
+  15-16: "DATA"
+  17-19: "StatusByte"
+  20-23: "StatusPayload"
+  24-25: "CRC32"
 ```
 
 | Element | Size | Type | Notes |

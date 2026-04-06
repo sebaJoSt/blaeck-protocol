@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Status Codes
 
-The [StatusByte](elements#statusbyte) in [D2](frames/data#d2--data-0xd2) data frames indicates the device or hub status at the time of transmission. Status codes are split into two ranges.
+The [StatusByte](elements) in [D2](frames/data#d2--data-0xd2) data frames indicates the device or hub status at the time of transmission. Status codes are split into two ranges.
 
 ## Device-Level Codes (0x00–0x7F)
 
@@ -17,7 +17,7 @@ These codes originate from the physical device.
 
 ### 0x01 — I2C Slave Skipped
 
-When a slave device fails to respond over I2C, the master sets `StatusByte = 0x01` and encodes diagnostic information in the [StatusPayload](elements#statuspayload):
+When a slave device fails to respond over I2C, the master sets `StatusByte = 0x01` and encodes diagnostic information in the [StatusPayload](elements):
 
 | Byte | Content | Description |
 |------|---------|-------------|

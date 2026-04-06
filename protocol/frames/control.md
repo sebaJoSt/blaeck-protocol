@@ -13,16 +13,16 @@ Sent when a device restarts. Allows the host to re-request the symbol list and r
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 20
 ---
 packet-beta
-  0-2: "MSC"
-  3-5: "SlaveID"
-  6-9: "DeviceName"
-  10-11: "HWVer"
-  12-13: "FWVer"
-  14-15: "LibVer"
-  16-19: "LibName"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
+  18-19: "LibName"
 ```
 
 | Element | Size | Type |

@@ -13,13 +13,13 @@ Enumerates all signals the device exposes. Sent in response to a host request.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 11
 ---
 packet-beta
-  0-2: "MSC"
-  3-5: "SlaveID"
-  6-12: "SymbolName"
-  13-15: "DTYPE"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
+  6-8: "SymbolName"
+  9-10: "DTYPE"
 ```
 
 | Element | Size | Type | Notes |

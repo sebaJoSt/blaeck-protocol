@@ -13,15 +13,15 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 18
 ---
 packet-beta
-  0-2: "MSC"
-  3-5: "SlaveID"
-  6-9: "DeviceName"
-  10-11: "HWVer"
-  12-13: "FWVer"
-  14-15: "LibVer"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
 ```
 
 | Element | Size | Type |
@@ -44,16 +44,16 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 20
 ---
 packet-beta
-  0-2: "MSC"
-  3-5: "SlaveID"
-  6-9: "DeviceName"
-  10-11: "HWVer"
-  12-13: "FWVer"
-  14-15: "LibVer"
-  16-19: "LibName"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
+  18-19: "LibName"
 ```
 
 | Element | Size | Type |
@@ -79,18 +79,18 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 18
 ---
 packet-beta
-  0-1: "ID_hi"
-  2-3: "ID_lo"
-  4-7: "DeviceName"
-  8-9: "HWVer"
-  10-11: "FWVer"
-  12-13: "LibVer"
-  14-15: "LibName"
-  16-19: "ClientNo"
-  20-25: "DataEnabled"
+  0-2: "SlaveID_hi"
+  3-5: "SlaveID_lo"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
+  18-19: "LibName"
+  20-21: "ClientNo"
+  22-25: "ClientDataEnabled"
 ```
 
 | Element | Size | Type |
@@ -116,19 +116,19 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 18
 ---
 packet-beta
-  0-1: "ID_hi"
-  2-3: "ID_lo"
-  4-7: "DeviceName"
-  8-9: "HWVer"
-  10-11: "FWVer"
-  12-13: "LibVer"
-  14-15: "LibName"
-  16-19: "ClientNo"
-  20-23: "DataEnabled"
-  24-31: "ServerRestarted"
+  0-2: "SlaveID_hi"
+  3-5: "SlaveID_lo"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
+  18-19: "LibName"
+  20-21: "ClientNo"
+  22-25: "ClientDataEnabled"
+  26-29: "ServerRestarted"
 ```
 
 | Element | Size | Type |
@@ -155,21 +155,21 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 16
+    bitsPerRow: 18
 ---
 packet-beta
-  0-1: "ID_hi"
-  2-3: "ID_lo"
-  4-7: "DeviceName"
-  8-9: "HWVer"
-  10-11: "FWVer"
-  12-13: "LibVer"
-  14-15: "LibName"
-  16-19: "ClientNo"
-  20-23: "DataEnabled"
-  24-27: "ServerRestarted"
-  28-31: "DeviceType"
-  32-35: "Parent"
+  0-2: "SlaveID_hi"
+  3-5: "SlaveID_lo"
+  6-8: "DeviceName"
+  9-11: "HWVersion"
+  12-14: "FWVersion"
+  15-17: "LibVersion"
+  18-19: "LibName"
+  20-21: "ClientNo"
+  22-25: "ClientDataEnabled"
+  26-29: "ServerRestarted"
+  30-32: "DeviceType"
+  33-34: "Parent"
 ```
 
 | Element | Size | Type |
