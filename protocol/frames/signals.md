@@ -22,9 +22,9 @@ packet-beta
   9-10: "DTYPE"
 ```
 
-| Element | Size | Type | Notes |
-|-------|------|------|-------|
-| MasterSlaveConfig | 1 byte | uint8 | `0x01` = master/local, `0x02` = slave/upstream |
-| SlaveID | 1 byte | uint8 | `0x00` for master |
-| SymbolName | variable | null-terminated string | Signal name |
-| DTYPE | 1 byte | uint8 | [Datatype code](../datatypes) |
+| Element | Size | Type |
+|-------|------|------|
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
+| SymbolName | variable | null-terminated string |
+| DTYPE | 1 byte | uint8 |

@@ -22,12 +22,12 @@ packet-beta
   7-8: "CRC32"
 ```
 
-| Element | Size | Type | Notes |
-|-------|------|------|-------|
-| **SymbolID** | 2 bytes | uint16 | |
-| **DATA** | variable | Per [DTYPE](../datatypes) | |
-| StatusByte | 1 byte | uint8 | |
-| CRC32 | 4 bytes | uint32 | Scope: MsgKey through last DATA byte (StatusByte **excluded**) |
+| Element | Size | Type |
+|-------|------|------|
+| **SymbolID** | 2 bytes | uint16 |
+| **DATA** | variable | per [DTYPE](../datatypes) |
+| StatusByte | 1 byte | uint8 |
+| CRC32 | 4 bytes | uint32 |
 
 ---
 
@@ -52,15 +52,15 @@ packet-beta
   17-18: "CRC32"
 ```
 
-| Element | Size | Type | Notes |
-|-------|------|------|-------|
-| RestartFlag | 1 byte | uint8 | `0x01` on first frame after restart |
-| TimestampMode | 1 byte | uint8 | `0` = none, `1` = micros, `2` = RTC/UNIX |
-| Timestamp | 4 bytes | uint32 | **Conditional:** only if TimestampMode > 0 |
-| **SymbolID** | 2 bytes | uint16 | |
-| **DATA** | variable | Per [DTYPE](../datatypes) | |
-| StatusByte | 1 byte | uint8 | |
-| CRC32 | 4 bytes | uint32 | Scope: MsgKey through last DATA byte (StatusByte **excluded**) |
+| Element | Size | Type |
+|-------|------|------|
+| RestartFlag | 1 byte | uint8 |
+| TimestampMode | 1 byte | uint8 |
+| Timestamp | 4 bytes | uint32 |
+| **SymbolID** | 2 bytes | uint16 |
+| **DATA** | variable | per [DTYPE](../datatypes) |
+| StatusByte | 1 byte | uint8 |
+| CRC32 | 4 bytes | uint32 |
 
 ---
 
@@ -87,16 +87,16 @@ packet-beta
   24-25: "CRC32"
 ```
 
-| Element | Size | Type | Notes |
-|-------|------|------|-------|
-| RestartFlag | 1 byte | uint8 | `0x01` on first frame after restart |
-| SchemaHash | 2 bytes | uint16 | [CRC16-CCITT](../schema-hash) over signal schema |
-| TimestampMode | 1 byte | uint8 | `0` = none, `1` = micros, `2` = UNIX |
-| Timestamp | 8 bytes | uint64 | **Conditional:** only present if TimestampMode > 0 |
-| **SymbolID** | 2 bytes | uint16 | Signal index |
-| **DATA** | variable | — | Value bytes, size per [datatype](../datatypes) |
-| StatusByte | 1 byte | uint8 | [Status code](../status-codes) |
-| StatusPayload | 4 bytes | — | Status-specific data |
-| CRC32 | 4 bytes | uint32 | [CRC32](../crc32) over MsgKey through StatusPayload |
+| Element | Size | Type |
+|-------|------|------|
+| RestartFlag | 1 byte | uint8 |
+| SchemaHash | 2 bytes | uint16 |
+| TimestampMode | 1 byte | uint8 |
+| Timestamp | 8 bytes | uint64 |
+| **SymbolID** | 2 bytes | uint16 |
+| **DATA** | variable | per [DTYPE](../datatypes) |
+| StatusByte | 1 byte | uint8 |
+| StatusPayload | 4 bytes | raw bytes |
+| CRC32 | 4 bytes | uint32 |
 
 See [Timestamps](../timestamps) for timestamp modes, [Status Codes](../status-codes) for status values, and [CRC32](../crc32) for the checksum algorithm.
