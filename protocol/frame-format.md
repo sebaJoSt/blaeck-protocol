@@ -48,21 +48,4 @@ The Message ID is a uint32 value included in every frame. For request/response e
 
 For unsolicited frames (e.g., timed data streaming, restart notifications), the Message ID is application-defined.
 
-## Example
 
-A minimal frame with message key `0xD2`, Message ID `1`, and a 20-byte elements payload:
-
-```
-Offset  Hex                                          ASCII
-------  -------------------------------------------  --------
-0x00    3C 42 4C 41 45 43 4B 3A                      <BLAECK:
-0x08    D2                                           .
-0x09    3A                                           :
-0x0A    01 00 00 00                                  ....
-0x0E    3A                                           :
-0x0F    [20 bytes of elements]                       ........
-0x23    2F 42 4C 41 45 43 4B 3E                      /BLAECK>
-0x2B    0D 0A                                        \r\n
-```
-
-See [Elements](elements) for the payload definitions and [Decoding Examples](decoding-examples) for fully annotated hex dumps.
