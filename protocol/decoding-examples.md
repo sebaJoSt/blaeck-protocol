@@ -26,7 +26,7 @@ A device with two signals: `temperature` (float, DTYPE 8) and `humidity` (unsign
 | `0x00` | `3C 42 4C 41 45 43 4B 3A` | Header | `<BLAECK:` |
 | `0x08` | `B0` | Message Key | `0xB0` — Symbol List |
 | `0x09` | `3A` | Separator | `:` |
-| `0x0A` | `01 00 00 00` | Message ID | `1` (uint32 LE) |
+| `0x0A` | `01 00 00 00` | Message ID | `1` (uint32) |
 | `0x0E` | `3A` | Separator | `:` |
 | | | **Signal 1** | |
 | `0x0F` | `01` | MasterSlaveConfig | `0x01` — master |
@@ -74,19 +74,19 @@ Using the schema from Example 1 (two signals: float + unsigned short). Timestamp
 | `0x00` | `3C 42 4C 41 45 43 4B 3A` | Header | `<BLAECK:` |
 | `0x08` | `D2` | Message Key | `0xD2` — Data (8B timestamps) |
 | `0x09` | `3A` | Separator | `:` |
-| `0x0A` | `02 00 00 00` | Message ID | `2` (uint32 LE) |
+| `0x0A` | `02 00 00 00` | Message ID | `2` (uint32) |
 | `0x0E` | `3A` | Separator | `:` |
 | | | **Control Fields** | |
 | `0x0F` | `00` | RestartFlag | `0x00` — not a restart |
-| `0x10` | `A1 B2` | SchemaHash | `0xB2A1` (uint16 LE) |
+| `0x10` | `A1 B2` | SchemaHash | `0xB2A1` (uint16) |
 | `0x12` | `01` | TimestampMode | `1` — MICROS |
-| `0x13` | `40 42 0F 00 00 00 00 00` | Timestamp | `1,000,000` µs (uint64 LE) |
+| `0x13` | `40 42 0F 00 00 00 00 00` | Timestamp | `1,000,000` µs (uint64) |
 | | | **Signal 1: temperature (float)** | |
-| `0x1B` | `00 00` | SymbolID | `0` (uint16 LE) |
-| `0x1D` | `00 00 C0 41` | DATA | `24.0` (float LE, `0x41C00000`) |
+| `0x1B` | `00 00` | SymbolID | `0` (uint16) |
+| `0x1D` | `00 00 C0 41` | DATA | `24.0` (float, `0x41C00000`) |
 | | | **Signal 2: humidity (unsigned short)** | |
-| `0x21` | `01 00` | SymbolID | `1` (uint16 LE) |
-| `0x23` | `E8 03` | DATA | `1000` (uint16 LE) |
+| `0x21` | `01 00` | SymbolID | `1` (uint16) |
+| `0x23` | `E8 03` | DATA | `1000` (uint16) |
 | | | **Integrity** | |
 | `0x25` | `00` | StatusByte | `0x00` — Normal |
 | `0x26` | `00 00 00 00` | StatusPayload | No additional status data |

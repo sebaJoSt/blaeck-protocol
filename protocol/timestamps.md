@@ -20,8 +20,8 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 
 | Message Key | Timestamp Size | Type |
 |-------------|---------------|------|
-| [D1](frames/data#d1--data-0xd1) | 4 bytes | uint32, little-endian |
-| [D2](frames/data#d2--data-0xd2) | 8 bytes | uint64, little-endian |
+| [D1](frames/data#d1--data-0xd1) | 4 bytes | uint32 |
+| [D2](frames/data#d2--data-0xd2) | 8 bytes | uint64 |
 
 ## Position in Frame
 

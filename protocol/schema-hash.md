@@ -16,7 +16,7 @@ When a device's signal schema changes (signals added, removed, renamed, or retyp
 |----------|-------|
 | Algorithm | CRC16-CCITT |
 | Size | 2 bytes |
-| Type | uint16, little-endian |
+| Type | uint16 |
 
 The hash is computed over the **signal names and datatype codes** that make up the schema.
 

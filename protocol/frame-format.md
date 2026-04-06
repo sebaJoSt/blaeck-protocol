@@ -34,7 +34,7 @@ packet-beta
 | Header | `<BLAECK:` | 8 bytes | ASCII `3C 42 4C 41 45 43 4B 3A` |
 | Message Key | Single byte (e.g. `0xD2`) | 1 byte | Binary |
 | Separator | `:` | 1 byte | ASCII `0x3A` |
-| Message ID | Monotonic counter | 4 bytes | uint32, little-endian |
+| Message ID | Monotonic counter | 4 bytes | uint32 |
 | Separator | `:` | 1 byte | ASCII `0x3A` |
 | Elements | Key-specific payload | variable | See [Frames](frames) |
 | Footer | `/BLAECK>` | 8 bytes | ASCII `2F 42 4C 41 45 43 4B 3E` |

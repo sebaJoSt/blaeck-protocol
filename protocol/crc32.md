@@ -16,7 +16,7 @@ Data frames use a CRC32 checksum to verify payload integrity. The algorithm is s
 | Reflect Input | `true` |
 | Reflect Output | `true` |
 | Size | 4 bytes |
-| Byte Order | Little-endian |
+| Byte Order | See [Frame Format](frame-format) |
 
 This is the same CRC-32 used by Ethernet, PKZIP, and many other protocols (often called CRC-32b or CRC-32/ISO-HDLC).
 
