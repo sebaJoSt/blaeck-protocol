@@ -31,3 +31,7 @@ For example, `ACTIVATE` with 1000 ms:
 ```
 <BLAECK.ACTIVATE,232,3,0,0>
 ```
+
+## Device Response
+
+While commands are ASCII text, the device responds with binary [frames](frame-format). Each response is wrapped in the standard envelope (`<BLAECK:` … `/BLAECK>`) and identified by a [Message Key](frames). The specific frame types are listed in the Response column above.
