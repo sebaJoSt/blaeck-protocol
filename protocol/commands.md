@@ -44,7 +44,6 @@ Starting timed data streaming with an interval of 1000 ms:
 Command:   <BLAECK.ACTIVATE,232,3,0,0>
 Responses: <BLAECK: B1 : E8 03 00 00 : … /BLAECK>\r\n
                     Key  Message ID    Frame
-           <BLAECK: B1 : E8 03 00 00 : … /BLAECK>\r\n
            …
 ```
 
