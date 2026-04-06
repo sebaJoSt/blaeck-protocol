@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Datatypes
 
-The DTYPE code in [B0 (Symbol List)](message-keys#b0--symbol-list-0xb0) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](message-keys#d2--data-0xd2).
+The DTYPE code in [B0 (Symbol List)](frames/signals#b0--symbol-list-0xb0) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](frames/data#d2--data-0xd2).
 
 ## Type Table
 
@@ -52,4 +52,4 @@ On 16-bit AVR platforms, `double` is actually 4 bytes (identical to `float`). Th
 ## See Also
 
 - [Elements](elements) — DTYPE field definition
-- [Message Keys](message-keys) — B0 and D2 payload layouts
+- [Frames](frames) — B0 and D2 payload layouts

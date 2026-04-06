@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Frame Format
 
-Every Blaeck message is wrapped in a fixed binary envelope. The envelope is identical across all [message keys](message-keys) and all library versions.
+Every Blaeck message is wrapped in a fixed binary envelope. The envelope is identical across all [frame types](frames) and all library versions.
 
 ## Structure
 
@@ -36,7 +36,7 @@ packet-beta
 | Separator | `:` | 1 byte | ASCII `0x3A` |
 | Message ID | Monotonic counter | 4 bytes | uint32, little-endian |
 | Separator | `:` | 1 byte | ASCII `0x3A` |
-| Elements | Key-specific payload | variable | See [Message Keys](message-keys) |
+| Elements | Key-specific payload | variable | See [Frames](frames) |
 | Footer | `/BLAECK>` | 8 bytes | ASCII `2F 42 4C 41 45 43 4B 3E` |
 | EOT | `\r\n` | 2 bytes | ASCII `0x0D 0x0A` |
 

@@ -85,6 +85,6 @@ def verify_d2_crc(msg_key_byte, elements_without_crc):
 
 ## See Also
 
-- [Message Keys](message-keys) — D2 payload layout
-- [Message Keys](message-keys) — B1 and D1 CRC scope
+- [Frames](frames) — D2 payload layout
+- [Frames](frames) — B1 and D1 CRC scope
 - [Status Codes](status-codes) — StatusByte values included in D2 CRC

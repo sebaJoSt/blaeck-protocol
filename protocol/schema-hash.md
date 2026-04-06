@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # Schema Hash
 
-The **SchemaHash** is a 2-byte field in [D2](message-keys#d2--data-0xd2) data frames that allows receivers to detect signal schema changes without requiring a full [B0 (Symbol List)](message-keys#b0--symbol-list-0xb0) retransmission.
+The **SchemaHash** is a 2-byte field in [D2](frames/data#d2--data-0xd2) data frames that allows receivers to detect signal schema changes without requiring a full [B0 (Symbol List)](frames/signals#b0--symbol-list-0xb0) retransmission.
 
 ## Purpose
 
@@ -39,5 +39,5 @@ The SchemaHash immediately follows the RestartFlag byte and precedes the Timesta
 ## See Also
 
 - [Elements](elements) — SchemaHash field definition
-- [Message Keys](message-keys) — D2 payload layout
+- [Frames](frames) — D2 payload layout
 - [CRC32](crc32) — Frame integrity checksum (separate from SchemaHash)

@@ -19,8 +19,8 @@
         },
         {
           "type": "link",
-          "label": "Message Keys",
-          "href": "/blaeck-protocol/protocol/message-keys"
+          "label": "Frames",
+          "href": "/blaeck-protocol/protocol/frames"
         },
         {
           "type": "link",

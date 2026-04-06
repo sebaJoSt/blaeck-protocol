@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Status Codes
 
-The [StatusByte](elements#statusbyte) in [D2](message-keys#d2--data-0xd2) data frames indicates the device or hub status at the time of transmission. Status codes are split into two ranges.
+The [StatusByte](elements#statusbyte) in [D2](frames/data#d2--data-0xd2) data frames indicates the device or hub status at the time of transmission. Status codes are split into two ranges.
 
 ## Device-Level Codes (0x00–0x7F)
 

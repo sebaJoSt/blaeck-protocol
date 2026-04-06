@@ -20,8 +20,8 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 
 | Message Key | Timestamp Size | Type |
 |-------------|---------------|------|
-| [D1](message-keys#d1--data-0xd1) | 4 bytes | uint32, little-endian |
-| [D2](message-keys#d2--data-0xd2) | 8 bytes | uint64, little-endian |
+| [D1](frames/data#d1--data-0xd1) | 4 bytes | uint32, little-endian |
+| [D2](frames/data#d2--data-0xd2) | 8 bytes | uint64, little-endian |
 
 ## Position in Frame
 
@@ -48,5 +48,5 @@ Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source 
 ## See Also
 
 - [Elements](elements) — TimestampMode and Timestamp field definitions
-- [Message Keys](message-keys) — D2 payload layout
-- [Message Keys](message-keys) — D1 payload layout
+- [Frames](frames) — D2 payload layout
+- [Frames](frames) — D1 payload layout

@@ -3,7 +3,17 @@ const sidebars = {
   protocolSidebar: [
     'intro',
     'frame-format',
-    'message-keys',
+    {
+      type: 'category',
+      label: 'Frames',
+      link: { type: 'doc', id: 'frames/index' },
+      items: [
+        'frames/signals',
+        'frames/devices',
+        'frames/data',
+        'frames/control',
+      ],
+    },
     'elements',
     'status-codes',
     'datatypes',

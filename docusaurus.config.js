@@ -172,7 +172,7 @@ const config = {
             items: [
               { label: 'Introduction', to: '/protocol/intro' },
               { label: 'Frame Format', to: '/protocol/frame-format' },
-              { label: 'Message Keys', to: '/protocol/message-keys' },
+              { label: 'Frames', to: '/protocol/frames' },
             ],
           },
           {
