@@ -22,7 +22,7 @@ Parameters are comma-separated integers.
 | `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Interval (ms) | Start timed data streaming | [Data frames](frames/data) in intervals |
 | `BLAECK.DEACTIVATE` | … | — | Stop timed data streaming | — |
 
-**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. For most commands this is the [Message ID](frame-format#message-id), which the device echoes in the response frame. For `ACTIVATE` it is the streaming interval in milliseconds.
+**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. The device echoes the [Message ID](frame-format#message-id) in the response frame.
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
