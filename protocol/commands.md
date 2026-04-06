@@ -22,6 +22,4 @@ Parameters are comma-separated integers. The number and meaning of parameters is
 | `BLAECK.ACTIVATE` | Start timed data streaming | Continuous data frames |
 | `BLAECK.DEACTIVATE` | Stop timed data streaming | — |
 
-## Custom Commands
-
-Libraries may support user-defined commands using the same `<COMMAND,params>` format. The `BLAECK.` prefix is reserved for built-in commands.
+The `BLAECK.` prefix is reserved for built-in commands.
