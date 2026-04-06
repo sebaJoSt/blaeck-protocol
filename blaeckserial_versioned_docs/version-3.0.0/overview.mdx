@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+---
+
+import Frame from '@site/src/components/Frame';
+
+# BlaeckSerial 3.0.0
+
+## Active Frames
+
+<Frame id="B0" showElements />
+<Frame id="B1" showElements />
+<Frame id="B2" showElements />
+
+## Changes from v2.0.0
+
+- Added **CRC32** (4 B) to B1 data frame for integrity checking
+- Added **StatusByte** (1 B) to B1 data frame
+- CRC scope: MsgKey through last data byte
+
+See [Protocol Spec](/protocol/intro) for full element definitions.

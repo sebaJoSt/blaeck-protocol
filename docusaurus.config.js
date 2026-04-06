@@ -108,7 +108,7 @@ const config = {
         sidebarPath: './sidebars-blaecktcpy.js',
         lastVersion: 'current',
         versions: {
-          current: { label: '3.0', path: '' },
+          current: { label: '2.0.0', path: '' },
         },
       },
     ],
@@ -138,6 +138,10 @@ const config = {
               { label: 'BlaeckTCP', to: '/blaecktcp/overview' },
               { label: 'blaecktcpy', to: '/blaecktcpy/overview' },
             ],
+          },
+          {
+            type: 'custom-libraryLabel',
+            position: 'left',
           },
           {
             type: 'docsVersionDropdown',

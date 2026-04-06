@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+---
+
+import Frame from '@site/src/components/Frame';
+
+# BlaeckSerial 2.0.0
+
+## Active Frames
+
+<Frame id="B0" showElements />
+<Frame id="B1_noCRC" showElements />
+<Frame id="B2" showElements />
+
+## Changes from v1.0.0
+
+- Added I2C multi-device support (MasterSlaveConfig + SlaveID)
+- Removed SymbolID from B0; replaced with MSC + SlaveID fields
+- Added `B2` devices frame and `GET_DEVICES` command
+
+See [Protocol Spec](/protocol/intro) for full element definitions.

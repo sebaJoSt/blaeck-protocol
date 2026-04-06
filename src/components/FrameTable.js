@@ -1,6 +1,7 @@
 import React from 'react';
 import Mermaid from '@theme/Mermaid';
 import { frames } from '@site/src/data/frames';
+import { generateMermaid } from '@site/src/data/elements';
 
 export default function FrameTable({ keys, showDiagrams = false }) {
   const selected = keys
@@ -37,7 +38,7 @@ export default function FrameTable({ keys, showDiagrams = false }) {
               {f.key} — {f.name} (<code>{f.hex}</code>)
             </h3>
             <p>{f.description}</p>
-            <Mermaid value={f.mermaid} />
+            <Mermaid value={generateMermaid(f.elements, f.bitsPerRow)} />
           </div>
         ))}
     </>

@@ -5,6 +5,9 @@
  *   - protocol/frames/*.mdx  (canonical frame pages)
  *   - library overview pages  (active frames per version)
  *   - src/components/FrameTable.js
+ *
+ * Mermaid diagrams are generated dynamically from elements + bitsPerRow
+ * via generateMermaid() in elements.js.
  */
 
 const frames = {
@@ -16,17 +19,20 @@ const frames = {
     description: 'Signal schema: names, types, master/slave config.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'b0--symbol-list-0xb0',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 11
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "SymbolName"
-  9-10: "DTYPE"`,
+    bitsPerRow: 11,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'SymbolName', 'DTYPE'],
+  },
+
+  B0_v1: {
+    key: 'B0',
+    hex: '0xB0',
+    category: 'signals',
+    name: 'Symbol List',
+    description: 'Signal schema: ID, name, and type. No multi-device support.',
+    page: '/blaeck-protocol/protocol/frames/signals',
+    anchor: 'b0--symbol-list-0xb0',
+    bitsPerRow: 7,
+    elements: ['SymbolID', 'SymbolName', 'DTYPE'],
   },
 
   B1: {
@@ -37,17 +43,20 @@ packet-beta
     description: 'Signal values with StatusByte and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'b1--data-0xb1',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 10
----
-packet-beta
-  0-1: "SymbolID"
-  2-3: "DATA"
-  4-6: "StatusByte"
-  7-8: "CRC32"`,
+    bitsPerRow: 10,
+    elements: ['SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+  },
+
+  B1_noCRC: {
+    key: 'B1',
+    hex: '0xB1',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values without integrity check.',
+    page: '/blaeck-protocol/protocol/frames/data',
+    anchor: 'b1--data-0xb1',
+    bitsPerRow: 4,
+    elements: ['SymbolID', 'DATA'],
   },
 
   D1: {
@@ -58,20 +67,8 @@ packet-beta
     description: 'Signal values with RestartFlag, 4-byte Timestamp, StatusByte, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd1--data-0xd1',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 10
----
-packet-beta
-  0-2: "RestartFlag"
-  3-6: "TimestampMode"
-  7-9: "Timestamp"
-  10-11: "SymbolID"
-  12-13: "DATA"
-  14-16: "StatusByte"
-  17-18: "CRC32"`,
+    bitsPerRow: 10,
+    elements: ['RestartFlag', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
   },
 
   D2: {
@@ -82,22 +79,8 @@ packet-beta
     description: 'Signal values with SchemaHash, 8-byte Timestamp, StatusByte, StatusPayload, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd2--data-0xd2',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 13
----
-packet-beta
-  0-2: "RestartFlag"
-  3-5: "SchemaHash"
-  6-9: "TimestampMode"
-  10-12: "Timestamp"
-  13-14: "SymbolID"
-  15-16: "DATA"
-  17-19: "StatusByte"
-  20-23: "StatusPayload"
-  24-25: "CRC32"`,
+    bitsPerRow: 13,
+    elements: ['RestartFlag', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
   },
 
   B2: {
@@ -108,19 +91,8 @@ packet-beta
     description: 'Device identity: name, hardware, firmware, and library version.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b2--devices-0xb2',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 18
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"`,
+    bitsPerRow: 18,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion'],
   },
 
   B3: {
@@ -131,20 +103,8 @@ packet-beta
     description: 'Device identity with LibName.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b3--devices-0xb3',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 20
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"
-  18-19: "LibName"`,
+    bitsPerRow: 20,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 
   B4: {
@@ -155,22 +115,8 @@ packet-beta
     description: 'Device identity with LibName, ClientNo, and ClientDataEnabled.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b4--devices-0xb4',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 20
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"
-  18-19: "LibName"
-  20-21: "ClientNo"
-  22-25: "ClientDataEnabled"`,
+    bitsPerRow: 20,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled'],
   },
 
   B5: {
@@ -181,23 +127,8 @@ packet-beta
     description: 'Device identity with LibName, ClientNo, ClientDataEnabled, and ServerRestarted.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b5--devices-0xb5',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 20
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"
-  18-19: "LibName"
-  20-21: "ClientNo"
-  22-25: "ClientDataEnabled"
-  26-29: "ServerRestarted"`,
+    bitsPerRow: 20,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted'],
   },
 
   B6: {
@@ -208,25 +139,8 @@ packet-beta
     description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ServerRestarted, DeviceType, and Parent.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 20
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"
-  18-19: "LibName"
-  20-21: "ClientNo"
-  22-25: "ClientDataEnabled"
-  26-29: "ServerRestarted"
-  30-32: "DeviceType"
-  33-34: "Parent"`,
+    bitsPerRow: 20,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
 
   C0: {
@@ -237,20 +151,8 @@ packet-beta
     description: 'Notifies that a device restarted. Same layout as B3.',
     page: '/blaeck-protocol/protocol/frames/control',
     anchor: 'c0--restart-notification-0xc0',
-    mermaid: `---
-config:
-  packet:
-    showBits: false
-    bitsPerRow: 20
----
-packet-beta
-  0-3: "MasterSlaveConfig"
-  4-5: "SlaveID"
-  6-8: "DeviceName"
-  9-11: "HWVersion"
-  12-14: "FWVersion"
-  15-17: "LibVersion"
-  18-19: "LibName"`,
+    bitsPerRow: 20,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 };
 

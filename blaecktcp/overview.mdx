@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+slug: overview
+---
+
+import Frame from '@site/src/components/Frame';
+
+# BlaeckTCP 6.0.0
+
+## Active Frames
+
+<Frame id="B0" showElements />
+<Frame id="D2" showElements />
+<Frame id="B6" showElements />
+
+## Changes from v5.0.0
+
+- `D1` → `D2`: added **SchemaHash**, expanded **Timestamp** to 8 bytes, added **StatusPayload**.
+- `B5` → `B6`: added **DeviceType** and **Parent** fields.
+
+See [Protocol Spec](/protocol/intro) for full element definitions.

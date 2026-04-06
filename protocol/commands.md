@@ -7,7 +7,7 @@ sidebar_position: 2
 Commands are sent from the host to the device as ASCII text, delimited by angle brackets:
 
 ```
-<COMMAND,Param0,Param1,Param2,Param3>
+<BLAECK.COMMAND,Param0,Param1,Param2,Param3>
 ```
 
 Parameters are comma-separated integers.
@@ -19,32 +19,21 @@ Parameters are comma-separated integers.
 | `BLAECK.WRITE_SYMBOLS` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request signal schema | [Signal frame](frames/signals) |
 | `BLAECK.GET_DEVICES` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request device identity | [Device frames](frames/devices) |
 | `BLAECK.WRITE_DATA` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request single data frame | [Data frame](frames/data) |
-| `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Interval (ms) | Start timed data streaming | [Data frames](frames/data) in intervals |
-| `BLAECK.DEACTIVATE` | … | — | Stop timed data streaming | — |
+| `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Interval (ms) | Start timed data streaming | [Data frame](frames/data) (in intervals) |
+| `BLAECK.DEACTIVATE` |  | n/a | Stop timed data streaming | n/a |
 
-**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. The device echoes the [Message ID](intro#protocol-at-a-glance) in the response frame.
+**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. 
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
 ## Response with Message ID
 
-While commands are ASCII text, the device responds with binary [frames](intro#protocol-at-a-glance). For example, requesting signal schema with Message ID `1`:
+`WRITE_SYMBOLS`, `GET_DEVICES` and `WRITE:DATA`: **P1-P4** sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
 
 ```
 Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
-Response: <BLAECK: B0 : 01 00 00 00 : … /BLAECK>\r\n
+Response: <BLAECK: B0 : 01 00 00 00 : …………… /BLAECK>\r\n
                    Key  Message ID    Frame
-```
-
-The device echoes the Message ID back, allowing the host to correlate requests with responses.
-
-Starting timed data streaming with an interval of 1000 ms:
-
-```
-Command:   <BLAECK.ACTIVATE,232,3,0,0>
-Responses: <BLAECK: B1 : E8 03 00 00 : … /BLAECK>\r\n
-                    Key  Message ID    Frame
-           …
 ```
 
 See [Frames](frames) for all frame types.
