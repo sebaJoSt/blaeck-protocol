@@ -44,6 +44,6 @@ All multi-byte integers throughout the protocol are **little-endian**.
 
 ## Message ID
 
-A user-defined uint32 value included in every frame. Can be used to correlate requests with responses.
+A user-defined uint32 value included in every frame. See [Commands](commands#message-id) for how it is used to correlate requests with responses.
 
 
