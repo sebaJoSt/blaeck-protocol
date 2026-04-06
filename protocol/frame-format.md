@@ -37,10 +37,6 @@ The Message ID is a uint32 value included in every frame. For request/response c
 
 For frames sent without a host request (e.g., timed data streaming, restart notifications), the Message ID is implementation-defined — typically `0x00000001` or a value set by the application.
 
-:::note
-The C0 (Restart Notification) message in hub mode always uses a fixed Message ID of `0x00000001`.
-:::
-
 ## Example
 
 A minimal frame with message key `0xD2`, Message ID `1`, and a 20-byte elements payload:

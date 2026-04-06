@@ -28,7 +28,7 @@ The server stores the client identity per TCP connection. It is available for:
 
 ## Wire Format
 
-Client identity does **not** appear in any Blaeck frame. The [B6](message-keys#b6--devices-tcp-0xb6) message includes `ClientNo` and `ClientDataEnabled` fields, but these are server-assigned values — not the client's self-reported identity.
+Client identity does **not** appear in any Blaeck frame. The [B6](message-keys#b6--devices-0xb6) message includes `ClientNo` and `ClientDataEnabled` fields, but these are server-assigned values — not the client's self-reported identity.
 
 ## See Also
 

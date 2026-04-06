@@ -15,16 +15,19 @@ The message key is a single byte in the [frame envelope](frame-format) that iden
 | Key | Hex | Purpose |
 |-----|-----|---------|
 | B0 | `0xB0` | Symbol List |
-| B3 | `0xB3` | Devices (serial) |
-| B6 | `0xB6` | Devices (TCP) |
+| B1 | `0xB1` | Data (no timestamps) |
+| B2 | `0xB2` | Devices (without LibName) |
+| B3 | `0xB3` | Devices (with LibName) |
+| B4 | `0xB4` | Devices (with ClientNo, ClientDataEnabled) |
+| B5 | `0xB5` | Devices (with ServerRestarted) |
+| B6 | `0xB6` | Devices (with DeviceType, Parent) |
 | C0 | `0xC0` | Restart Notification |
-| D2 | `0xD2` | Data (timestamped, with schema hash) |
-
-For deprecated keys (B1, B2, B4, B5, D1), see [Historical Keys](historical).
+| D1 | `0xD1` | Data (4-byte timestamps) |
+| D2 | `0xD2` | Data (8-byte timestamps, schema hash, status payload) |
 
 ---
 
-## Active Key Definitions
+## Key Definitions
 
 ### B0 — Symbol List (`0xB0`)
 
@@ -47,9 +50,9 @@ Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. The wire f
 
 ---
 
-### B3 — Devices, Serial (`0xB3`)
+### B3 — Devices (`0xB3`)
 
-Reports device identity for serial-connected devices.
+Reports device identity. Adds `LibName` field compared to [B2](historical#b2--devices-legacy-0xb2).
 
 **Element layout** (repeated per device):
 
@@ -67,9 +70,9 @@ See [Elements](elements) for field definitions.
 
 ---
 
-### B6 — Devices, TCP (`0xB6`)
+### B6 — Devices (`0xB6`)
 
-Reports device identity for network-connected devices. Extends B3 with TCP-specific fields.
+Reports device identity. Extends [B5](historical#b5--devices-tcp-extended-0xb5) with `DeviceType` and `Parent` fields.
 
 **Element layout** (repeated per device):
 
@@ -92,9 +95,7 @@ Reports device identity for network-connected devices. Extends B3 with TCP-speci
 
 ### C0 — Restart Notification (`0xC0`)
 
-Sent when a device restarts. Allows the host to re-request the symbol list and reset state.
-
-**Serial implementations** — Same payload as [B3](#b3--devices-serial-0xb3):
+Sent when a device restarts. Allows the host to re-request the symbol list and reset state. Payload follows the same layout as [B3](#b3--devices-0xb3):
 
 | Field | Size | Type |
 |-------|------|------|
@@ -106,16 +107,11 @@ Sent when a device restarts. Allows the host to re-request the symbol list and r
 | LibVersion | variable | null-terminated string |
 | LibName | variable | null-terminated string |
 
-**Hub mode** — Same fields with fixed values:
-- `MasterSlaveConfig` = `0x02` (slave/upstream)
-- `SlaveID` = `0x01`
-- Fixed Message ID = `0x00000001`
-
 ---
 
 ### D2 — Data (`0xD2`)
 
-Current data message with 8-byte timestamps, schema hash, and status payload.
+Data message with 8-byte timestamps, schema hash, and status payload.
 
 **Element layout:**
 

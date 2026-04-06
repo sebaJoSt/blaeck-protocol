@@ -4,9 +4,9 @@ sidebar_position: 12
 
 # Historical Keys
 
-This appendix documents deprecated message keys. These keys are no longer emitted by current library versions but may be encountered when working with older firmware or log files.
+This appendix documents earlier message keys. These keys may be encountered when working with older firmware or log files.
 
-For active keys, see [Message Keys](message-keys).
+All keys are defined in the [Message Keys](message-keys) summary table.
 
 ---
 
@@ -53,7 +53,7 @@ Early device identity message.
 | FWVersion | variable | null-terminated string |
 | LibVersion | variable | null-terminated string |
 
-**Replaced by:** [B3](message-keys#b3--devices-serial-0xb3) (adds LibName)
+**Replaced by:** [B3](message-keys#b3--devices-0xb3) (adds LibName)
 
 ---
 
@@ -98,7 +98,7 @@ Extended TCP device message (without DeviceType/Parent).
 | ClientDataEnabled | variable | null-terminated string |
 | ServerRestarted | variable | null-terminated string |
 
-**Replaced by:** [B6](message-keys#b6--devices-tcp-0xb6) (adds DeviceType, Parent)
+**Replaced by:** [B6](message-keys#b6--devices-0xb6) (adds DeviceType, Parent)
 
 ---
 
