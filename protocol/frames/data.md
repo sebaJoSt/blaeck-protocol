@@ -4,6 +4,8 @@ sidebar_position: 3
 
 # Data
 
+SymbolID + DATA repeat per signal. See [Elements](../elements) for field details.
+
 ## B1 — Data (`0xB1`)
 
 Data message without timestamps.
@@ -21,13 +23,6 @@ packet-beta
   4-6: "StatusByte"
   7-8: "CRC32"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| **SymbolID** | 2 bytes | uint16 |
-| **DATA** | variable | per [DTYPE](../datatypes) |
-| StatusByte | 1 byte | uint8 |
-| CRC32 | 4 bytes | uint32 |
 
 ---
 
@@ -51,16 +46,6 @@ packet-beta
   14-16: "StatusByte"
   17-18: "CRC32"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| RestartFlag | 1 byte | uint8 |
-| TimestampMode | 1 byte | uint8 |
-| Timestamp | 4 bytes | uint32 |
-| **SymbolID** | 2 bytes | uint16 |
-| **DATA** | variable | per [DTYPE](../datatypes) |
-| StatusByte | 1 byte | uint8 |
-| CRC32 | 4 bytes | uint32 |
 
 ---
 
@@ -86,17 +71,3 @@ packet-beta
   20-23: "StatusPayload"
   24-25: "CRC32"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| RestartFlag | 1 byte | uint8 |
-| SchemaHash | 2 bytes | uint16 |
-| TimestampMode | 1 byte | uint8 |
-| Timestamp | 8 bytes | uint64 |
-| **SymbolID** | 2 bytes | uint16 |
-| **DATA** | variable | per [DTYPE](../datatypes) |
-| StatusByte | 1 byte | uint8 |
-| StatusPayload | 4 bytes | raw bytes |
-| CRC32 | 4 bytes | uint32 |
-
-See [Timestamps](../timestamps) for timestamp modes, [Status Codes](../status-codes) for status values, and [CRC32](../crc32) for the checksum algorithm.

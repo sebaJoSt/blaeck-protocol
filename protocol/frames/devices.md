@@ -4,6 +4,8 @@ sidebar_position: 2
 
 # Devices
 
+Repeated per device. See [Elements](../elements) for field details.
+
 ## B2 — Devices (`0xB2`)
 
 Device identity message.
@@ -23,15 +25,6 @@ packet-beta
   12-14: "FWVersion"
   15-17: "LibVersion"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
 
 ---
 
@@ -55,16 +48,6 @@ packet-beta
   15-17: "LibVersion"
   18-19: "LibName"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
-| LibName | variable | null-terminated string |
 
 ---
 
@@ -91,18 +74,6 @@ packet-beta
   22-25: "ClientDataEnabled"
 ```
 
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
-| LibName | variable | null-terminated string |
-| ClientNo | variable | null-terminated string |
-| ClientDataEnabled | variable | null-terminated string |
-
 ---
 
 ## B5 — Devices (`0xB5`)
@@ -128,19 +99,6 @@ packet-beta
   22-25: "ClientDataEnabled"
   26-29: "ServerRestarted"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
-| LibName | variable | null-terminated string |
-| ClientNo | variable | null-terminated string |
-| ClientDataEnabled | variable | null-terminated string |
-| ServerRestarted | variable | null-terminated string |
 
 ---
 
@@ -169,18 +127,3 @@ packet-beta
   30-32: "DeviceType"
   33-34: "Parent"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
-| LibName | variable | null-terminated string |
-| ClientNo | variable | null-terminated string |
-| ClientDataEnabled | variable | null-terminated string |
-| ServerRestarted | variable | null-terminated string |
-| DeviceType | variable | null-terminated string (`"server"` or `"hub"`) |
-| Parent | variable | null-terminated string |

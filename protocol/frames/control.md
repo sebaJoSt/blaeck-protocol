@@ -24,13 +24,3 @@ packet-beta
   15-17: "LibVersion"
   18-19: "LibName"
 ```
-
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| DeviceName | variable | null-terminated string |
-| HWVersion | variable | null-terminated string |
-| FWVersion | variable | null-terminated string |
-| LibVersion | variable | null-terminated string |
-| LibName | variable | null-terminated string |

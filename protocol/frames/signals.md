@@ -22,9 +22,4 @@ packet-beta
   9-10: "DTYPE"
 ```
 
-| Element | Size | Type |
-|-------|------|------|
-| MasterSlaveConfig | 1 byte | uint8 |
-| SlaveID | 1 byte | uint8 |
-| SymbolName | variable | null-terminated string |
-| DTYPE | 1 byte | uint8 |
+Repeated per signal. See [Elements](../elements) for field details.
