@@ -16,11 +16,11 @@ Parameters are comma-separated integers.
 
 | Command | Parameters | Description | Response |
 |---------|------------|-------------|----------|
-| `BLAECK.WRITE_SYMBOLS` | **P0**, **P1**, **P2**, **P3** | Request signal schema | [Signal frame](frames/signals) |
+| `BLAECK.WRITE_SYMBOLS` | **P0**, **P1**, **P2**, **P3**, … | Request signal schema | [Signal frame](frames/signals) |
 | `BLAECK.GET_DEVICES` | **P0**, **P1**, **P2**, **P3**, … | Request device identity | [Device frames](frames/devices) |
-| `BLAECK.WRITE_DATA` | **P0**, **P1**, **P2**, **P3** | Request single data frame | [Data frame](frames/data) |
-| `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3** | Start timed data streaming | [Data frames](frames/data) in intervals |
-| `BLAECK.DEACTIVATE` | — | Stop timed data streaming | — |
+| `BLAECK.WRITE_DATA` | **P0**, **P1**, **P2**, **P3**, … | Request single data frame | [Data frame](frames/data) |
+| `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Start timed data streaming | [Data frames](frames/data) in intervals |
+| `BLAECK.DEACTIVATE` | … | Stop timed data streaming | — |
 
 **Bold** parameters encode a uint32 in little-endian byte order: Message ID for most commands, interval in milliseconds for `ACTIVATE`.
 
