@@ -134,9 +134,9 @@ const config = {
             position: 'left',
             activeBaseRegex: '/(blaeckserial|blaecktcp|blaecktcpy)/',
             items: [
-              { type: 'doc', docId: 'overview', docsPluginId: 'blaeckserial', label: 'BlaeckSerial' },
-              { type: 'doc', docId: 'overview', docsPluginId: 'blaecktcp', label: 'BlaeckTCP' },
-              { type: 'doc', docId: 'overview', docsPluginId: 'blaecktcpy', label: 'blaecktcpy' },
+              { label: 'BlaeckSerial', to: '/blaeckserial/overview' },
+              { label: 'BlaeckTCP', to: '/blaecktcp/overview' },
+              { label: 'blaecktcpy', to: '/blaecktcpy/overview' },
             ],
           },
           {
