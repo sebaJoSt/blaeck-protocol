@@ -8,8 +8,6 @@ The **Blaeck protocol** is a lightweight binary protocol for streaming typed sig
 
 :::note
 B3 and B6 are **not** sequential replacements — they coexist. B3 is used for serial devices, while B6 is used for networked devices (with additional fields like `DeviceType` and `Parent`).
-
-See each library's documentation for the specific message keys it implements.
 :::
 
 ## Protocol at a Glance

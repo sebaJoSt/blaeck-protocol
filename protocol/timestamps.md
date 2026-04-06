@@ -23,8 +23,6 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 | [D1](message-keys#d1--data-0xd1) | 4 bytes | uint32, little-endian |
 | [D2](message-keys#d2--data-0xd2) | 8 bytes | uint64, little-endian |
 
-D2 doubled the timestamp field to 8 bytes to support high-resolution microsecond counters on 32-bit platforms without overflow.
-
 ## Position in Frame
 
 In a D2 frame, the timestamp appears after the [SchemaHash](schema-hash) and TimestampMode byte:
@@ -42,8 +40,6 @@ Returns the value of `micros()` (Arduino) or an equivalent microsecond counter.
 **Overflow behavior:**
 - D1 (uint32): wraps every ~71.6 minutes
 - D2 (uint64): wraps every ~584,942 years (effectively never)
-
-Receivers should handle uint32 wraparound when processing D1 frames from older library versions.
 
 ## Mode 2 — UNIX
 

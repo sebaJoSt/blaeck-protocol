@@ -34,9 +34,7 @@ The SchemaHash immediately follows the RestartFlag byte and precedes the Timesta
 2. On each D2 frame, the receiver compares the SchemaHash against the stored value.
 3. If the hash differs, the receiver requests a new B0 frame to update its signal definitions.
 
-:::note
-SchemaHash is present only in D2 frames. Earlier data formats (B1, D1) do not include it — receivers using those formats must rely on other mechanisms (e.g., restart detection) to know when to re-request the symbol list.
-:::
+
 
 ## See Also
 

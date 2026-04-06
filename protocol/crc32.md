@@ -22,9 +22,9 @@ This is the same CRC-32 used by Ethernet, PKZIP, and many other protocols (often
 
 ## CRC Scope
 
-The bytes included in the CRC calculation differ between message key versions:
+The bytes included in the CRC calculation depend on the message key:
 
-### D2 (current)
+### D2
 
 ```
 CRC scope: MsgKey → StatusPayload
@@ -34,9 +34,9 @@ CRC scope: MsgKey → StatusPayload
 └── StatusPayload (4B)   ← included
 ```
 
-In D2 frames, the CRC covers everything from the Message Key byte through the StatusPayload (inclusive). **StatusByte and StatusPayload are included in the CRC.**
+The CRC covers everything from the Message Key byte through the StatusPayload (inclusive).
 
-### B1 and D1 (earlier versions)
+### B1 and D1
 
 ```
 CRC scope: MsgKey → last data byte
@@ -46,11 +46,7 @@ CRC scope: MsgKey → last data byte
     StatusByte (1B)      ← NOT included
 ```
 
-In B1 (v3+) and D1 frames, the CRC covers from the Message Key byte through the last signal data byte. **StatusByte is NOT included in the CRC.**
-
-:::caution
-This scope difference means that D2 CRC values cannot be computed the same way as B1/D1 CRC values. When migrating a decoder, ensure the CRC scope is updated to include StatusByte and StatusPayload.
-:::
+The CRC covers from the Message Key byte through the last signal data byte. StatusByte is **not** included.
 
 ## Position in Frame
 

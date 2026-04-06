@@ -168,7 +168,7 @@ Numeric code identifying the signal's data type. See [Datatypes](datatypes) for 
 
 ## Signal Data Fields
 
-These fields appear in data messages (D2, and earlier B1/D1).
+These fields appear in data messages (B1, D1, D2).
 
 ### SymbolID / SignalIndex
 

@@ -25,21 +25,6 @@ The message key is a single byte in the [frame envelope](frame-format) that iden
 | D1 | `0xD1` | Data (4-byte timestamps) |
 | D2 | `0xD2` | Data (8-byte timestamps, schema hash, status payload) |
 
-## Evolution
-
-```
-Data messages:       B1 → D1 → D2
-                     no timestamps   4B timestamps   8B timestamps + SchemaHash
-
-Serial devices:      B2 → B3
-                     no LibName   + LibName
-
-TCP devices:         B4 → B5 → B6
-                     base TCP   + ServerRestarted   + DeviceType, Parent
-```
-
----
-
 ## Key Definitions
 
 ### B0 — Symbol List (`0xB0`)
@@ -55,9 +40,7 @@ Enumerates all signals the device exposes. Sent in response to a host request.
 | SymbolName | variable | null-terminated string | Signal name |
 | DTYPE | 1 byte | uint8 | [Datatype code](datatypes) |
 
-:::note
-The earliest protocol version (B0 in v1) used a 2-byte `SymbolID` (signal index) in place of `MasterSlaveConfig`/`SlaveID`. From v2 onward, all versions use the layout shown above.
-:::
+
 
 ---
 
@@ -87,7 +70,7 @@ Data message without timestamps.
 
 ### B2 — Devices (`0xB2`)
 
-Device identity message without `LibName`.
+Device identity message.
 
 **Element layout** (repeated per device):
 
@@ -104,7 +87,7 @@ Device identity message without `LibName`.
 
 ### B3 — Devices (`0xB3`)
 
-Device identity message. Adds `LibName` compared to [B2](#b2--devices-0xb2).
+Device identity message.
 
 **Element layout** (repeated per device):
 
@@ -124,7 +107,7 @@ See [Elements](elements) for field definitions.
 
 ### B4 — Devices (`0xB4`)
 
-Device identity message. Adds `ClientNo` and `ClientDataEnabled` compared to [B3](#b3--devices-0xb3).
+Device identity message.
 
 **Element layout** (repeated per device):
 
@@ -144,7 +127,7 @@ Device identity message. Adds `ClientNo` and `ClientDataEnabled` compared to [B3
 
 ### B5 — Devices (`0xB5`)
 
-Device identity message. Adds `ServerRestarted` compared to [B4](#b4--devices-0xb4).
+Device identity message.
 
 **Element layout** (repeated per device):
 
@@ -165,7 +148,7 @@ Device identity message. Adds `ServerRestarted` compared to [B4](#b4--devices-0x
 
 ### B6 — Devices (`0xB6`)
 
-Device identity message. Adds `DeviceType` and `Parent` compared to [B5](#b5--devices-0xb5).
+Device identity message.
 
 **Element layout** (repeated per device):
 
