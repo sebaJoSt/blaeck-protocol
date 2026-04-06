@@ -29,13 +29,13 @@ For quick programmatic use:
 DTYPE_SIZE = {0: 1, 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 4, 7: 4, 8: 4, 9: 8}
 ```
 
-## AVR vs 32-bit Platform Notes
+## Platform-Specific Notes
 
-On **AVR** (Arduino Uno, Mega, etc.):
+On **16-bit platforms** (e.g., AVR-based microcontrollers):
 - `int` is 16-bit (2 bytes) → DTYPE `4`
 - `unsigned int` is 16-bit (2 bytes) → DTYPE `5`
 
-On **32-bit platforms** (Arduino Due, ESP32, Teensy, etc.):
+On **32-bit platforms**:
 - `int` is 32-bit (4 bytes) — mapped to DTYPE `6` (same as `long`)
 - `unsigned int` is 32-bit (4 bytes) — mapped to DTYPE `7` (same as `unsigned long`)
 
@@ -45,9 +45,9 @@ When decoding, always use the DTYPE code and the size table above — never assu
 
 ## double Support
 
-DTYPE `9` (`double`, 8 bytes) was added in **BlaeckSerial v4.0.0**. Earlier library versions do not support it.
+DTYPE `9` (`double`, 8 bytes) is intended for 32-bit platforms where `double` is a true IEEE 754 double-precision value.
 
-On AVR platforms, `double` is actually 4 bytes (identical to `float`). The 8-byte DTYPE `9` is intended for 32-bit platforms where `double` is a true IEEE 754 double-precision value.
+On 16-bit AVR platforms, `double` is actually 4 bytes (identical to `float`). The 8-byte DTYPE `9` should only be used when the platform supports native 64-bit floating point.
 
 ## See Also
 

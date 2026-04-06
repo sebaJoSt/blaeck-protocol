@@ -36,7 +36,7 @@ All multi-byte integers throughout the protocol are **little-endian**.
 The Message ID is a uint32 counter that increments with each transmitted frame. It starts at `0x00000001` on boot and wraps at `0xFFFFFFFF`. Receivers can use it to detect dropped frames.
 
 :::note
-The C0 (Restart Notification) message in blaecktcpy always uses a fixed Message ID of `0x00000001`.
+The C0 (Restart Notification) message in hub mode always uses a fixed Message ID of `0x00000001`.
 :::
 
 ## Example

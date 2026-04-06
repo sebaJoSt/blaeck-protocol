@@ -47,12 +47,7 @@ Receivers should handle uint32 wraparound when processing D1 frames from older l
 
 ## Mode 2 — UNIX
 
-Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source on the device.
-
-On Arduino, a callback function is registered with the library to provide the current time:
-- BlaeckSerial: `setTimestampCallback()`
-- BlaeckTCP: `setTimestampCallback()`
-- blaecktcpy: uses Python's `time.time()` natively
+Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source on the device. The library implementation typically provides a callback mechanism for the application to supply the current time.
 
 ## See Also
 

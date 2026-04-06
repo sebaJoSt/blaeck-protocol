@@ -27,7 +27,7 @@ This page defines every field that can appear in the elements section of a Blaec
 | Used in | B0, B3, B6 (as SlaveID_lo), C0 |
 
 :::note
-BlaeckTCP and blaecktcpy label these bytes `SlaveID_hi` and `SlaveID_lo` respectively. Both are always `0x00` in current TCP implementations.
+Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. Both are always `0x00` in current TCP implementations.
 :::
 
 ### DeviceName
@@ -78,13 +78,13 @@ Library version string (e.g., `"6.0.0"`).
 | Type | Null-terminated string |
 | Used in | B3, B6, C0 |
 
-Library name (e.g., `"BlaeckSerial"`, `"BlaeckTCP"`, `"blaecktcpy"`).
+Library name string.
 
 ---
 
 ## TCP-Specific Fields
 
-These fields appear only in BlaeckTCP and blaecktcpy device messages.
+These fields appear only in TCP device messages (B6).
 
 ### ClientNo
 
@@ -151,7 +151,7 @@ These fields appear in B0 (Symbol List) messages.
 | Type | Null-terminated string |
 | Used in | B0 |
 
-Human-readable name of the signal. blaecktcpy uses the term "SignalName"; the wire format is identical.
+Human-readable name of the signal. Some implementations use the term "SignalName"; the wire format is identical.
 
 ### DTYPE / DatatypeCode
 

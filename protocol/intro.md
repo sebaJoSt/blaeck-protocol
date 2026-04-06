@@ -6,28 +6,10 @@ sidebar_position: 1
 
 The **Blaeck protocol** is a lightweight binary protocol for streaming typed signal data from embedded devices to host applications. It supports device discovery, schema negotiation, timestamped data frames, and integrity checking — all within a compact, deterministic wire format.
 
-## Libraries
-
-Three libraries implement the Blaeck protocol:
-
-| Library | Language | Transport | Repository |
-|---------|----------|-----------|------------|
-| **BlaeckSerial** | C++ (Arduino) | UART / Serial | [GitHub](https://github.com/sebluo/BlaeckSerial) |
-| **BlaeckTCP** | C++ (Arduino) | TCP / Ethernet | [GitHub](https://github.com/sebluo/BlaeckTCP) |
-| **blaecktcpy** | Python | TCP | [GitHub](https://github.com/sebluo/blaecktcpy) |
-
-## Compatibility Matrix
-
-Current versions and the message keys they emit:
-
-| Library | Current Data Key | Current Devices Key | Other Keys |
-|---------|-----------------|--------------------| -----------|
-| BlaeckSerial 6.0.0 | D2 (`0xD2`) | B3 (`0xB3`) | B0, C0 |
-| BlaeckTCP 6.0.0 | D2 (`0xD2`) | B6 (`0xB6`) | B0 |
-| blaecktcpy 3.0 | D2 (`0xD2`) | B6 (`0xB6`) | B0, C0 (hub) |
-
 :::note
-B3 and B6 are **not** sequential replacements — they coexist. BlaeckSerial uses B3 (serial devices), while BlaeckTCP and blaecktcpy use B6 (networked devices with additional fields like `DeviceType` and `Parent`).
+B3 and B6 are **not** sequential replacements — they coexist. B3 is used for serial devices, while B6 is used for networked devices (with additional fields like `DeviceType` and `Parent`).
+
+See each library's documentation for the specific message keys it implements.
 :::
 
 ## Protocol at a Glance
@@ -47,7 +29,7 @@ See [Frame Format](frame-format) for the full binary layout, and [Message Keys](
 
 ## Typical Session Flow
 
-1. Host connects and requests device info → device replies with a **B3/B6** (Devices) frame.
+1. Host connects and requests device info → device replies with a **B3** or **B6** (Devices) frame.
 2. Host requests signal list → device replies with a **B0** (Symbol List) frame.
 3. Device streams **D2** (Data) frames at the configured interval.
 4. If the device restarts, it sends a **C0** (Restart Notification) frame.

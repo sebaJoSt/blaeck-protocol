@@ -12,18 +12,18 @@ The message key is a single byte in the [frame envelope](frame-format) that iden
 
 ## Summary Table
 
-| Key | Hex | Purpose | Libraries | Status |
-|-----|-----|---------|-----------|--------|
-| B0 | `0xB0` | Symbol List | All | **Active** |
-| B1 | `0xB1` | Data (no timestamps) | BlaeckSerial v1–v4.3, BlaeckTCP v1–v3 | Deprecated |
-| B2 | `0xB2` | Devices (legacy) | BlaeckSerial v2–v3 | Deprecated |
-| B3 | `0xB3` | Devices (serial) | BlaeckSerial v4+ | **Active** |
-| B4 | `0xB4` | Devices (TCP v2) | BlaeckTCP v2 | Deprecated |
-| B5 | `0xB5` | Devices (TCP v3–v5) | BlaeckTCP v3–v5 | Deprecated |
-| B6 | `0xB6` | Devices (TCP v6, blaecktcpy) | BlaeckTCP v6, blaecktcpy | **Active** |
-| C0 | `0xC0` | Restart Notification | BlaeckSerial v4.3+, blaecktcpy hub | **Active** |
-| D1 | `0xD1` | Data (4B timestamps) | BlaeckSerial v5, BlaeckTCP v5 | Deprecated |
-| D2 | `0xD2` | Data (8B timestamps + schema hash) | BlaeckSerial v6, BlaeckTCP v6, blaecktcpy | **Active** |
+| Key | Hex | Purpose | Status |
+|-----|-----|---------|--------|
+| B0 | `0xB0` | Symbol List | **Active** |
+| B1 | `0xB1` | Data (no timestamps) | Deprecated |
+| B2 | `0xB2` | Devices (legacy, no LibName) | Deprecated |
+| B3 | `0xB3` | Devices (serial) | **Active** |
+| B4 | `0xB4` | Devices (TCP, early) | Deprecated |
+| B5 | `0xB5` | Devices (TCP, no DeviceType) | Deprecated |
+| B6 | `0xB6` | Devices (TCP, full) | **Active** |
+| C0 | `0xC0` | Restart Notification | **Active** |
+| D1 | `0xD1` | Data (4B timestamps) | Deprecated |
+| D2 | `0xD2` | Data (8B timestamps + schema hash) | **Active** |
 
 For deprecated keys, see [Historical Keys](historical).
 
@@ -45,14 +45,14 @@ Enumerates all signals the device exposes. Sent in response to a host request.
 | DTYPE | 1 byte | uint8 | [Datatype code](datatypes) |
 
 :::note
-BlaeckSerial v1 used a different layout with a 2-byte `SymbolID` instead of `MasterSlaveConfig`/`SlaveID`. All current versions use the layout shown above.
+Early protocol versions used a different B0 layout with a 2-byte `SymbolID` instead of `MasterSlaveConfig`/`SlaveID`. All current versions use the layout shown above.
 :::
 
-BlaeckTCP sends `SlaveID_hi` (always `0x00`) and `SlaveID_lo` (always `0x00`) in place of MasterSlaveConfig and SlaveID, but the wire format is identical.
+Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. The wire format is identical.
 
 ---
 
-### B3 — Devices (`0xB3`, BlaeckSerial)
+### B3 — Devices, Serial (`0xB3`)
 
 Reports device identity for serial-connected devices.
 
@@ -72,7 +72,7 @@ See [Elements](elements) for field definitions.
 
 ---
 
-### B6 — Devices (`0xB6`, BlaeckTCP / blaecktcpy)
+### B6 — Devices, TCP (`0xB6`)
 
 Reports device identity for network-connected devices. Extends B3 with TCP-specific fields.
 
@@ -99,7 +99,7 @@ Reports device identity for network-connected devices. Extends B3 with TCP-speci
 
 Sent when a device restarts. Allows the host to re-request the symbol list and reset state.
 
-**BlaeckSerial** — Same payload as [B3](#b3--devices-0xb3-blaeckserial):
+**Serial implementations** — Same payload as [B3](#b3--devices-serial-0xb3):
 
 | Field | Size | Type |
 |-------|------|------|
@@ -111,7 +111,7 @@ Sent when a device restarts. Allows the host to re-request the symbol list and r
 | LibVersion | variable | null-terminated string |
 | LibName | variable | null-terminated string |
 
-**blaecktcpy hub mode** — Same fields with fixed values:
+**Hub mode** — Same fields with fixed values:
 - `MasterSlaveConfig` = `0x02` (slave/upstream)
 - `SlaveID` = `0x01`
 - Fixed Message ID = `0x00000001`

@@ -14,11 +14,9 @@ For active keys, see [Message Keys](message-keys).
 
 The original data message format. Carries signal values without timestamps.
 
-**Used by:** BlaeckSerial v1–v4.3, BlaeckTCP v1–v3
-
 ### Element Layout
 
-#### Without CRC (v1–v2)
+#### Without CRC (early versions)
 
 | Field | Size | Type |
 |-------|------|------|
@@ -26,7 +24,7 @@ The original data message format. Carries signal values without timestamps.
 | SymbolID | 2 bytes | uint16 LE |
 | DATA | variable | Per [DTYPE](datatypes) |
 
-#### With CRC (v3+)
+#### With CRC (later versions)
 
 | Field | Size | Type | Notes |
 |-------|------|------|-------|
@@ -44,8 +42,6 @@ The original data message format. Carries signal values without timestamps.
 
 Early device identity message.
 
-**Used by:** BlaeckSerial v2–v3
-
 ### Element Layout
 
 | Field | Size | Type |
@@ -57,15 +53,13 @@ Early device identity message.
 | FWVersion | variable | null-terminated string |
 | LibVersion | variable | null-terminated string |
 
-**Replaced by:** [B3](message-keys#b3--devices-0xb3-blaeckserial) (adds LibName)
+**Replaced by:** [B3](message-keys#b3--devices-serial-0xb3) (adds LibName)
 
 ---
 
-## B4 — Devices, BlaeckTCP v2 (`0xB4`)
+## B4 — Devices, TCP Early (`0xB4`)
 
 First TCP-specific device message.
-
-**Used by:** BlaeckTCP v2
 
 ### Element Layout
 
@@ -81,15 +75,13 @@ First TCP-specific device message.
 | ClientNo | variable | null-terminated string |
 | ClientDataEnabled | variable | null-terminated string |
 
-**Replaced by:** [B5](#b5--devices-blaecktcp-v3v5-0xb5) (adds ServerRestarted)
+**Replaced by:** [B5](#b5--devices-tcp-extended-0xb5) (adds ServerRestarted)
 
 ---
 
-## B5 — Devices, BlaeckTCP v3–v5 (`0xB5`)
+## B5 — Devices, TCP Extended (`0xB5`)
 
-Extended TCP device message.
-
-**Used by:** BlaeckTCP v3–v5
+Extended TCP device message (without DeviceType/Parent).
 
 ### Element Layout
 
@@ -106,15 +98,13 @@ Extended TCP device message.
 | ClientDataEnabled | variable | null-terminated string |
 | ServerRestarted | variable | null-terminated string |
 
-**Replaced by:** [B6](message-keys#b6--devices-0xb6-blaecktcp--blaecktcpy) (adds DeviceType, Parent)
+**Replaced by:** [B6](message-keys#b6--devices-tcp-0xb6) (adds DeviceType, Parent)
 
 ---
 
 ## D1 — Data with 4-Byte Timestamps (`0xD1`)
 
 Intermediate data format that introduced timestamps but used only 4 bytes.
-
-**Used by:** BlaeckSerial v5, BlaeckTCP v5
 
 ### Element Layout
 
@@ -145,14 +135,14 @@ Intermediate data format that introduced timestamps but used only 4 bytes.
 ## Evolution Timeline
 
 ```
-Data messages:   B1 (v1) → D1 (v5) → D2 (v6)
-                 no timestamps   4B timestamps   8B timestamps + SchemaHash
+Data messages:       B1 → D1 → D2
+                     no timestamps   4B timestamps   8B timestamps + SchemaHash
 
-Serial devices:  B2 (v2) → B3 (v4)
-                 no LibName   + LibName
+Serial devices:      B2 → B3
+                     no LibName   + LibName
 
-TCP devices:     B4 (v2) → B5 (v3) → B6 (v6)
-                 base TCP   + ServerRestarted   + DeviceType, Parent
+TCP devices:         B4 → B5 → B6
+                     base TCP   + ServerRestarted   + DeviceType, Parent
 ```
 
 ## See Also
