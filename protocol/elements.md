@@ -4,243 +4,32 @@ sidebar_position: 4
 
 # Elements
 
-This page defines every field that can appear in the elements section of a Blaeck [frame](frame-format). See each frame's sub-page under [Frames](frames) for the exact layout.
-
-### ClientDataEnabled
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B4, B5, B6 |
-
-Whether data streaming is enabled for this client (`"true"` / `"false"`).
-
-### ClientNo
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B4, B5, B6 |
-
-Client number as a string.
-
-### CRC32
-
-| Property | Value |
-|----------|-------|
-| Size | 4 bytes |
-| Type | uint32, little-endian |
-| Algorithm | CRC-32/ISO-HDLC |
-| Used in | B1, D1, D2 |
-
-Integrity checksum over the frame payload. See [CRC32](crc32) for the algorithm and scope details.
-
-### DATA
-
-| Property | Value |
-|----------|-------|
-| Size | Variable (determined by [DTYPE](datatypes)) |
-| Type | Raw bytes, little-endian |
-| Used in | B1, D1, D2 |
-
-The signal's current value. Size is determined by the signal's datatype: 1 byte for `bool`/`byte`, up to 8 bytes for `double`.
-
-### DeviceName
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B2, B3, B4, B5, B6, C0 |
-
-User-defined name identifying the device.
-
-### DeviceType
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Values | `"server"` or `"hub"` |
-| Used in | B6 |
-
-Indicates the device's role in the network topology.
-
-### DTYPE
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Values | `0x00`–`0x09` |
-| Used in | B0 |
-
-Numeric code identifying the signal's data type. See [Datatypes](datatypes) for the full table.
-
-### FWVersion
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B2, B3, B4, B5, B6, C0 |
-
-Firmware version string.
-
-### HWVersion
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B2, B3, B4, B5, B6, C0 |
-
-Hardware version string.
-
-### LibName
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B3, B4, B5, B6, C0 |
-
-Library name string.
-
-### LibVersion
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B2, B3, B4, B5, B6, C0 |
-
-Library version string (e.g., `"6.0.0"`).
-
-### MasterSlaveConfig
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Values | `0x01` = master (local device), `0x02` = slave (upstream device) |
-| Used in | B0, B2, B3, C0 |
-
-:::note
-In B4, B5, and B6 messages, this field is replaced by `SlaveID_hi` and `SlaveID_lo` (both always `0x00`).
-:::
-
-### Parent
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B6 |
-
-Identifier of the parent device in the topology.
-
-### RestartFlag
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Values | `0x00` = normal, `0x01` = first frame after restart |
-| Used in | D1, D2 |
-
-Signals to the receiver that this is the first data frame after a device restart.
-
-### SchemaHash
-
-| Property | Value |
-|----------|-------|
-| Size | 2 bytes |
-| Type | uint16, little-endian |
-| Algorithm | CRC16-CCITT |
-| Used in | D2 |
-
-Hash of the signal schema (names + types). Allows the receiver to detect schema changes without requiring a full B0 retransmission. See [Schema Hash](schema-hash).
-
-### ServerRestarted
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B5, B6 |
-
-Whether the server has restarted since the client connected.
-
-### SlaveID
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Values | `0x00` for master; device-specific for slaves |
-| Used in | B0, B2, B3, C0 |
-
-### StatusByte
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Used in | B1, D1, D2 |
-
-Indicates the device or hub status at the time of transmission. See [Status Codes](status-codes).
-
-### StatusPayload
-
-| Property | Value |
-|----------|-------|
-| Size | 4 bytes |
-| Type | Raw bytes |
-| Used in | D2 |
-
-Additional data associated with the [StatusByte](status-codes). Content depends on the status code.
-
-### SymbolID
-
-| Property | Value |
-|----------|-------|
-| Size | 2 bytes |
-| Type | uint16, little-endian |
-| Used in | B1, D1, D2 |
-
-Zero-based index of the signal, matching the order in the B0 symbol list.
-
-### SymbolName
-
-| Property | Value |
-|----------|-------|
-| Size | Variable |
-| Type | Null-terminated string |
-| Used in | B0 |
-
-Human-readable name of the signal.
-
-### Timestamp
-
-| Property | Value |
-|----------|-------|
-| Size | 4 bytes (D1) or 8 bytes (D2) |
-| Type | uint32 LE (D1) or uint64 LE (D2) |
-| Conditional | Only present if TimestampMode > 0 |
-| Used in | D1, D2 |
-
-The timestamp value. Interpretation depends on [TimestampMode](timestamps).
-
-### TimestampMode
-
-| Property | Value |
-|----------|-------|
-| Size | 1 byte |
-| Type | uint8 |
-| Values | `0` = none, `1` = micros, `2` = UNIX |
-| Used in | D1, D2 |
-
-Determines whether a timestamp field follows and how to interpret it. See [Timestamps](timestamps).
+Every field that can appear in the elements section of a Blaeck [frame](frame-format). See [Frames](frames) for per-frame layouts.
+
+| Element | Size | Type | Description |
+|---------|------|------|-------------|
+| ClientDataEnabled | variable | string | Data streaming enabled (`"true"` / `"false"`) |
+| ClientNo | variable | string | Client number |
+| CRC32 | 4 bytes | uint32 LE | Integrity checksum. See [CRC32](crc32) |
+| DATA | variable | raw bytes LE | Signal value, size per [DTYPE](datatypes) |
+| DeviceName | variable | string | User-defined device name |
+| DeviceType | variable | string | `"server"` or `"hub"` |
+| DTYPE | 1 byte | uint8 | Datatype code (`0x00`–`0x09`). See [Datatypes](datatypes) |
+| FWVersion | variable | string | Firmware version |
+| HWVersion | variable | string | Hardware version |
+| LibName | variable | string | Library name |
+| LibVersion | variable | string | Library version (e.g., `"6.0.0"`) |
+| MasterSlaveConfig | 1 byte | uint8 | `0x01` = master, `0x02` = slave. In B4–B6: replaced by SlaveID_hi/lo (both `0x00`) |
+| Parent | variable | string | Parent device in topology |
+| RestartFlag | 1 byte | uint8 | `0x00` = normal, `0x01` = first frame after restart |
+| SchemaHash | 2 bytes | uint16 LE | CRC16-CCITT over signal schema. See [Schema Hash](schema-hash) |
+| ServerRestarted | variable | string | Whether server restarted since client connected |
+| SlaveID | 1 byte | uint8 | `0x00` for master; device-specific for slaves |
+| StatusByte | 1 byte | uint8 | Device/hub status. See [Status Codes](status-codes) |
+| StatusPayload | 4 bytes | raw bytes | Status-specific data |
+| SymbolID | 2 bytes | uint16 LE | Zero-based signal index (matches B0 order) |
+| SymbolName | variable | string | Signal name |
+| Timestamp | 4 or 8 bytes | uint32/uint64 LE | Conditional: only if TimestampMode > 0. See [Timestamps](timestamps) |
+| TimestampMode | 1 byte | uint8 | `0` = none, `1` = micros, `2` = UNIX. See [Timestamps](timestamps) |
+
+All string fields are null-terminated.
