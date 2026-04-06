@@ -22,8 +22,6 @@ packet-beta
   13-15: "DTYPE"
 ```
 
-**Element layout** (repeated per signal):
-
 | Element | Size | Type | Notes |
 |-------|------|------|-------|
 | MasterSlaveConfig | 1 byte | uint8 | `0x01` = master/local, `0x02` = slave/upstream |

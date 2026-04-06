@@ -24,8 +24,6 @@ packet-beta
   14-15: "LibVer"
 ```
 
-**Element layout** (repeated per device):
-
 | Element | Size | Type |
 |-------|------|------|
 | MasterSlaveConfig | 1 byte | uint8 |
@@ -57,8 +55,6 @@ packet-beta
   14-15: "LibVer"
   16-19: "LibName"
 ```
-
-**Element layout** (repeated per device):
 
 | Element | Size | Type |
 |-------|------|------|
@@ -97,8 +93,6 @@ packet-beta
   20-25: "DataEnabled"
 ```
 
-**Element layout** (repeated per device):
-
 | Element | Size | Type |
 |-------|------|------|
 | SlaveID_hi | 1 byte | uint8 (always `0x00`) |
@@ -136,8 +130,6 @@ packet-beta
   20-23: "DataEnabled"
   24-31: "ServerRestarted"
 ```
-
-**Element layout** (repeated per device):
 
 | Element | Size | Type |
 |-------|------|------|
@@ -179,8 +171,6 @@ packet-beta
   28-31: "DeviceType"
   32-35: "Parent"
 ```
-
-**Element layout** (repeated per device):
 
 | Element | Size | Type |
 |-------|------|------|
