@@ -16,10 +16,10 @@ Parameters are comma-separated integers. The number and meaning of parameters is
 
 | Command | Description | Response |
 |---------|-------------|----------|
-| `BLAECK.WRITE_SYMBOLS` | Request signal schema | [B0](frames/signals#b0--symbol-list-0xb0) |
-| `BLAECK.GET_DEVICES` | Request device identity | [B2](frames/devices#b2--devices-0xb2)–[B6](frames/devices#b6--devices-0xb6) |
-| `BLAECK.WRITE_DATA` | Request single data frame | [B1](frames/data#b1--data-0xb1)–[D2](frames/data#d2--data-0xd2) |
-| `BLAECK.ACTIVATE` | Start timed data streaming | Continuous data frames |
+| `BLAECK.WRITE_SYMBOLS` | Request signal schema | [Signal frame](frames/signals) |
+| `BLAECK.GET_DEVICES` | Request device identity | [Device frames](frames/devices) |
+| `BLAECK.WRITE_DATA` | Request single data frame | [Data frame](frames/data) |
+| `BLAECK.ACTIVATE` | Start timed data streaming | [Data frames](frames/data) (continuous) |
 | `BLAECK.DEACTIVATE` | Stop timed data streaming | — |
 
 The `BLAECK.` prefix is reserved for built-in commands.
