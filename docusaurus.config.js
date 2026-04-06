@@ -75,7 +75,7 @@ const config = {
         id: 'blaeckserial',
         path: 'blaeckserial',
         routeBasePath: 'blaeckserial',
-        sidebarPath: './sidebars-library.js',
+        sidebarPath: './sidebars-blaeckserial.js',
         lastVersion: 'current',
         versions: {
           current: { label: '6.0.0', path: '' },
@@ -88,7 +88,7 @@ const config = {
         id: 'blaecktcp',
         path: 'blaecktcp',
         routeBasePath: 'blaecktcp',
-        sidebarPath: './sidebars-library.js',
+        sidebarPath: './sidebars-blaecktcp.js',
         lastVersion: 'current',
         versions: {
           current: { label: '6.0.0', path: '' },
@@ -101,7 +101,7 @@ const config = {
         id: 'blaecktcpy',
         path: 'blaecktcpy',
         routeBasePath: 'blaecktcpy',
-        sidebarPath: './sidebars-library.js',
+        sidebarPath: './sidebars-blaecktcpy.js',
         lastVersion: 'current',
         versions: {
           current: { label: '3.0', path: '' },
@@ -126,37 +126,12 @@ const config = {
           },
           {
             type: 'dropdown',
-            label: 'BlaeckSerial',
+            label: 'Libraries',
             position: 'left',
             items: [
-              { label: '6.0.0 (latest)', to: '/blaeckserial/overview' },
-              { label: '5.0.0', to: '/blaeckserial/5.0.0/overview' },
-              { label: '4.3.0', to: '/blaeckserial/4.3.0/overview' },
-              { label: '4.0.0', to: '/blaeckserial/4.0.0/overview' },
-              { label: '3.0.0', to: '/blaeckserial/3.0.0/overview' },
-              { label: '2.0.0', to: '/blaeckserial/2.0.0/overview' },
-              { label: '1.0.0', to: '/blaeckserial/1.0.0/overview' },
-            ],
-          },
-          {
-            type: 'dropdown',
-            label: 'BlaeckTCP',
-            position: 'left',
-            items: [
-              { label: '6.0.0 (latest)', to: '/blaecktcp/overview' },
-              { label: '5.0.0', to: '/blaecktcp/5.0.0/overview' },
-              { label: '3.0.0', to: '/blaecktcp/3.0.0/overview' },
-              { label: '2.0.0', to: '/blaecktcp/2.0.0/overview' },
-              { label: '1.0.0', to: '/blaecktcp/1.0.0/overview' },
-            ],
-          },
-          {
-            type: 'dropdown',
-            label: 'blaecktcpy',
-            position: 'left',
-            items: [
-              { label: '3.0 (latest)', to: '/blaecktcpy/overview' },
-              { label: '2.0.0', to: '/blaecktcpy/2.0.0/overview' },
+              { label: 'BlaeckSerial', to: '/blaeckserial/overview' },
+              { label: 'BlaeckTCP', to: '/blaecktcp/overview' },
+              { label: 'blaecktcpy', to: '/blaecktcpy/overview' },
             ],
           },
           {
