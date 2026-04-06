@@ -54,4 +54,4 @@ For example, 1000 ms (`0x000003E8`):
 
 ## Custom Commands
 
-Libraries may support user-defined commands using the same `<COMMAND,params>` format. Commands that do not start with `BLAECK.` are forwarded to application-level handlers.
+Libraries may support user-defined commands using the same `<COMMAND,params>` format. The `BLAECK.` prefix is reserved for built-in commands.
