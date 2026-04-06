@@ -6,10 +6,6 @@ sidebar_position: 1
 
 The **Blaeck protocol** is a lightweight binary protocol for streaming typed signal data from embedded devices to host applications. It supports device discovery, schema negotiation, timestamped data frames, and integrity checking — all within a compact, deterministic wire format.
 
-:::note
-B3 and B6 are **not** sequential replacements — they coexist. B3 is used for serial devices, while B6 is used for networked devices (with additional fields like `DeviceType` and `Parent`).
-:::
-
 ## Protocol at a Glance
 
 Every Blaeck message is wrapped in a fixed binary envelope:
