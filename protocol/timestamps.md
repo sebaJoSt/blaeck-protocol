@@ -23,28 +23,6 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 | [D1](frames/data#d1--data-0xd1) | 4 bytes | uint32 |
 | [D2](frames/data#d2--data-0xd2) | 8 bytes | uint64 |
 
-## Position in Frame
-
-In a D2 frame, the timestamp appears after the [SchemaHash](schema-hash) and TimestampMode byte:
-
-```
-RestartFlag(1B) : SchemaHash(2B) : TimestampMode(1B) [Timestamp(8B)] : signals... : StatusByte(1B) : StatusPayload(4B) : CRC32(4B)
-```
-
-The timestamp is **conditional** — only present when TimestampMode > 0.
-
-## Mode 1 — MICROS
-
-Returns the value of `micros()` (Arduino) or an equivalent microsecond counter.
-
-**Overflow behavior:**
-- D1 (uint32): wraps every ~71.6 minutes
-- D2 (uint64): wraps every ~584,942 years (effectively never)
-
-## Mode 2 — UNIX
-
-Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source on the device.
-
 ## See Also
 
 - [Elements](elements) — TimestampMode and Timestamp field definitions

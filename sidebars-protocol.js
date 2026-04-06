@@ -6,7 +6,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Frames',
-      link: { type: 'doc', id: 'frames/index' },
+      link: { type: 'generated-index', slug: '/frames', description: 'All frame types by category.' },
       items: [
         'frames/signals',
         'frames/devices',
