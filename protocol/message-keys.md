@@ -25,6 +25,19 @@ The message key is a single byte in the [frame envelope](frame-format) that iden
 | D1 | `0xD1` | Data (4-byte timestamps) |
 | D2 | `0xD2` | Data (8-byte timestamps, schema hash, status payload) |
 
+## Evolution
+
+```
+Data messages:       B1 → D1 → D2
+                     no timestamps   4B timestamps   8B timestamps + SchemaHash
+
+Serial devices:      B2 → B3
+                     no LibName   + LibName
+
+TCP devices:         B4 → B5 → B6
+                     base TCP   + ServerRestarted   + DeviceType, Parent
+```
+
 ---
 
 ## Key Definitions
@@ -46,13 +59,52 @@ Enumerates all signals the device exposes. Sent in response to a host request.
 The earliest protocol version (B0 in v1) used a 2-byte `SymbolID` (signal index) in place of `MasterSlaveConfig`/`SlaveID`. From v2 onward, all versions use the layout shown above.
 :::
 
-Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. The wire format is identical.
+---
+
+### B1 — Data (`0xB1`)
+
+Data message without timestamps.
+
+**Element layout (without CRC):**
+
+| Field | Size | Type |
+|-------|------|------|
+| *Per signal:* | | |
+| SymbolID | 2 bytes | uint16 LE |
+| DATA | variable | Per [DTYPE](datatypes) |
+
+**Element layout (with CRC):**
+
+| Field | Size | Type | Notes |
+|-------|------|------|-------|
+| *Per signal:* | | | |
+| SymbolID | 2 bytes | uint16 LE | |
+| DATA | variable | Per [DTYPE](datatypes) | |
+| StatusByte | 1 byte | uint8 | |
+| CRC32 | 4 bytes | uint32 LE | Scope: MsgKey through last DATA byte (StatusByte **excluded**) |
+
+---
+
+### B2 — Devices (`0xB2`)
+
+Device identity message without `LibName`.
+
+**Element layout** (repeated per device):
+
+| Field | Size | Type |
+|-------|------|------|
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
 
 ---
 
 ### B3 — Devices (`0xB3`)
 
-Reports device identity. Adds `LibName` field compared to [B2](historical#b2--devices-legacy-0xb2).
+Device identity message. Adds `LibName` compared to [B2](#b2--devices-0xb2).
 
 **Element layout** (repeated per device):
 
@@ -70,9 +122,50 @@ See [Elements](elements) for field definitions.
 
 ---
 
+### B4 — Devices (`0xB4`)
+
+Device identity message. Adds `ClientNo` and `ClientDataEnabled` compared to [B3](#b3--devices-0xb3).
+
+**Element layout** (repeated per device):
+
+| Field | Size | Type |
+|-------|------|------|
+| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
+| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
+| ClientNo | variable | null-terminated string |
+| ClientDataEnabled | variable | null-terminated string |
+
+---
+
+### B5 — Devices (`0xB5`)
+
+Device identity message. Adds `ServerRestarted` compared to [B4](#b4--devices-0xb4).
+
+**Element layout** (repeated per device):
+
+| Field | Size | Type |
+|-------|------|------|
+| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
+| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
+| ClientNo | variable | null-terminated string |
+| ClientDataEnabled | variable | null-terminated string |
+| ServerRestarted | variable | null-terminated string |
+
+---
+
 ### B6 — Devices (`0xB6`)
 
-Reports device identity. Extends [B5](historical#b5--devices-tcp-extended-0xb5) with `DeviceType` and `Parent` fields.
+Device identity message. Adds `DeviceType` and `Parent` compared to [B5](#b5--devices-0xb5).
 
 **Element layout** (repeated per device):
 
@@ -106,6 +199,25 @@ Sent when a device restarts. Allows the host to re-request the symbol list and r
 | FWVersion | variable | null-terminated string |
 | LibVersion | variable | null-terminated string |
 | LibName | variable | null-terminated string |
+
+---
+
+### D1 — Data (`0xD1`)
+
+Data message with 4-byte timestamps.
+
+**Element layout:**
+
+| Field | Size | Type | Notes |
+|-------|------|------|-------|
+| RestartFlag | 1 byte | uint8 | `0x01` on first frame after restart |
+| TimestampMode | 1 byte | uint8 | `0` = none, `1` = micros, `2` = RTC/UNIX |
+| Timestamp | 4 bytes | uint32 LE | **Conditional:** only if TimestampMode > 0 |
+| *Per signal:* | | | |
+| SymbolID | 2 bytes | uint16 LE | |
+| DATA | variable | Per [DTYPE](datatypes) | |
+| StatusByte | 1 byte | uint8 | |
+| CRC32 | 4 bytes | uint32 LE | Scope: MsgKey through last DATA byte (StatusByte **excluded**) |
 
 ---
 

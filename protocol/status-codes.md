@@ -32,7 +32,7 @@ Data values for signals belonging to the skipped slave should be considered **in
 
 ## Hub-Level Codes (0x80–0xFF)
 
-These codes are emitted by hub implementations when upstream device connectivity changes.
+These codes are emitted by hubs when upstream device connectivity changes.
 
 | Code | Name | Description |
 |------|------|-------------|

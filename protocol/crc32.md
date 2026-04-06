@@ -36,7 +36,7 @@ CRC scope: MsgKey → StatusPayload
 
 In D2 frames, the CRC covers everything from the Message Key byte through the StatusPayload (inclusive). **StatusByte and StatusPayload are included in the CRC.**
 
-### B1 and D1 (historical)
+### B1 and D1 (earlier versions)
 
 ```
 CRC scope: MsgKey → last data byte
@@ -90,5 +90,5 @@ def verify_d2_crc(msg_key_byte, elements_without_crc):
 ## See Also
 
 - [Message Keys](message-keys) — D2 payload layout
-- [Historical Keys](historical) — B1 and D1 CRC scope
+- [Message Keys](message-keys) — B1 and D1 CRC scope
 - [Status Codes](status-codes) — StatusByte values included in D2 CRC

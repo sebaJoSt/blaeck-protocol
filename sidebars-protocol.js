@@ -12,7 +12,6 @@ const sidebars = {
     'client-identity',
     'crc32',
     'decoding-examples',
-    'historical',
   ],
 };
 

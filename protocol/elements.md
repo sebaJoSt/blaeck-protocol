@@ -27,7 +27,7 @@ This page defines every field that can appear in the elements section of a Blaec
 | Used in | B0, B3, B6 (as SlaveID_lo), C0 |
 
 :::note
-Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. Both are always `0x00` in current TCP implementations.
+In B6 messages, these bytes are named `SlaveID_hi` and `SlaveID_lo`. Both are always `0x00`.
 :::
 
 ### DeviceName
@@ -151,7 +151,7 @@ These fields appear in B0 (Symbol List) messages.
 | Type | Null-terminated string |
 | Used in | B0 |
 
-Human-readable name of the signal. Some implementations use the term "SignalName"; the wire format is identical.
+Human-readable name of the signal. Also referred to as "SignalName"; the wire format is identical.
 
 ### DTYPE / DatatypeCode
 
@@ -168,7 +168,7 @@ Numeric code identifying the signal's data type. See [Datatypes](datatypes) for 
 
 ## Signal Data Fields
 
-These fields appear in data messages (D2, and historically B1/D1).
+These fields appear in data messages (D2, and earlier B1/D1).
 
 ### SymbolID / SignalIndex
 

@@ -61,11 +61,6 @@
           "type": "link",
           "label": "Decoding Examples",
           "href": "/blaeck-protocol/protocol/decoding-examples"
-        },
-        {
-          "type": "link",
-          "label": "Historical",
-          "href": "/blaeck-protocol/protocol/historical"
         }
       ]
     }

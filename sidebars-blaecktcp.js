@@ -19,7 +19,6 @@ const sidebars = {
         { type: 'link', label: 'Client Identity', href: '/blaeck-protocol/protocol/client-identity' },
         { type: 'link', label: 'CRC32', href: '/blaeck-protocol/protocol/crc32' },
         { type: 'link', label: 'Decoding Examples', href: '/blaeck-protocol/protocol/decoding-examples' },
-        { type: 'link', label: 'Historical', href: '/blaeck-protocol/protocol/historical' },
       ],
     },
   ],

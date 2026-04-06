@@ -35,7 +35,7 @@ All multi-byte integers throughout the protocol are **little-endian**.
 
 The Message ID is a uint32 value included in every frame. For request/response commands (e.g., `GET_DEVICES`, `WRITE_SYMBOLS`, `WRITE_DATA`), the host provides a Message ID in the command parameters and the device **echoes it back** in the response frame, allowing the host to correlate requests with responses.
 
-For frames sent without a host request (e.g., timed data streaming, restart notifications), the Message ID is implementation-defined — typically `0x00000001` or a value set by the application.
+For frames sent without a host request (e.g., timed data streaming, restart notifications), the Message ID is application-defined — typically `0x00000001` or a value set by the application.
 
 ## Example
 

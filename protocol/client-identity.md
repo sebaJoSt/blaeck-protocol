@@ -4,7 +4,7 @@ sidebar_position: 9
 
 # Client Identity
 
-**Client Identity** is a feature for TCP-based implementations that allows clients to identify themselves to the server. This information is used for server-side logging and management — it is **not** transmitted in any outbound Blaeck frames.
+**Client Identity** allows TCP clients to identify themselves to the server. This information is used for server-side logging and management — it is **not** transmitted in any outbound Blaeck frames.
 
 ## Mechanism
 

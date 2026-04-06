@@ -20,7 +20,7 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 
 | Message Key | Timestamp Size | Type |
 |-------------|---------------|------|
-| [D1](historical#d1--data-with-4-byte-timestamps-0xd1) | 4 bytes | uint32, little-endian |
+| [D1](message-keys#d1--data-0xd1) | 4 bytes | uint32, little-endian |
 | [D2](message-keys#d2--data-0xd2) | 8 bytes | uint64, little-endian |
 
 D2 doubled the timestamp field to 8 bytes to support high-resolution microsecond counters on 32-bit platforms without overflow.
@@ -47,10 +47,10 @@ Receivers should handle uint32 wraparound when processing D1 frames from older l
 
 ## Mode 2 — UNIX
 
-Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source on the device. The library implementation typically provides a callback mechanism for the application to supply the current time.
+Returns Unix epoch seconds. Requires a Real-Time Clock (RTC) or NTP time source on the device.
 
 ## See Also
 
 - [Elements](elements) — TimestampMode and Timestamp field definitions
 - [Message Keys](message-keys) — D2 payload layout
-- [Historical Keys](historical) — D1 payload layout
+- [Message Keys](message-keys) — D1 payload layout
