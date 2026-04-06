@@ -26,7 +26,7 @@ packet-beta
 
 | Field | Size | Type | Notes |
 |-------|------|------|-------|
-| **MasterSlaveConfig** | 1 byte | uint8 | `0x01` = master/local, `0x02` = slave/upstream |
-| **SlaveID** | 1 byte | uint8 | `0x00` for master |
-| **SymbolName** | variable | null-terminated string | Signal name |
-| **DTYPE** | 1 byte | uint8 | [Datatype code](../datatypes) |
+| MasterSlaveConfig | 1 byte | uint8 | `0x01` = master/local, `0x02` = slave/upstream |
+| SlaveID | 1 byte | uint8 | `0x00` for master |
+| SymbolName | variable | null-terminated string | Signal name |
+| DTYPE | 1 byte | uint8 | [Datatype code](../datatypes) |

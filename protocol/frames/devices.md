@@ -28,12 +28,12 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **MasterSlaveConfig** | 1 byte | uint8 |
-| **SlaveID** | 1 byte | uint8 |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
 
 ---
 
@@ -62,13 +62,13 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **MasterSlaveConfig** | 1 byte | uint8 |
-| **SlaveID** | 1 byte | uint8 |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
-| **LibName** | variable | null-terminated string |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
 
 See [Elements](../elements) for field definitions.
 
@@ -101,15 +101,15 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **SlaveID_hi** | 1 byte | uint8 (always `0x00`) |
-| **SlaveID_lo** | 1 byte | uint8 (always `0x00`) |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
-| **LibName** | variable | null-terminated string |
-| **ClientNo** | variable | null-terminated string |
-| **ClientDataEnabled** | variable | null-terminated string |
+| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
+| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
+| ClientNo | variable | null-terminated string |
+| ClientDataEnabled | variable | null-terminated string |
 
 ---
 
@@ -141,16 +141,16 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **SlaveID_hi** | 1 byte | uint8 (always `0x00`) |
-| **SlaveID_lo** | 1 byte | uint8 (always `0x00`) |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
-| **LibName** | variable | null-terminated string |
-| **ClientNo** | variable | null-terminated string |
-| **ClientDataEnabled** | variable | null-terminated string |
-| **ServerRestarted** | variable | null-terminated string |
+| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
+| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
+| ClientNo | variable | null-terminated string |
+| ClientDataEnabled | variable | null-terminated string |
+| ServerRestarted | variable | null-terminated string |
 
 ---
 
@@ -184,15 +184,15 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **SlaveID_hi** | 1 byte | uint8 (always `0x00`) |
-| **SlaveID_lo** | 1 byte | uint8 (always `0x00`) |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
-| **LibName** | variable | null-terminated string |
-| **ClientNo** | variable | null-terminated string |
-| **ClientDataEnabled** | variable | null-terminated string |
-| **ServerRestarted** | variable | null-terminated string |
-| **DeviceType** | variable | null-terminated string (`"server"` or `"hub"`) |
-| **Parent** | variable | null-terminated string |
+| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
+| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
+| ClientNo | variable | null-terminated string |
+| ClientDataEnabled | variable | null-terminated string |
+| ServerRestarted | variable | null-terminated string |
+| DeviceType | variable | null-terminated string (`"server"` or `"hub"`) |
+| Parent | variable | null-terminated string |

@@ -27,10 +27,10 @@ packet-beta
 
 | Field | Size | Type |
 |-------|------|------|
-| **MasterSlaveConfig** | 1 byte | uint8 |
-| **SlaveID** | 1 byte | uint8 |
-| **DeviceName** | variable | null-terminated string |
-| **HWVersion** | variable | null-terminated string |
-| **FWVersion** | variable | null-terminated string |
-| **LibVersion** | variable | null-terminated string |
-| **LibName** | variable | null-terminated string |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
+| DeviceName | variable | null-terminated string |
+| HWVersion | variable | null-terminated string |
+| FWVersion | variable | null-terminated string |
+| LibVersion | variable | null-terminated string |
+| LibName | variable | null-terminated string |
