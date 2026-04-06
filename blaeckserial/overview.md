@@ -13,10 +13,3 @@ slug: overview
 | D2 | `0xD2` | [Data frame](/blaeck-protocol/protocol/frames/data#d2--data-0xd2) |
 | B3 | `0xB3` | [Device frame](/blaeck-protocol/protocol/frames/devices#b3--devices-0xb3) |
 | C0 | `0xC0` | [Control frame](/blaeck-protocol/protocol/frames/control#c0--restart-notification-0xc0) |
-
-## Status Codes
-
-| Code | Name | Description |
-|------|------|-------------|
-| `0x00` | Normal | No errors |
-| `0x01` | I2C Slave Skip | An I2C slave was skipped |
