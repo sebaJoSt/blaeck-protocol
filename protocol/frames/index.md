@@ -26,9 +26,9 @@ Each frame type is identified by its message key — a single byte in the [frame
 
 | Key | Hex | Description |
 |-----|-----|-------------|
-| [B1](data#b1--data-0xb1) | `0xB1` | Data without timestamps |
-| [D1](data#d1--data-0xd1) | `0xD1` | Data with 4-byte timestamps |
-| [D2](data#d2--data-0xd2) | `0xD2` | Data with 8-byte timestamps, schema hash, and status payload |
+| [B1](data#b1--data-0xb1) | `0xB1` | Basic data: SymbolID, DATA, StatusByte, and CRC32 |
+| [D1](data#d1--data-0xd1) | `0xD1` | Adds RestartFlag, TimestampMode, and Timestamp (4 bytes) |
+| [D2](data#d2--data-0xd2) | `0xD2` | Adds SchemaHash and StatusPayload. Timestamp grows to 8 bytes |
 
 ## Control
 

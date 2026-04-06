@@ -8,7 +8,7 @@ SymbolID + DATA repeat per signal. See [Elements](../elements) for field details
 
 ## B1 — Data (`0xB1`)
 
-Data message without timestamps.
+Basic data: SymbolID, DATA, StatusByte, and CRC32.
 
 ```mermaid
 ---
@@ -28,7 +28,7 @@ packet-beta
 
 ## D1 — Data (`0xD1`)
 
-Data message with 4-byte timestamps.
+Adds RestartFlag, TimestampMode, and Timestamp (4 bytes).
 
 ```mermaid
 ---
@@ -51,7 +51,7 @@ packet-beta
 
 ## D2 — Data (`0xD2`)
 
-Data message with 8-byte timestamps, schema hash, and status payload.
+Adds SchemaHash and StatusPayload. Timestamp grows to 8 bytes.
 
 ```mermaid
 ---
