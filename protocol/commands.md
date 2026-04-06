@@ -26,7 +26,7 @@ Parameters are comma-separated integers.
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
-For example, `ACTIVATE` with 1000 ms (`0x000003E8`):
+For example, `ACTIVATE` with 1000 ms:
 
 ```
 <BLAECK.ACTIVATE,232,3,0,0>
