@@ -135,6 +135,24 @@ const config = {
             ],
           },
           {
+            type: 'docsVersionDropdown',
+            docsPluginId: 'blaeckserial',
+            position: 'left',
+            className: 'version-blaeckserial',
+          },
+          {
+            type: 'docsVersionDropdown',
+            docsPluginId: 'blaecktcp',
+            position: 'left',
+            className: 'version-blaecktcp',
+          },
+          {
+            type: 'docsVersionDropdown',
+            docsPluginId: 'blaecktcpy',
+            position: 'left',
+            className: 'version-blaecktcpy',
+          },
+          {
             href: 'https://github.com/sebaJoSt/blaeck-protocol',
             position: 'right',
             className: 'header-icon header-icon-github',
