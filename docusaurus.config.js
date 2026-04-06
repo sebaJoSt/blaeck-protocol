@@ -169,28 +169,7 @@ const config = {
           },
         ],
       },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Protocol',
-            items: [
-              { label: 'Introduction', to: '/protocol/intro' },
-              { label: 'Commands', to: '/protocol/commands' },
-              { label: 'Frames', to: '/protocol/category/frames' },
-            ],
-          },
-          {
-            title: 'Libraries',
-            items: [
-              { label: 'BlaeckSerial', href: 'https://github.com/sebaJoSt/BlaeckSerial' },
-              { label: 'BlaeckTCP', href: 'https://github.com/sebaJoSt/BlaeckTCP' },
-              { label: 'blaecktcpy', href: 'https://github.com/sebaJoSt/blaecktcpy' },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} Sebastian Strobl. Built with Docusaurus.`,
-      },
+      footer: {},
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
