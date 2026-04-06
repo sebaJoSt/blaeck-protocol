@@ -19,6 +19,10 @@ const config = {
 
   onBrokenLinks: 'throw',
 
+  markdown: {
+    mermaid: true,
+  },
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -186,7 +190,11 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
+      mermaid: {
+        theme: { light: 'base', dark: 'dark' },
+      },
     }),
+  themes: ['@docusaurus/theme-mermaid'],
 };
 
 export default config;

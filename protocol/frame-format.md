@@ -8,8 +8,23 @@ Every Blaeck message is wrapped in a fixed binary envelope. The envelope is iden
 
 ## Structure
 
-```
-<BLAECK: MSGKEY : MSGID : <ELEMENTS> /BLAECK>\r\n
+```mermaid
+---
+config:
+  packet:
+    showBits: false
+    bitsPerRow: 16
+---
+packet-beta
+  0-3: "Header: <BLAECK:"
+  4: "Key"
+  5: ":"
+  6-8: "Message ID"
+  9: ":"
+  10-13: "Elements (var)"
+  14-17: "Footer: /BLAECK>"
+  18: "CR"
+  19: "LF"
 ```
 
 ### Parts Table
