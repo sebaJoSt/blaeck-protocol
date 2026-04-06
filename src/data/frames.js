@@ -34,7 +34,7 @@ packet-beta
     hex: '0xB1',
     category: 'data',
     name: 'Data',
-    description: 'Basic data: SymbolID, DATA, StatusByte, and CRC32.',
+    description: 'Signal values with StatusByte and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'b1--data-0xb1',
     mermaid: `---
@@ -55,7 +55,7 @@ packet-beta
     hex: '0xD1',
     category: 'data',
     name: 'Data',
-    description: 'Adds RestartFlag, TimestampMode, and Timestamp (4 bytes).',
+    description: 'Signal values with RestartFlag, 4-byte Timestamp, StatusByte, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd1--data-0xd1',
     mermaid: `---
@@ -79,7 +79,7 @@ packet-beta
     hex: '0xD2',
     category: 'data',
     name: 'Data',
-    description: 'Adds SchemaHash and StatusPayload. Timestamp grows to 8 bytes.',
+    description: 'Signal values with SchemaHash, 8-byte Timestamp, StatusByte, StatusPayload, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd2--data-0xd2',
     mermaid: `---
@@ -105,7 +105,7 @@ packet-beta
     hex: '0xB2',
     category: 'devices',
     name: 'Devices',
-    description: 'Basic device identity: name, hardware, firmware, and library version.',
+    description: 'Device identity: name, hardware, firmware, and library version.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b2--devices-0xb2',
     mermaid: `---
@@ -128,7 +128,7 @@ packet-beta
     hex: '0xB3',
     category: 'devices',
     name: 'Devices',
-    description: 'Adds LibName.',
+    description: 'Device identity with LibName.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b3--devices-0xb3',
     mermaid: `---
@@ -152,7 +152,7 @@ packet-beta
     hex: '0xB4',
     category: 'devices',
     name: 'Devices',
-    description: 'Adds ClientNo and ClientDataEnabled.',
+    description: 'Device identity with LibName, ClientNo, and ClientDataEnabled.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b4--devices-0xb4',
     mermaid: `---
@@ -178,7 +178,7 @@ packet-beta
     hex: '0xB5',
     category: 'devices',
     name: 'Devices',
-    description: 'Adds ServerRestarted.',
+    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, and ServerRestarted.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b5--devices-0xb5',
     mermaid: `---
@@ -205,7 +205,7 @@ packet-beta
     hex: '0xB6',
     category: 'devices',
     name: 'Devices',
-    description: 'Adds DeviceType and Parent.',
+    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ServerRestarted, DeviceType, and Parent.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
     mermaid: `---
