@@ -8,16 +8,16 @@ sidebar_position: 9
 
 ## Mechanism
 
-Client identity is sent via the `GET_DEVICES` command. The 6th and 7th parameters carry the client's name and type:
+Client identity is sent via the `GET_DEVICES` command. The 5th and 6th parameters carry the client's name and type:
 
 ```
-<BLAECK.GET_DEVICES,P0,P1,P2,P3,P4,ClientName,ClientType>
+<BLAECK.GET_DEVICES,P0,P1,P2,P3,ClientName,ClientType>
 ```
 
 | Parameter Position | Field | Description |
 |-------------------|-------|-------------|
-| 6 | ClientName | Human-readable name of the client application |
-| 7 | ClientType | Type of client (e.g., `"desktop"`, `"web"`, `"script"`) |
+| 5 | ClientName | Human-readable name of the client application |
+| 6 | ClientType | Type of client (e.g., `"desktop"`, `"web"`, `"script"`) |
 
 ## Storage
 
