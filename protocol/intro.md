@@ -8,7 +8,7 @@ The **Blaeck protocol** is a lightweight binary protocol for streaming typed sig
 
 ## Protocol at a Glance
 
-Every Blaeck message is wrapped in a fixed binary envelope:
+Every Blaeck message is wrapped in a fixed envelope:
 
 ```
 <BLAECK: MSGKEY(1B) : MSGID(4B) : FRAME /BLAECK>\r\n
