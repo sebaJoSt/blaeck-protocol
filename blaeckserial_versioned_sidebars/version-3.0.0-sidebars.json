@@ -14,13 +14,13 @@
         },
         {
           "type": "link",
-          "label": "Frame Format",
-          "href": "/blaeck-protocol/protocol/frame-format"
+          "label": "Frames",
+          "href": "/blaeck-protocol/protocol/frames"
         },
         {
           "type": "link",
-          "label": "Frames",
-          "href": "/blaeck-protocol/protocol/frames"
+          "label": "Commands",
+          "href": "/blaeck-protocol/protocol/commands"
         },
         {
           "type": "link",

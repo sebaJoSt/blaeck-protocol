@@ -16,8 +16,8 @@ const ROOT = path.resolve(__dirname, '..');
 
 const PROTOCOL_ITEMS = [
   { type: 'link', label: 'Introduction', href: '/blaeck-protocol/protocol/intro' },
-  { type: 'link', label: 'Frame Format', href: '/blaeck-protocol/protocol/frame-format' },
   { type: 'link', label: 'Frames', href: '/blaeck-protocol/protocol/frames' },
+  { type: 'link', label: 'Commands', href: '/blaeck-protocol/protocol/commands' },
   { type: 'link', label: 'Elements', href: '/blaeck-protocol/protocol/elements' },
   { type: 'link', label: 'Status Codes', href: '/blaeck-protocol/protocol/status-codes' },
   { type: 'link', label: 'Data Types', href: '/blaeck-protocol/protocol/datatypes' },

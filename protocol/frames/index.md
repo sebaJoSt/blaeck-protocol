@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Frames
 
-Each frame type is identified by its message key — a single byte in the [frame envelope](../frame-format). Frames are grouped by function:
+Each frame type is identified by its message key — a single byte in the [frame envelope](../intro#protocol-at-a-glance). Frames are grouped by function:
 
 ## Signals
 

@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Elements
 
-Every field that can appear in the elements section of a Blaeck [frame](frame-format). See [Frames](frames) for per-frame layouts.
+Every field that can appear in the elements section of a Blaeck [frame](intro#protocol-at-a-glance). See [Frames](frames) for per-frame layouts.
 
 | Element | Size | Type | Description |
 |---------|------|------|-------------|

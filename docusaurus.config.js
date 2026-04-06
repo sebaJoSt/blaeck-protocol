@@ -171,8 +171,8 @@ const config = {
             title: 'Protocol',
             items: [
               { label: 'Introduction', to: '/protocol/intro' },
-              { label: 'Frame Format', to: '/protocol/frame-format' },
               { label: 'Frames', to: '/protocol/frames' },
+              { label: 'Commands', to: '/protocol/commands' },
             ],
           },
           {

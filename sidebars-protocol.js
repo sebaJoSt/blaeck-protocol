@@ -2,7 +2,6 @@
 const sidebars = {
   protocolSidebar: [
     'intro',
-    'frame-format',
     {
       type: 'category',
       label: 'Frames',

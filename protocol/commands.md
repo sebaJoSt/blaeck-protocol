@@ -22,13 +22,13 @@ Parameters are comma-separated integers.
 | `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Interval (ms) | Start timed data streaming | [Data frames](frames/data) in intervals |
 | `BLAECK.DEACTIVATE` | … | — | Stop timed data streaming | — |
 
-**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. The device echoes the [Message ID](frame-format#message-id) in the response frame.
+**Bold** parameters encode a uint32 in little-endian byte order as four comma-separated bytes. The device echoes the [Message ID](intro#protocol-at-a-glance) in the response frame.
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
 ## Response with Message ID
 
-While commands are ASCII text, the device responds with binary [frames](frame-format). For example, requesting signal schema with Message ID `1`:
+While commands are ASCII text, the device responds with binary [frames](intro#protocol-at-a-glance). For example, requesting signal schema with Message ID `1`:
 
 ```
 Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
