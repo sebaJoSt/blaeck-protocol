@@ -66,8 +66,6 @@ packet-beta
 | LibVersion | variable | null-terminated string |
 | LibName | variable | null-terminated string |
 
-See [Elements](../elements) for field definitions.
-
 ---
 
 ## B4 — Devices (`0xB4`)
