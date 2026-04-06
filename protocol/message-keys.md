@@ -43,7 +43,7 @@ Enumerates all signals the device exposes. Sent in response to a host request.
 | DTYPE | 1 byte | uint8 | [Datatype code](datatypes) |
 
 :::note
-Early protocol versions used a different B0 layout with a 2-byte `SymbolID` instead of `MasterSlaveConfig`/`SlaveID`. All current versions use the layout shown above.
+The earliest protocol version (B0 in v1) used a 2-byte `SymbolID` (signal index) in place of `MasterSlaveConfig`/`SlaveID`. From v2 onward, all versions use the layout shown above.
 :::
 
 Some implementations label these bytes `SlaveID_hi` and `SlaveID_lo`. The wire format is identical.
