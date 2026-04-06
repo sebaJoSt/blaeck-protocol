@@ -132,7 +132,7 @@ const config = {
             type: 'dropdown',
             label: 'Libraries',
             position: 'left',
-            activeBaseRegex: '/(blaeckserial|blaecktcp|blaecktcpy)/',
+            activeBaseRegex: 'blaeckserial|blaecktcp|blaecktcpy',
             items: [
               { label: 'BlaeckSerial', to: '/blaeckserial/overview' },
               { label: 'BlaeckTCP', to: '/blaecktcp/overview' },
