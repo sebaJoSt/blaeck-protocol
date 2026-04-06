@@ -44,8 +44,6 @@ All multi-byte integers throughout the protocol are **little-endian**.
 
 ## Message ID
 
-The Message ID is a uint32 value included in every frame. For request/response exchanges, the host provides a Message ID and the device **echoes it back**, allowing the host to correlate requests with responses.
-
-For unsolicited frames (e.g., timed data streaming, restart notifications), the Message ID is application-defined.
+A user-defined uint32 value included in every frame. Can be used to correlate requests with responses.
 
 
