@@ -11,7 +11,7 @@ Every Blaeck message is wrapped in a fixed binary envelope. The envelope is iden
 config:
   packet:
     showBits: false
-    bitsPerRow: 20
+    bitsPerRow: 28
 ---
 packet-beta
   0-7: "Header: <BLAECK:"
@@ -19,7 +19,7 @@ packet-beta
   9: ":"
   10-13: "Message ID"
   14: ":"
-  15-17: "Frame (var)"
+  15-17: "Frame"
   18-25: "Footer: /BLAECK>"
   26: "CR"
   27: "LF"
