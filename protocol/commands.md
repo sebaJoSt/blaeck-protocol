@@ -26,12 +26,6 @@ Parameters are comma-separated integers.
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
-For example, `ACTIVATE` with 1000 ms:
-
-```
-<BLAECK.ACTIVATE,232,3,0,0>
-```
-
 ## Response with Message ID
 
 While commands are ASCII text, the device responds with binary [frames](frame-format). For example, requesting signal schema with Message ID `1`:
@@ -42,4 +36,15 @@ Response: <BLAECK: B0 : 01 00 00 00 : … /BLAECK>\r\n
                    Key  Message ID    Frame
 ```
 
-The device echoes the Message ID back, allowing the host to correlate requests with responses. See [Frames](frames) for all frame types.
+The device echoes the Message ID back, allowing the host to correlate requests with responses.
+
+Starting timed data streaming with an interval of 1000 ms:
+
+```
+Command:   <BLAECK.ACTIVATE,232,3,0,0>
+Responses: <BLAECK: B1 : … : … /BLAECK>\r\n
+           <BLAECK: B1 : … : … /BLAECK>\r\n
+           …
+```
+
+See [Frames](frames) for all frame types.
