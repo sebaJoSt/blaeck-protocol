@@ -8,7 +8,7 @@ Repeated per device. See [Elements](../elements) for field details.
 
 ## B2 — Devices (`0xB2`)
 
-Device identity message.
+Basic device identity: name, hardware, firmware, and library version.
 
 ```mermaid
 ---
@@ -30,7 +30,7 @@ packet-beta
 
 ## B3 — Devices (`0xB3`)
 
-Device identity message.
+Adds LibName.
 
 ```mermaid
 ---
@@ -53,7 +53,7 @@ packet-beta
 
 ## B4 — Devices (`0xB4`)
 
-Device identity message.
+Adds ClientNo and ClientDataEnabled.
 
 ```mermaid
 ---
@@ -78,7 +78,7 @@ packet-beta
 
 ## B5 — Devices (`0xB5`)
 
-Device identity message.
+Adds ServerRestarted.
 
 ```mermaid
 ---
@@ -104,7 +104,7 @@ packet-beta
 
 ## B6 — Devices (`0xB6`)
 
-Device identity message.
+Adds DeviceType and Parent.
 
 ```mermaid
 ---
