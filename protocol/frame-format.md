@@ -33,7 +33,9 @@ All multi-byte integers throughout the protocol are **little-endian**.
 
 ## Message ID
 
-The Message ID is a uint32 counter that increments with each transmitted frame. It starts at `0x00000001` on boot and wraps at `0xFFFFFFFF`. Receivers can use it to detect dropped frames.
+The Message ID is a uint32 value included in every frame. For request/response commands (e.g., `GET_DEVICES`, `WRITE_SYMBOLS`, `WRITE_DATA`), the host provides a Message ID in the command parameters and the device **echoes it back** in the response frame, allowing the host to correlate requests with responses.
+
+For frames sent without a host request (e.g., timed data streaming, restart notifications), the Message ID is implementation-defined — typically `0x00000001` or a value set by the implementor.
 
 :::note
 The C0 (Restart Notification) message in hub mode always uses a fixed Message ID of `0x00000001`.
