@@ -22,14 +22,7 @@ packet-beta
   12-15: "CRC32"
 ```
 
-**Element layout (without CRC):**
-
-| Field | Size | Type |
-|-------|------|------|
-| **SymbolID** | 2 bytes | uint16 LE |
-| **DATA** | variable | Per [DTYPE](../datatypes) |
-
-**Element layout (with CRC):**
+**Element layout:**
 
 | Field | Size | Type | Notes |
 |-------|------|------|-------|
