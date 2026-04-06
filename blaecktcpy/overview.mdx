@@ -21,13 +21,4 @@ import Frame from '@site/src/components/Frame';
 
 <Frame id="C0" showElements />
 
-### Differences from server mode
-
-- **B0**: Master signals listed first, then slave signals with `MasterSlaveConfig = 0x02` and remapped SlaveIDs.
-- **B6**: Contains multiple device entries — the hub device itself plus each upstream device.
-- **C0**: Upstream restart notification (not present in server mode).
-- **Status codes**: Additional hub-specific codes (`0x80`, `0x81`) for upstream connection events.
-- **Schema hash validation**: Hub validates the schema hash across aggregated upstream devices.
-- **Auto-reconnect**: Hub can automatically reconnect to lost upstream servers.
-
 See [Protocol Spec](/protocol/intro) for full element definitions.
