@@ -79,11 +79,11 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 18
+    bitsPerRow: 20
 ---
 packet-beta
-  0-2: "SlaveID_hi"
-  3-5: "SlaveID_lo"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
   6-8: "DeviceName"
   9-11: "HWVersion"
   12-14: "FWVersion"
@@ -95,8 +95,8 @@ packet-beta
 
 | Element | Size | Type |
 |-------|------|------|
-| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
-| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
 | DeviceName | variable | null-terminated string |
 | HWVersion | variable | null-terminated string |
 | FWVersion | variable | null-terminated string |
@@ -116,11 +116,11 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 18
+    bitsPerRow: 20
 ---
 packet-beta
-  0-2: "SlaveID_hi"
-  3-5: "SlaveID_lo"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
   6-8: "DeviceName"
   9-11: "HWVersion"
   12-14: "FWVersion"
@@ -133,8 +133,8 @@ packet-beta
 
 | Element | Size | Type |
 |-------|------|------|
-| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
-| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
 | DeviceName | variable | null-terminated string |
 | HWVersion | variable | null-terminated string |
 | FWVersion | variable | null-terminated string |
@@ -155,11 +155,11 @@ Device identity message.
 config:
   packet:
     showBits: false
-    bitsPerRow: 18
+    bitsPerRow: 20
 ---
 packet-beta
-  0-2: "SlaveID_hi"
-  3-5: "SlaveID_lo"
+  0-3: "MasterSlaveConfig"
+  4-5: "SlaveID"
   6-8: "DeviceName"
   9-11: "HWVersion"
   12-14: "FWVersion"
@@ -174,8 +174,8 @@ packet-beta
 
 | Element | Size | Type |
 |-------|------|------|
-| SlaveID_hi | 1 byte | uint8 (always `0x00`) |
-| SlaveID_lo | 1 byte | uint8 (always `0x00`) |
+| MasterSlaveConfig | 1 byte | uint8 |
+| SlaveID | 1 byte | uint8 |
 | DeviceName | variable | null-terminated string |
 | HWVersion | variable | null-terminated string |
 | FWVersion | variable | null-terminated string |

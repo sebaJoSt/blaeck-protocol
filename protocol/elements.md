@@ -19,7 +19,7 @@ Every field that can appear in the elements section of a Blaeck [frame](frame-fo
 | HWVersion | variable | string | Hardware version |
 | LibName | variable | string | Library name |
 | LibVersion | variable | string | Library version (e.g., `"6.0.0"`) |
-| MasterSlaveConfig | 1 byte | uint8 | `0x01` = master, `0x02` = slave. In B4–B6: replaced by SlaveID_hi/lo (both `0x00`) |
+| MasterSlaveConfig | 1 byte | uint8 | `0x01` = master, `0x02` = slave |
 | Parent | variable | string | Parent device in topology |
 | RestartFlag | 1 byte | uint8 | `0x00` = normal, `0x01` = first frame after restart |
 | SchemaHash | 2 bytes | uint16 | CRC16-CCITT over signal schema. See [Schema Hash](schema-hash) |
