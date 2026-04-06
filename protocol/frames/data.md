@@ -22,8 +22,6 @@ packet-beta
   12-15: "CRC32"
 ```
 
-**Element layout:**
-
 | Element | Size | Type | Notes |
 |-------|------|------|-------|
 | **SymbolID** | 2 bytes | uint16 | |
@@ -53,8 +51,6 @@ packet-beta
   16-18: "Status"
   19-22: "CRC32"
 ```
-
-**Element layout:**
 
 | Element | Size | Type | Notes |
 |-------|------|------|-------|
@@ -90,8 +86,6 @@ packet-beta
   23-26: "StatusPayload"
   27-30: "CRC32"
 ```
-
-**Element layout:**
 
 | Element | Size | Type | Notes |
 |-------|------|------|-------|
