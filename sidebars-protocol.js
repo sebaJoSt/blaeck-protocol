@@ -14,6 +14,7 @@ const sidebars = {
         'frames/control',
       ],
     },
+    'commands',
     'elements',
     'status-codes',
     'datatypes',

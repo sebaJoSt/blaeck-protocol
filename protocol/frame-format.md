@@ -6,8 +6,6 @@ sidebar_position: 2
 
 Every Blaeck message is wrapped in a fixed binary envelope. The envelope is identical across all [frame types](frames) and all library versions.
 
-## Structure
-
 ```mermaid
 ---
 config:
@@ -26,8 +24,6 @@ packet-beta
   18: "CR"
   19: "LF"
 ```
-
-### Parts Table
 
 | Part | Content | Size | Encoding |
 |------|---------|------|----------|
@@ -48,9 +44,9 @@ All multi-byte integers throughout the protocol are **little-endian**.
 
 ## Message ID
 
-The Message ID is a uint32 value included in every frame. For request/response commands (e.g., `GET_DEVICES`, `WRITE_SYMBOLS`, `WRITE_DATA`), the host provides a Message ID in the command parameters and the device **echoes it back** in the response frame, allowing the host to correlate requests with responses.
+The Message ID is a uint32 value included in every frame. For request/response exchanges, the host provides a Message ID and the device **echoes it back**, allowing the host to correlate requests with responses.
 
-For frames sent without a host request (e.g., timed data streaming, restart notifications), the Message ID is application-defined — typically `0x00000001` or a value set by the application.
+For unsolicited frames (e.g., timed data streaming, restart notifications), the Message ID is application-defined.
 
 ## Example
 
