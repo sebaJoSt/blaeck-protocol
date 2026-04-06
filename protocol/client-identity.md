@@ -8,10 +8,10 @@ sidebar_position: 9
 
 ## Mechanism
 
-Client identity is parsed from the `GET_DEVICES` command. The 6th and 7th comma-separated parameters carry the client's name and type:
+Client identity is sent via the `GET_DEVICES` command. The 6th and 7th parameters carry the client's name and type:
 
 ```
-GET_DEVICES,param1,param2,param3,param4,param5,ClientName,ClientType
+<BLAECK.GET_DEVICES,P0,P1,P2,P3,P4,ClientName,ClientType>
 ```
 
 | Parameter Position | Field | Description |

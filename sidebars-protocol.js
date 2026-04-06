@@ -17,11 +17,9 @@ const sidebars = {
     'elements',
     'status-codes',
     'datatypes',
-    'timestamps',
     'schema-hash',
     'client-identity',
     'crc32',
-    'decoding-examples',
   ],
 };
 

@@ -66,19 +66,19 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: '`0` = none, `1` = micros, `2` = UNIX. See [Timestamps](timestamps)',
+    description: '`0` = none, `1` = micros, `2` = UNIX',
   },
   Timestamp32: {
     size: '4 bytes',
     type: 'uint32',
     span: 3,
-    description: 'Conditional: only if TimestampMode > 0. See [Timestamps](timestamps)',
+    description: 'Conditional: only if TimestampMode > 0',
   },
   Timestamp64: {
     size: '8 bytes',
     type: 'uint64',
     span: 3,
-    description: 'Conditional: only if TimestampMode > 0. See [Timestamps](timestamps)',
+    description: 'Conditional: only if TimestampMode > 0',
   },
   SchemaHash: {
     size: '2 bytes',

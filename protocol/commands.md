@@ -16,7 +16,7 @@ Parameters are comma-separated integers.
 
 | Command | Parameters | P0–P3 | Description | Response |
 |---------|------------|-------|-------------|----------|
-| `BLAECK.WRITE_SYMBOLS` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request signal schema | [Signal frame](frames/signals) |
+| `BLAECK.WRITE_SYMBOLS` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request signal schema | [Signals](frames/signals) |
 | `BLAECK.GET_DEVICES` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request device identity | [Device frames](frames/devices) |
 | `BLAECK.WRITE_DATA` | **P0**, **P1**, **P2**, **P3**, … | Message ID | Request single data frame | [Data frame](frames/data) |
 | `BLAECK.ACTIVATE` | **P0**, **P1**, **P2**, **P3**, … | Interval (ms) | Start timed data streaming | [Data frame](frames/data) (in intervals) |

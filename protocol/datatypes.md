@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Datatypes
 
-The DTYPE code in [B0 (Symbol List)](frames/signals#b0--symbol-list-0xb0) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](frames/data#d2--data-0xd2).
+The DTYPE code in [B0](frames/signals#b0--symbol-list-0xb0) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](frames/data#d2--data-0xd2).
 
 ## Type Table
 

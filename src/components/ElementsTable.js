@@ -6,7 +6,6 @@ const defined = {
   datatypes: '/blaeck-protocol/protocol/datatypes',
   'status-codes': '/blaeck-protocol/protocol/status-codes',
   crc32: '/blaeck-protocol/protocol/crc32',
-  timestamps: '/blaeck-protocol/protocol/timestamps',
   'schema-hash': '/blaeck-protocol/protocol/schema-hash',
 };
 
