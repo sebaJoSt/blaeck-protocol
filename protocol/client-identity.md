@@ -14,10 +14,10 @@ Client identity is sent via the `GET_DEVICES` command. The 5th and 6th parameter
 <BLAECK.GET_DEVICES,P0,P1,P2,P3,ClientName,ClientType>
 ```
 
-| Parameter Position | Field | Description |
-|-------------------|-------|-------------|
-| 5 | ClientName | Human-readable name of the client application |
-| 6 | ClientType | Type of client (e.g., `"desktop"`, `"web"`, `"script"`) |
+| Field | Description |
+|-------|-------------|
+| ClientName | Human-readable name of the client application |
+| ClientType | Type of client (e.g., `"desktop"`, `"web"`, `"script"`) |
 
 ## Storage
 
