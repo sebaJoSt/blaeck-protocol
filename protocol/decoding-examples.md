@@ -105,6 +105,6 @@ Using the schema from Example 1 (two signals: float + unsigned short). Timestamp
 ## See Also
 
 - [Introduction](intro#protocol-at-a-glance) — Envelope structure
-- [Frames](frames) — B0 and D2 definitions
+- [Frames](category/frames) — B0 and D2 definitions
 - [Datatypes](datatypes) — DTYPE size lookup
 - [CRC32](crc32) — Checksum algorithm

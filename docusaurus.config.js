@@ -177,7 +177,7 @@ const config = {
             items: [
               { label: 'Introduction', to: '/protocol/intro' },
               { label: 'Commands', to: '/protocol/commands' },
-              { label: 'Frames', to: '/protocol/frames' },
+              { label: 'Frames', to: '/protocol/category/frames' },
             ],
           },
           {

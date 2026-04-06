@@ -39,5 +39,5 @@ The SchemaHash immediately follows the RestartFlag byte and precedes the Timesta
 ## See Also
 
 - [Elements](elements) — SchemaHash field definition
-- [Frames](frames) — D2 payload layout
+- [Frames](category/frames) — D2 payload layout
 - [CRC32](crc32) — Frame integrity checksum (separate from SchemaHash)

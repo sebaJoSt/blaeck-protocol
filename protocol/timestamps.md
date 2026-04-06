@@ -26,5 +26,5 @@ When `TimestampMode = 0`, the timestamp field is **omitted entirely** — no byt
 ## See Also
 
 - [Elements](elements) — TimestampMode and Timestamp field definitions
-- [Frames](frames) — D2 payload layout
-- [Frames](frames) — D1 payload layout
+- [Frames](category/frames) — D2 payload layout
+- [Frames](category/frames) — D1 payload layout

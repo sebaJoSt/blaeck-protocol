@@ -32,5 +32,5 @@ Client identity does **not** appear in any Blaeck frame. The [B6](frames/devices
 
 ## See Also
 
-- [Frames](frames) — B6 device message layout
+- [Frames](category/frames) — B6 device message layout
 - [Elements](elements) — ClientNo and ClientDataEnabled fields

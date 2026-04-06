@@ -20,4 +20,4 @@ Every Blaeck message is wrapped in a fixed binary envelope:
 
 All multi-byte integers throughout the protocol are **little-endian**.
 
-See [Frames](frames) for all frame definitions.
+See [Frames](category/frames) for all frame definitions.

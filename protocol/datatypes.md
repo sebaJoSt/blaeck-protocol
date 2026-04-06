@@ -8,48 +8,32 @@ The DTYPE code in [B0 (Symbol List)](frames/signals#b0--symbol-list-0xb0) messag
 
 ## Type Table
 
-| Code | Name | Size | Arduino Type | Python `struct` Format |
-|------|------|------|-------------|----------------------|
-| `0` | bool | 1 byte | `bool` | `<?` |
-| `1` | byte | 1 byte | `byte` / `uint8_t` | `<B` |
-| `2` | short | 2 bytes | `short` / `int16_t` | `<h` |
-| `3` | unsigned short | 2 bytes | `unsigned short` / `uint16_t` | `<H` |
-| `4` | int | 2 bytes | `int` (AVR) | `<h` |
-| `5` | unsigned int | 2 bytes | `unsigned int` (AVR) | `<H` |
-| `6` | long / int32 | 4 bytes | `long` / `int32_t` | `<l` |
-| `7` | unsigned long / uint32 | 4 bytes | `unsigned long` / `uint32_t` | `<L` |
-| `8` | float | 4 bytes | `float` | `<f` |
-| `9` | double | 8 bytes | `double` | `<d` |
+| User Type | AVR | 32-bit Platform |
+|-----------|-----|-----------------|
+| `bool` | DTYPE 0 (1 byte) | DTYPE 0 (1 byte) |
+| `byte` | DTYPE 1 (1 byte) | DTYPE 1 (1 byte) |
+| `short` | DTYPE 2 (2 bytes) | DTYPE 2 (2 bytes) |
+| `unsigned short` | DTYPE 3 (2 bytes) | DTYPE 3 (2 bytes) |
+| `int` | DTYPE 4 (2 bytes) | DTYPE 6 (4 bytes) |
+| `unsigned int` | DTYPE 5 (2 bytes) | DTYPE 7 (4 bytes) |
+| `long` | DTYPE 6 (4 bytes) | DTYPE 6 (4 bytes) |
+| `unsigned long` | DTYPE 7 (4 bytes) | DTYPE 7 (4 bytes) |
+| `float` | DTYPE 8 (4 bytes) | DTYPE 8 (4 bytes) |
+| `double` | DTYPE 8 (4 bytes) | DTYPE 9 (8 bytes) |
 
-## Size Lookup
+blaecktcpy uses the same mapping as 32-bit platforms.
 
-For quick programmatic use:
+The protocol automatically handles platform differences in data type sizes:
 
-```python
-DTYPE_SIZE = {0: 1, 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 4, 7: 4, 8: 4, 9: 8}
-```
+**AVR** (Arduino Uno, Nano, Mega, etc.):
+- `int` and `unsigned int` are 2 bytes
+- `double` has no precision advantage over `float` (both 4 bytes)
 
-## Platform-Specific Notes
-
-On **16-bit platforms** (e.g., AVR-based microcontrollers):
-- `int` is 16-bit (2 bytes) → DTYPE `4`
-- `unsigned int` is 16-bit (2 bytes) → DTYPE `5`
-
-On **32-bit platforms**:
-- `int` is 32-bit (4 bytes) — mapped to DTYPE `6` (same as `long`)
-- `unsigned int` is 32-bit (4 bytes) — mapped to DTYPE `7` (same as `unsigned long`)
-
-:::tip
-When decoding, always use the DTYPE code and the size table above — never assume `int` size based on platform. The sender's library handles the platform-specific mapping at registration time.
-:::
-
-## double Support
-
-DTYPE `9` (`double`, 8 bytes) is intended for 32-bit platforms where `double` is a true IEEE 754 double-precision value.
-
-On 16-bit AVR platforms, `double` is actually 4 bytes (identical to `float`). The 8-byte DTYPE `9` should only be used when the platform supports native 64-bit floating point.
+**32-bit Platforms** (ESP32, ESP8266, Arduino Due, etc.):
+- `int` and `unsigned int` are 4 bytes and get automatically mapped to `long`/`unsigned long` protocol types
+- `double` provides true 8-byte double precision
 
 ## See Also
 
 - [Elements](elements) — DTYPE field definition
-- [Frames](frames) — B0 and D2 payload layouts
+- [Frames](category/frames) — B0 and D2 payload layouts
