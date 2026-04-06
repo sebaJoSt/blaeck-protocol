@@ -32,7 +32,7 @@ For example, `ACTIVATE` with 1000 ms:
 <BLAECK.ACTIVATE,232,3,0,0>
 ```
 
-## Device Response
+## Response with Message ID
 
 While commands are ASCII text, the device responds with binary [frames](frame-format). For example, requesting signal schema with Message ID `1`:
 
