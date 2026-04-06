@@ -23,7 +23,7 @@ See [Frame Format](frame-format) for the full binary layout, and [Message Keys](
 
 ## Typical Session Flow
 
-1. Host connects and requests device info → device replies with a **B3** or **B6** (Devices) frame.
-2. Host requests signal list → device replies with a **B0** (Symbol List) frame.
-3. Device streams **D2** (Data) frames at the configured interval.
-4. If the device restarts, it sends a **C0** (Restart Notification) frame.
+1. Host connects and requests device info → device replies with a **Devices** frame.
+2. Host requests signal list → device replies with a **Symbol List** frame.
+3. Device streams **Data** frames at the configured interval.
+4. If the device restarts, it sends a **Restart Notification** frame.
