@@ -12,20 +12,15 @@ The message key is a single byte in the [frame envelope](frame-format) that iden
 
 ## Summary Table
 
-| Key | Hex | Purpose | Status |
-|-----|-----|---------|--------|
-| B0 | `0xB0` | Symbol List | **Active** |
-| B1 | `0xB1` | Data (no timestamps) | Deprecated |
-| B2 | `0xB2` | Devices (legacy, no LibName) | Deprecated |
-| B3 | `0xB3` | Devices (serial) | **Active** |
-| B4 | `0xB4` | Devices (TCP, early) | Deprecated |
-| B5 | `0xB5` | Devices (TCP, no DeviceType) | Deprecated |
-| B6 | `0xB6` | Devices (TCP, full) | **Active** |
-| C0 | `0xC0` | Restart Notification | **Active** |
-| D1 | `0xD1` | Data (4B timestamps) | Deprecated |
-| D2 | `0xD2` | Data (8B timestamps + schema hash) | **Active** |
+| Key | Hex | Purpose |
+|-----|-----|---------|
+| B0 | `0xB0` | Symbol List |
+| B3 | `0xB3` | Devices (serial) |
+| B6 | `0xB6` | Devices (TCP) |
+| C0 | `0xC0` | Restart Notification |
+| D2 | `0xD2` | Data (timestamped, with schema hash) |
 
-For deprecated keys, see [Historical Keys](historical).
+For deprecated keys (B1, B2, B4, B5, D1), see [Historical Keys](historical).
 
 ---
 
