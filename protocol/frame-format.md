@@ -19,7 +19,7 @@ packet-beta
   5: ":"
   6-8: "Message ID"
   9: ":"
-  10-13: "Elements (var)"
+  10-13: "Frame (var)"
   14-17: "Footer: /BLAECK>"
   18: "CR"
   19: "LF"
@@ -32,11 +32,11 @@ packet-beta
 | Separator | 1 byte | ASCII `:` |
 | Message ID | 4 bytes | uint32 — see below |
 | Separator | 1 byte | ASCII `:` |
-| Elements | variable | Frame-specific payload — see [Frames](frames) |
+| Frame | variable | Frame-specific payload — see [Frames](frames) |
 | Footer | 8 bytes | ASCII `/BLAECK>` |
 | EOT | 2 bytes | `\r\n` |
 
-**Total overhead:** 25 bytes + elements.
+**Total overhead:** 25 bytes + frame.
 
 ## Byte Order
 
