@@ -21,13 +21,6 @@ import Frame from '@site/src/components/Frame';
 
 <Frame id="C0" showElements />
 
-### Hub status codes
-
-| Code   | Name                  | Description                                  | StatusPayload                                                                                      |
-| ------ | --------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `0x80` | UPSTREAM_LOST         | Upstream server disconnected                 | byte\[0\]: `0x01` = auto-reconnect enabled, `0x00` = off; bytes\[1–3\]: `0x00`                    |
-| `0x81` | UPSTREAM_RECONNECTED  | Upstream server reconnected                  | `0x00000000`                                                                                       |
-
 ### Differences from server mode
 
 - **B0**: Master signals listed first, then slave signals with `MasterSlaveConfig = 0x02` and remapped SlaveIDs.
