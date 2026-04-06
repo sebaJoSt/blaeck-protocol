@@ -25,16 +25,16 @@ packet-beta
   19: "LF"
 ```
 
-| Part | Content | Size | Encoding |
-|------|---------|------|----------|
-| Header | `<BLAECK:` | 8 bytes | ASCII `3C 42 4C 41 45 43 4B 3A` |
-| Message Key | Single byte (e.g. `0xD2`) | 1 byte | Binary |
-| Separator | `:` | 1 byte | ASCII `0x3A` |
-| Message ID | Monotonic counter | 4 bytes | uint32 |
-| Separator | `:` | 1 byte | ASCII `0x3A` |
-| Elements | Key-specific payload | variable | See [Frames](frames) |
-| Footer | `/BLAECK>` | 8 bytes | ASCII `2F 42 4C 41 45 43 4B 3E` |
-| EOT | `\r\n` | 2 bytes | ASCII `0x0D 0x0A` |
+| Part | Size | Description |
+|------|------|-------------|
+| Header | 8 bytes | ASCII `<BLAECK:` |
+| Message Key | 1 byte | Identifies the [frame type](frames) |
+| Separator | 1 byte | ASCII `:` |
+| Message ID | 4 bytes | uint32 — see below |
+| Separator | 1 byte | ASCII `:` |
+| Elements | variable | Frame-specific payload — see [Frames](frames) |
+| Footer | 8 bytes | ASCII `/BLAECK>` |
+| EOT | 2 bytes | `\r\n` |
 
 **Total overhead:** 25 bytes + elements.
 
