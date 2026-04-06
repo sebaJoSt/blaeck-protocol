@@ -125,27 +125,38 @@ const config = {
             position: 'left',
           },
           {
-            type: 'docsVersionDropdown',
-            docsPluginId: 'blaeckserial',
+            type: 'dropdown',
+            label: 'BlaeckSerial',
             position: 'left',
-            dropdownItemsAfter: [
-              { to: '/blaeckserial/overview', label: 'BlaeckSerial' },
+            items: [
+              { label: '6.0.0 (latest)', to: '/blaeckserial/overview' },
+              { label: '5.0.0', to: '/blaeckserial/5.0.0/overview' },
+              { label: '4.3.0', to: '/blaeckserial/4.3.0/overview' },
+              { label: '4.0.0', to: '/blaeckserial/4.0.0/overview' },
+              { label: '3.0.0', to: '/blaeckserial/3.0.0/overview' },
+              { label: '2.0.0', to: '/blaeckserial/2.0.0/overview' },
+              { label: '1.0.0', to: '/blaeckserial/1.0.0/overview' },
             ],
           },
           {
-            type: 'docsVersionDropdown',
-            docsPluginId: 'blaecktcp',
+            type: 'dropdown',
+            label: 'BlaeckTCP',
             position: 'left',
-            dropdownItemsAfter: [
-              { to: '/blaecktcp/overview', label: 'BlaeckTCP' },
+            items: [
+              { label: '6.0.0 (latest)', to: '/blaecktcp/overview' },
+              { label: '5.0.0', to: '/blaecktcp/5.0.0/overview' },
+              { label: '3.0.0', to: '/blaecktcp/3.0.0/overview' },
+              { label: '2.0.0', to: '/blaecktcp/2.0.0/overview' },
+              { label: '1.0.0', to: '/blaecktcp/1.0.0/overview' },
             ],
           },
           {
-            type: 'docsVersionDropdown',
-            docsPluginId: 'blaecktcpy',
+            type: 'dropdown',
+            label: 'blaecktcpy',
             position: 'left',
-            dropdownItemsAfter: [
-              { to: '/blaecktcpy/overview', label: 'blaecktcpy' },
+            items: [
+              { label: '3.0 (latest)', to: '/blaecktcpy/overview' },
+              { label: '2.0.0', to: '/blaecktcpy/2.0.0/overview' },
             ],
           },
           {
