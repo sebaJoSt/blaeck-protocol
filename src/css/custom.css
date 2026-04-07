@@ -88,8 +88,8 @@
   stroke: none !important;
 }
 [data-theme='dark'] .docusaurus-mermaid-container .packetBlock {
-  fill: #0f172a !important;
-  stroke: #1e3a8a !important;
+  fill: #1e3a8a !important;
+  stroke: #2563eb !important;
 }
 [data-theme='dark'] .docusaurus-mermaid-container .packetLabel {
   fill: #dbeafe !important;
