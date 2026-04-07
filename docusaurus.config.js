@@ -175,7 +175,7 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
       mermaid: {
-        theme: { light: 'base', dark: 'dark' },
+        theme: { light: 'base', dark: 'base' },
       },
     }),
   themes: ['@docusaurus/theme-mermaid'],
