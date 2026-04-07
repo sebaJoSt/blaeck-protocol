@@ -122,6 +122,10 @@ const config = {
       },
       navbar: {
         title: 'Blaeck Protocol',
+        logo: {
+          alt: 'Blaeck Protocol Logo',
+          src: 'img/logo.png',
+        },
         items: [
           {
             to: '/protocol/intro',
