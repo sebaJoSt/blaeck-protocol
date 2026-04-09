@@ -12,6 +12,14 @@ Commands are sent from the host to the device as ASCII text, delimited by angle 
 
 Parameters are comma-separated integers.
 
+### Empty Parameters
+
+An empty field between commas (e.g. `<CMD,10,,20>`) preserves its position. The empty slot defaults to `0` for integer parameters or an empty string for string parameters. This allows callers to skip parameters without shifting subsequent values:
+
+```
+<MYCMD,10,,20>   → Param0=10, Param1=(empty/0), Param2=20
+```
+
 ## Built-in Commands
 
 | Command | Parameters | Description | Response |
