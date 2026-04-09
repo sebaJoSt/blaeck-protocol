@@ -7,7 +7,7 @@ sidebar_position: 2
 Commands are sent from the host to the device as ASCII text, delimited by angle brackets:
 
 ```
-<BLAECK.COMMAND,Param0,Param1,Param2,Param3>
+<BLAECK.COMMAND,Param0,Param1,…>
 ```
 
 Parameters are comma-separated integers.
