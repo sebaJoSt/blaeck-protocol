@@ -136,7 +136,7 @@ const frames = {
     hex: '0xB6',
     category: 'devices',
     name: 'Devices',
-    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ServerRestarted, DeviceType, Parent, ClientName, and ClientType.',
+    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ClientName, ClientType, ServerRestarted, DeviceType, and Parent.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
     bitsPerRow: 20,
