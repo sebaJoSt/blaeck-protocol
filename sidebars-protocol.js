@@ -18,7 +18,6 @@ const sidebars = {
     'status-codes',
     'datatypes',
     'schema-hash',
-    'client-identity',
     'crc32',
   ],
 };

@@ -152,6 +152,18 @@ const elements = {
     span: 2,
     description: 'Parent device in topology',
   },
+  ClientName: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Name of the connected client (from `GET_DEVICES` identity)',
+  },
+  ClientType: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Type of the connected client (e.g., `"app"`, `"hub"`)',
+  },
 };
 
 /**

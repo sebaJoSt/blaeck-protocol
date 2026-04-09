@@ -136,11 +136,11 @@ const frames = {
     hex: '0xB6',
     category: 'devices',
     name: 'Devices',
-    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ServerRestarted, DeviceType, and Parent.',
+    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ServerRestarted, DeviceType, Parent, ClientName, and ClientType.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
     bitsPerRow: 20,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted', 'DeviceType', 'Parent'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientName', 'ClientType'],
   },
 
   C0: {
