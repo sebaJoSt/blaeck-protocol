@@ -137,7 +137,7 @@ const elements = {
   ServerRestarted: {
     size: 'variable',
     type: 'string',
-    span: 4,
+    span: 3,
     description: 'Whether server restarted since client connected',
   },
   DeviceType: {
