@@ -40,11 +40,7 @@ See [Frames](category/frames) for all frame types.
 
 ## Client Identity
 
-`GET_DEVICES` accepts two optional trailing parameters — `ClientName` and `ClientType` — that let TCP clients identify themselves to the server:
-
-```
-<BLAECK.GET_DEVICES,P0,P1,P2,P3,ClientName,ClientType>
-```
+`GET_DEVICES` has two parameters — `ClientName` and `ClientType` — that let TCP clients identify themselves to the server:
 
 | Field | Description |
 |-------|-------------|
