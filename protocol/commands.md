@@ -7,17 +7,13 @@ sidebar_position: 2
 Commands are sent from the host to the device as ASCII text, delimited by angle brackets:
 
 ```
-<BLAECK.COMMAND,Param0,Param1,…>
+<COMMAND,Param0,Param1,…>
 ```
 
-Parameters are comma-separated integers.
-
-### Empty Parameters
-
-An empty field between commas (e.g. `<CMD,10,,20>`) preserves its position. The empty slot defaults to `0` for integer parameters or an empty string for string parameters. This allows callers to skip parameters without shifting subsequent values:
+Parameters are comma-separated tokens. An empty field between commas preserves its position and is delivered as an empty string, allowing callers to skip parameters without shifting subsequent values:
 
 ```
-<MYCMD,10,,20>   → Param0=10, Param1=(empty/0), Param2=20
+<MYCMD,10,,20>   → Param0="10", Param1="", Param2="20"
 ```
 
 ## Built-in Commands
@@ -33,6 +29,16 @@ An empty field between commas (e.g. `<CMD,10,,20>`) preserves its position. The 
 Bracketed parameters encode a uint32 in little-endian byte order as four comma-separated bytes.
 
 The `BLAECK.` prefix is reserved for built-in commands.
+
+## Custom Commands
+
+Any command name without the `BLAECK.` prefix is user-defined. Parameters are delivered as string tokens; the device handler decides how to interpret them (e.g. convert to integer, use as text, or apply a default when empty).
+
+```
+<SwitchLED,1>        → turn LED on
+<Print,Hello,1>      → string parameter with mode
+<MyCmd,10,,20>       → skip second parameter
+```
 
 ## Response with Message ID
 
