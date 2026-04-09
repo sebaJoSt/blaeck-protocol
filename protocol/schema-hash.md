@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # Schema Hash
 
-The **SchemaHash** is a 2-byte field in data frames that allows receivers to detect signal schema changes without requiring a full [B0](frames/signals#b0--symbol-list-0xb0) retransmission.
+The **SchemaHash** is a 2-byte field in data frames that allows receivers to detect signal schema changes without requiring a full [B0](frames/signals) retransmission.
 
 ## Purpose
 

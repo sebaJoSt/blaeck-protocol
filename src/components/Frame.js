@@ -25,7 +25,7 @@ export default function Frame({ id, showElements = false }) {
   const f = frames[id];
   if (!f) return null;
 
-  const mermaidValue = generateMermaid(f.elements, f.bitsPerRow);
+  const mermaidValue = generateMermaid(f.elements, f.bitsPerRow, f.repeat);
 
   return (
     <div style={{ marginBottom: '2rem' }}>

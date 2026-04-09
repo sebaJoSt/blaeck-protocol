@@ -35,7 +35,7 @@ const elements = {
   SymbolID: {
     size: '2 bytes',
     type: 'uint16',
-    span: 2,
+    span: 3,
     description: 'Zero-based signal index (matches B0 order)',
   },
   DATA: {
@@ -169,17 +169,20 @@ const elements = {
 /**
  * Generate a Mermaid packet-beta diagram from a frame's elements and bitsPerRow.
  */
-function generateMermaid(frameElements, bitsPerRow) {
+function generateMermaid(frameElements, bitsPerRow, repeat) {
   const header = `---\nconfig:\n  packet:\n    showBits: false\n    bitsPerRow: ${bitsPerRow}\n---\npacket-beta`;
+  const repeatSet = new Set(repeat || []);
   let pos = 0;
-  const lines = frameElements.map((key) => {
+  const lines = [];
+  frameElements.forEach((key) => {
     const el = elements[key];
-    if (!el) return '';
-    const label = el.label || key;
+    if (!el) return;
+    const raw = el.label || key;
+    const label = repeatSet.has(key) ? `[${raw}]` : raw;
     const start = pos;
     const end = pos + el.span - 1;
     pos += el.span;
-    return `  ${start}-${end}: "${label}"`;
+    lines.push(`  ${start}-${end}: "${label}"`);
   });
   return header + '\n' + lines.join('\n');
 }

@@ -38,7 +38,7 @@ export default function FrameTable({ keys, showDiagrams = false }) {
               {f.key} — {f.name} (<code>{f.hex}</code>)
             </h3>
             <p>{f.description}</p>
-            <Mermaid value={generateMermaid(f.elements, f.bitsPerRow)} />
+            <Mermaid value={generateMermaid(f.elements, f.bitsPerRow, f.repeat)} />
           </div>
         ))}
     </>

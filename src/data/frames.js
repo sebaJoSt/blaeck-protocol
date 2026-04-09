@@ -31,7 +31,7 @@ const frames = {
     description: 'Signal schema: ID, name, and type. No multi-device support.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'b0--symbol-list-0xb0',
-    bitsPerRow: 7,
+    bitsPerRow: 8,
     elements: ['SymbolID', 'SymbolName', 'DTYPE'],
   },
 
@@ -45,6 +45,7 @@ const frames = {
     anchor: 'b1--data-0xb1',
     bitsPerRow: 10,
     elements: ['SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
   },
 
   B1_noCRC: {
@@ -55,7 +56,7 @@ const frames = {
     description: 'Signal values without integrity check.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'b1--data-0xb1',
-    bitsPerRow: 4,
+    bitsPerRow: 5,
     elements: ['SymbolID', 'DATA'],
   },
 
@@ -69,6 +70,7 @@ const frames = {
     anchor: 'd1--data-0xd1',
     bitsPerRow: 10,
     elements: ['RestartFlag', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
   },
 
   D2: {
@@ -79,8 +81,9 @@ const frames = {
     description: 'Signal values with SchemaHash, 8-byte Timestamp, StatusByte, StatusPayload, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd2--data-0xd2',
-    bitsPerRow: 13,
+    bitsPerRow: 16,
     elements: ['RestartFlag', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
   },
 
   B2: {

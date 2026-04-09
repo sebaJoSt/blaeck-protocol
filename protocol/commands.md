@@ -61,4 +61,4 @@ See [Frames](category/frames) for all frame types.
 | ClientName | Human-readable name of the client application |
 | ClientType | Type of client (e.g., `"app"`, `"hub"`, `"script"`) |
 
-The server stores this identity per TCP connection for logging, management UIs, and diagnostics. The [B6](frames/devices#b6--devices-0xb6) response echoes these values back as `ClientName` and `ClientType`, alongside the server-assigned `ClientNo` and `ClientDataEnabled` fields.
+The server stores this identity per TCP connection for logging, management UIs, and diagnostics. The [B6](frames/devices) response echoes these values back as `ClientName` and `ClientType`, alongside the server-assigned `ClientNo` and `ClientDataEnabled` fields.
