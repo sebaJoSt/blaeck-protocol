@@ -140,7 +140,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
     bitsPerRow: 20,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientName', 'ClientType'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ClientName', 'ClientType', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
 
   C0: {
