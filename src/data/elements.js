@@ -119,7 +119,7 @@ const elements = {
   LibName: {
     size: 'variable',
     type: 'string',
-    span: 2,
+    span: 3,
     description: 'Library name',
   },
   ClientNo: {
@@ -137,7 +137,7 @@ const elements = {
   ServerRestarted: {
     size: 'variable',
     type: 'string',
-    span: 3,
+    span: 4,
     description: 'Whether server restarted since client connected',
   },
   DeviceType: {
@@ -163,6 +163,12 @@ const elements = {
     type: 'string',
     span: 3,
     description: 'Type of the connected client (e.g., `"app"`, `"hub"`)',
+  },
+  DeviceCount: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: 'Number of device entries in the frame',
   },
 };
 

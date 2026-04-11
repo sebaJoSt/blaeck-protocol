@@ -106,7 +106,7 @@ const frames = {
     description: 'Device identity with LibName.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b3--devices-0xb3',
-    bitsPerRow: 20,
+    bitsPerRow: 21,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 
@@ -118,7 +118,7 @@ const frames = {
     description: 'Device identity with LibName, ClientNo, and ClientDataEnabled.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b4--devices-0xb4',
-    bitsPerRow: 20,
+    bitsPerRow: 27,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled'],
   },
 
@@ -130,7 +130,7 @@ const frames = {
     description: 'Device identity with LibName, ClientNo, ClientDataEnabled, and ServerRestarted.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b5--devices-0xb5',
-    bitsPerRow: 20,
+    bitsPerRow: 31,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted'],
   },
 
@@ -139,11 +139,12 @@ const frames = {
     hex: '0xB6',
     category: 'devices',
     name: 'Devices',
-    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, ClientName, ClientType, ServerRestarted, DeviceType, and Parent.',
+    description: 'Device identity with DeviceCount, per-device fields, and client trailer (ClientNo, ClientDataEnabled, ClientName, ClientType).',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
-    bitsPerRow: 20,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ClientName', 'ClientType', 'ServerRestarted', 'DeviceType', 'Parent'],
+    bitsPerRow: 33,
+    elements: ['DeviceCount', 'MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientNo', 'ClientDataEnabled', 'ClientName', 'ClientType'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
 
   C0: {
@@ -154,7 +155,7 @@ const frames = {
     description: 'Notifies that a device restarted. Same layout as B3.',
     page: '/blaeck-protocol/protocol/frames/control',
     anchor: 'c0--restart-notification-0xc0',
-    bitsPerRow: 20,
+    bitsPerRow: 21,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 };
