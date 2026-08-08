@@ -3,6 +3,7 @@ const sidebars = {
   protocolSidebar: [
     'intro',
     'commands',
+    'message-keys',
     {
       type: 'category',
       label: 'Frames',
@@ -12,6 +13,9 @@ const sidebars = {
         'frames/devices',
         'frames/data',
         'frames/control',
+        'frames/messages',
+        'frames/events',
+        'frames/commands',
       ],
     },
     'elements',

@@ -158,6 +158,79 @@ const frames = {
     bitsPerRow: 21,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
+
+  '80': {
+    key: '80',
+    hex: '0x80',
+    category: 'events',
+    name: 'Event Channel List',
+    description: 'Event channel catalog: name, flags, optional icon, and the closed list of event types each channel may emit.',
+    page: '/blaeck-protocol/protocol/frames/events',
+    anchor: '80--event-channel-list-0x80',
+    bitsPerRow: 18,
+    elements: ['Reserved', 'ChannelName', 'ChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
+    repeat: ['EventType'],
+  },
+
+  '85': {
+    key: '85',
+    hex: '0x85',
+    category: 'events',
+    name: 'Event',
+    description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
+    page: '/blaeck-protocol/protocol/frames/events',
+    anchor: '85--event-0x85',
+    bitsPerRow: 5,
+    elements: ['ChannelName', 'EventIndex'],
+  },
+
+  '90': {
+    key: '90',
+    hex: '0x90',
+    category: 'messages',
+    name: 'Message Channel List',
+    description: 'Message channel catalog: name, flags, and optional icon.',
+    page: '/blaeck-protocol/protocol/frames/messages',
+    anchor: '90--message-channel-list-0x90',
+    bitsPerRow: 11,
+    elements: ['Reserved', 'ChannelName', 'ChannelFlags', 'Icon'],
+  },
+
+  '95': {
+    key: '95',
+    hex: '0x95',
+    category: 'messages',
+    name: 'Message',
+    description: 'Free-text line on a declared message channel. Composed at runtime; not telemetry and not stored.',
+    page: '/blaeck-protocol/protocol/frames/messages',
+    anchor: '95--message-0x95',
+    bitsPerRow: 8,
+    elements: ['ChannelName', 'TextLength', 'Text'],
+  },
+
+  A0: {
+    key: 'A0',
+    hex: '0xA0',
+    category: 'commands',
+    name: 'Command List',
+    description: 'Command catalog: every command the device accepts, with kind, flags, and optional metadata.',
+    page: '/blaeck-protocol/protocol/frames/commands',
+    anchor: 'a0--command-list-0xa0',
+    bitsPerRow: 29,
+    elements: ['Reserved', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'TextMaxLen'],
+  },
+
+  A5: {
+    key: 'A5',
+    hex: '0xA5',
+    category: 'commands',
+    name: 'Command Ack',
+    description: 'Outcome of a dispatched command, matched to the request by command hash.',
+    page: '/blaeck-protocol/protocol/frames/commands',
+    anchor: 'a5--command-ack-0xa5',
+    bitsPerRow: 7,
+    elements: ['CmdHash', 'AckStatus', 'AckReason'],
+  },
 };
 
 module.exports = { frames };

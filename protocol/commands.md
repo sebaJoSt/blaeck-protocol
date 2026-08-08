@@ -23,6 +23,9 @@ Parameters are comma-separated tokens. An empty field between commas preserves i
 | `BLAECK.WRITE_SYMBOLS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal schema | [Signals](frames/signals) |
 | `BLAECK.GET_DEVICES` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3], ClientName, ClientType</small> | Request device identity | [Device frames](frames/devices) |
 | `BLAECK.WRITE_DATA` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request single data frame | [Data frame](frames/data) |
+| `BLAECK.WRITE_COMMANDS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request command catalog | [Command List](frames/commands) |
+| `BLAECK.WRITE_MESSAGE_CHANNELS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request message channel catalog | [Message Channel List](frames/messages) |
+| `BLAECK.WRITE_EVENT_CHANNELS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request event channel catalog | [Event Channel List](frames/events) |
 | `BLAECK.ACTIVATE` | <small>Interval[0], Interval[1], Interval[2], Interval[3]</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
 
@@ -42,7 +45,7 @@ Any command name without the `BLAECK.` prefix is user-defined. Parameters are de
 
 ## Response with Message ID
 
-`WRITE_SYMBOLS`, `GET_DEVICES` and `WRITE_DATA`: `MsgID[0]`–`MsgID[3]` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
+`WRITE_SYMBOLS`, `GET_DEVICES`, `WRITE_DATA`, `WRITE_COMMANDS`, `WRITE_MESSAGE_CHANNELS` and `WRITE_EVENT_CHANNELS` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
 
 ```
 Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
