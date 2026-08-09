@@ -246,7 +246,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasRange, 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText',
+    description: 'Bit 0 = hasRange, 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved). Bit 7 reserved',
   },
   RangeMin: {
     size: '4 bytes',
