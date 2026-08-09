@@ -180,8 +180,8 @@ const frames = {
     description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '85--event-0x85',
-    bitsPerRow: 5,
-    elements: ['ChannelName', 'EventIndex'],
+    bitsPerRow: 4,
+    elements: ['ChannelIndex', 'EventIndex'],
   },
 
   '90': {
@@ -204,8 +204,8 @@ const frames = {
     description: 'Free-text line on a declared message channel. Composed at runtime; not telemetry and not stored.',
     page: '/blaeck-protocol/protocol/frames/messages',
     anchor: '95--message-0x95',
-    bitsPerRow: 8,
-    elements: ['ChannelName', 'TextLength', 'Text'],
+    bitsPerRow: 7,
+    elements: ['ChannelIndex', 'TextLength', 'Text'],
   },
 
   A0: {

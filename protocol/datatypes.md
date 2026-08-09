@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Datatypes
 
-The DTYPE code in [B0](frames/signals) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](frames/data).
+The DTYPE code in [B0](frames/signals) messages identifies each signal's data type. The same codes determine how many bytes to read per signal in [data frames](frames/data), except DTYPE 10, which carries its own length.
 
 ## Type Table
 
@@ -20,8 +20,25 @@ The DTYPE code in [B0](frames/signals) messages identifies each signal's data ty
 | `unsigned long` | DTYPE 7 (4 bytes) | DTYPE 7 (4 bytes) |
 | `float` | DTYPE 8 (4 bytes) | DTYPE 8 (4 bytes) |
 | `double` | DTYPE 8 (4 bytes) | DTYPE 9 (8 bytes) |
+| `char *` | DTYPE 10 (variable) | DTYPE 10 (variable) |
 
 blaecktcpy uses the same mapping as 32-bit platforms.
+
+## Strings (DTYPE 10)
+
+DTYPE 10 is the only variable-width type. In [data frames](frames/data) its value is a 1-byte
+length followed by that many UTF-8 bytes, **not** null-terminated:
+
+```
+LEN(1B) BYTES(LEN)
+```
+
+An empty string is a single `0x00` length byte with no bytes after it. Values longer than 255 bytes
+are truncated to 255 by the sender, so `LEN` needs no escaping.
+
+Because the width is not implied by the type, a decoder cannot compute signal offsets from the
+[Symbol List](frames/signals) alone: it must read each value in order and consume `LEN` before
+advancing. The length byte is inside the [CRC32](crc32) scope, like the bytes it prefixes.
 
 The protocol automatically handles platform differences in data type sizes:
 

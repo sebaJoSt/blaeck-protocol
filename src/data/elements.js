@@ -30,7 +30,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 2,
-    description: 'Datatype code (`0x00`–`0x09`). See [Datatypes](datatypes)',
+    description: 'Datatype code (`0x00`–`0x0A`). See [Datatypes](datatypes)',
   },
   SymbolID: {
     size: '2 bytes',
@@ -42,7 +42,7 @@ const elements = {
     size: 'variable',
     type: 'raw bytes',
     span: 2,
-    description: 'Signal value, size per [DTYPE](datatypes)',
+    description: 'Signal value, size per [DTYPE](datatypes). Fixed width except DTYPE `0x0A`, which is length-prefixed',
   },
   StatusByte: {
     size: '1 byte',
@@ -217,6 +217,12 @@ const elements = {
     type: 'string',
     span: 3,
     description: 'Declared event type. Repeated `EventTypeCount` times; position defines its index',
+  },
+  ChannelIndex: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 2,
+    description: 'Zero-based index of the channel in the catalog frame',
   },
   EventIndex: {
     size: '1 byte',
