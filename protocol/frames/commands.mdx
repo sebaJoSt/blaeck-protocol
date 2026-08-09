@@ -9,6 +9,9 @@ import Frame from '@site/src/components/Frame';
 A command list declares which custom commands the device accepts, Command Ack reports the outcome of those commands (see [Commands](../commands)). `CommandFlags` bits 5–6 carry the Home Assistant entity category, so a device setting can be marked as such without a trailing field. See
 [Elements](../elements) for field details.
 
+When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
+signal, `1` a message channel.
+
 <Frame id="A0" />
 
 ---

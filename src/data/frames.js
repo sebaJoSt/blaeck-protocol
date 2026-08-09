@@ -168,7 +168,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '80--event-channel-list-0x80',
     bitsPerRow: 18,
-    elements: ['Reserved', 'ChannelName', 'ChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
+    elements: ['Reserved', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
 
@@ -189,11 +189,11 @@ const frames = {
     hex: '0x90',
     category: 'messages',
     name: 'Message Channel List',
-    description: 'Message channel catalog: name, flags, and optional icon.',
+    description: 'Message channel catalog: name, flags, optional icon, and optional current value.',
     page: '/blaeck-protocol/protocol/frames/messages',
     anchor: '90--message-channel-list-0x90',
-    bitsPerRow: 11,
-    elements: ['Reserved', 'ChannelName', 'ChannelFlags', 'Icon'],
+    bitsPerRow: 13,
+    elements: ['Reserved', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText'],
   },
 
   '95': {
@@ -216,8 +216,8 @@ const frames = {
     description: 'Command catalog: every command the device accepts, with kind, flags, and optional metadata.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
-    bitsPerRow: 29,
-    elements: ['Reserved', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'TextMaxLen'],
+    bitsPerRow: 32,
+    elements: ['Reserved', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
   },
 
   A5: {

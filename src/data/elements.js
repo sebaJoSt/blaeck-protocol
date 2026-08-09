@@ -182,7 +182,17 @@ const elements = {
     span: 3,
     description: 'Channel name, unique per device',
   },
-  ChannelFlags: {
+  // Both catalogs call this field ChannelFlags on the wire and share bits 0-1, but
+  // diverge from bit 2, so each frame documents its own.
+  MessageChannelFlags: {
+    label: 'ChannelFlags',
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText. Bits 3–7 reserved',
+  },
+  EventChannelFlags: {
+    label: 'ChannelFlags',
     size: '1 byte',
     type: 'uint8',
     span: 3,
@@ -193,6 +203,12 @@ const elements = {
     type: 'string',
     span: 2,
     description: 'Conditional: only if `ChannelFlags` bit 0. Material Design Icons name (e.g. `"mdi:script-text"`)',
+  },
+  StateText: {
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if `ChannelFlags` bit 2. The channel\'s value when the frame was built',
   },
   TextLength: {
     size: '2 bytes',
@@ -282,7 +298,13 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal reflecting this command\'s state',
+    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or message channel reflecting this command\'s state; which of the two is given by `StateSource`',
+  },
+  StateSource: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: 'Conditional: only if `CommandFlags` bit 3. What `StateSignal` names: `0` a signal, `1` a message channel',
   },
   TextMaxLen: {
     size: '2 bytes',
