@@ -18,3 +18,13 @@ signal, `1` a message channel.
 
 <Frame id="A5" />
 
+`CmdHash` covers the bytes the device received, so it matches only when those are the bytes the
+sender wrote. `CmdNameHash` covers the name alone, which sits before the first comma and so
+survives a frame the device could not take in full.
+
+| CmdHash | CmdNameHash | Meaning |
+|---------|-------------|---------|
+| match | match | Acknowledged command received intact |
+| no match | match | Same command, different bytes: it did not arrive as sent |
+| no match | no match | Not a command this sender issued |
+

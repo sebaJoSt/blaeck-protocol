@@ -225,11 +225,11 @@ const frames = {
     hex: '0xA5',
     category: 'commands',
     name: 'Command Ack',
-    description: 'Outcome of a dispatched command, matched to the request by command hash.',
+    description: 'Outcome of a dispatched command, matched to the request by command hash, or by name hash when the bytes differ.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a5--command-ack-0xa5',
     bitsPerRow: 7,
-    elements: ['CmdHash', 'AckStatus', 'AckReason'],
+    elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason'],
   },
 };
 

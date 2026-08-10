@@ -316,7 +316,13 @@ const elements = {
     size: '4 bytes',
     type: 'uint32',
     span: 3,
-    description: 'FNV-1a 32 hash of the raw command string, identifying which command is acknowledged',
+    description: 'FNV-1a 32 hash of the command string as received, identifying which command is acknowledged',
+  },
+  CmdNameHash: {
+    size: '4 bytes',
+    type: 'uint32',
+    span: 3,
+    description: 'FNV-1a 32 hash of the command name alone (up to the first comma), or `0` if no name was parsed',
   },
   AckStatus: {
     size: '1 byte',
