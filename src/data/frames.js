@@ -213,12 +213,12 @@ const frames = {
     hex: '0xA0',
     category: 'commands',
     name: 'Command List',
-    description: 'Command catalog: how long a command the device can receive, then every command it accepts, with kind, flags, and optional metadata.',
+    description: 'Command catalog: every command the device accepts, with kind, flags, how long a command the device can receive, and optional metadata.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
     bitsPerRow: 32,
-    elements: ['CommandPayloadMax', 'MasterSlaveConfig', 'SlaveID', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
-    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
   },
 
   A5: {
