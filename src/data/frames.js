@@ -168,7 +168,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '80--event-channel-list-0x80',
     bitsPerRow: 18,
-    elements: ['Reserved', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
 
@@ -193,7 +193,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/messages',
     anchor: '90--message-channel-list-0x90',
     bitsPerRow: 13,
-    elements: ['Reserved', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText'],
   },
 
   '95': {
@@ -213,11 +213,12 @@ const frames = {
     hex: '0xA0',
     category: 'commands',
     name: 'Command List',
-    description: 'Command catalog: every command the device accepts, with kind, flags, and optional metadata.',
+    description: 'Command catalog: how long a command the device can receive, then every command it accepts, with kind, flags, and optional metadata.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
     bitsPerRow: 32,
-    elements: ['Reserved', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
+    elements: ['CommandPayloadMax', 'MasterSlaveConfig', 'SlaveID', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'OptionsCsv', 'StateSignal', 'StateSource', 'TextMaxLen'],
   },
 
   A5: {

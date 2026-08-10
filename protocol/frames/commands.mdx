@@ -12,6 +12,11 @@ A command list declares which custom commands the device accepts, Command Ack re
 When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
 signal, `1` a message channel.
 
+`CommandPayloadMax` is sent once, before the entries: one receive buffer serves every command.
+A host derives what a given command leaves for its parameters by subtracting the name and the
+separating comma, and compares that against the value it is about to send — encoded, since
+encoding happens before the frame is built.
+
 <Frame id="A0" />
 
 ---

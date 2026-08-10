@@ -170,11 +170,11 @@ const elements = {
     span: 3,
     description: 'Number of device entries in the frame',
   },
-  Reserved: {
+  CommandPayloadMax: {
     size: '2 bytes',
-    type: 'raw bytes',
+    type: 'uint16',
     span: 3,
-    description: 'Always `0x00 0x00`. Keeps catalog entries byte-aligned with one another',
+    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised',
   },
   ChannelName: {
     size: 'variable',
