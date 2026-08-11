@@ -336,6 +336,39 @@ const elements = {
     span: 2,
     description: 'Reason code. See [Status Codes](status-codes)',
   },
+  SignalMetaFlags: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 4,
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–4 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing), 5 = isDiagnostic, 6 = disabledByDefault, 7 = forceUpdate, 8 = hasDisplayPrecision. Bits 9–15 reserved',
+  },
+  SignalUnit: {
+    label: 'Unit',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if `SignalMetaFlags` bit 0',
+  },
+  SignalDeviceClass: {
+    label: 'DeviceClass',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `SignalMetaFlags` bit 1',
+  },
+  SignalIcon: {
+    label: 'Icon',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if `SignalMetaFlags` bit 2. Material Design Icons name (e.g. `"mdi:sine-wave"`)',
+  },
+  DisplayPrecision: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 4,
+    description: 'Conditional: only if `SignalMetaFlags` bit 8. Decimal places to display',
+  },
 };
 
 /**

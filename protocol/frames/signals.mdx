@@ -9,3 +9,14 @@ import Frame from '@site/src/components/Frame';
 Repeated per signal. See [Elements](../elements) for field details.
 
 <Frame id="B0" />
+
+---
+
+<Frame id="F0" />
+
+Signal Config carries how a signal is presented: unit, device class, icon, state class, display
+precision. Only signals that declare something appear, so the frame may hold no entries at all;
+`SymbolID` gives each entry's signal.
+
+`SignalMetaFlags` determines the entry's structure. Each optional field follows only if its bit is
+set, in the order above.

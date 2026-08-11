@@ -31,6 +31,7 @@ superseded revisions still in the field.
 | `C0`–`C3` | `C0` | [Restart Notification](frames/control) |
 | `D1`–`D7` | `D2` | [Data](frames/data) |
 | `E0`–`E3` | `B0` † | [Symbol List](frames/signals) |
+| `F0`–`F3` | `F0` | [Signal Config](frames/signals) |
 
 † The Symbol List's current key `B0` predates the block scheme and cannot move. `E0`–`E3` is reserved
 for its future revisions.

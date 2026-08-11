@@ -22,6 +22,7 @@ Parameters are comma-separated tokens. An empty field between commas preserves i
 |---------|-----------|-------------|----------|
 | `BLAECK.WRITE_SYMBOLS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal schema | [Signals](frames/signals) |
 | `BLAECK.GET_DEVICES` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3], ClientName, ClientType</small> | Request device identity | [Device frames](frames/devices) |
+| `BLAECK.WRITE_SIGNAL_CONFIG` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal presentation metadata | [Signal Config](frames/signals) |
 | `BLAECK.WRITE_DATA` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request single data frame | [Data frame](frames/data) |
 | `BLAECK.WRITE_COMMANDS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request command catalog | [Command List](frames/commands) |
 | `BLAECK.WRITE_MESSAGE_CHANNELS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request message channel catalog | [Message Channel List](frames/messages) |
@@ -45,7 +46,7 @@ Any command name without the `BLAECK.` prefix is user-defined. Parameters are de
 
 ## Response with Message ID
 
-`WRITE_SYMBOLS`, `GET_DEVICES`, `WRITE_DATA`, `WRITE_COMMANDS`, `WRITE_MESSAGE_CHANNELS` and `WRITE_EVENT_CHANNELS` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
+`WRITE_SYMBOLS`, `GET_DEVICES`, `WRITE_SIGNAL_CONFIG`, `WRITE_DATA`, `WRITE_COMMANDS`, `WRITE_MESSAGE_CHANNELS` and `WRITE_EVENT_CHANNELS` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
 
 ```
 Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>

@@ -232,6 +232,19 @@ const frames = {
     bitsPerRow: 7,
     elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason'],
   },
+
+  F0: {
+    key: 'F0',
+    hex: '0xF0',
+    category: 'signals',
+    name: 'Signal Config',
+    description: 'Presentation metadata for signals that declare any: unit, device class, icon, state class, and display precision.',
+    page: '/blaeck-protocol/protocol/frames/signals',
+    anchor: 'f0--signal-config-0xf0',
+    bitsPerRow: 18,
+    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision'],
+    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision'],
+  },
 };
 
 module.exports = { frames };
