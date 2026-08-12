@@ -193,7 +193,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/messages',
     anchor: '90--message-channel-list-0x90',
     bitsPerRow: 13,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText', 'MessageDeviceClass', 'MessageUnit'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText', 'MessageDeviceClass', 'MessageUnit', 'MessageOptions'],
   },
 
   '95': {
@@ -242,8 +242,8 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'f0--signal-config-0xf0',
     bitsPerRow: 18,
-    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision'],
-    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision'],
+    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision'],
+    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision'],
   },
 };
 
