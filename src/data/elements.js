@@ -368,7 +368,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–4 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing), 5 = isDiagnostic, 6 = disabledByDefault, 7 = forceUpdate, 8 = hasDisplayPrecision. Bits 9–15 reserved',
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–4 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing), 5 = isDiagnostic, 6 = disabledByDefault, 7 = forceUpdate, 8 = hasDisplayPrecision, 9 = hasOptions. Bits 10–15 reserved',
   },
   SignalUnit: {
     label: 'Unit',
