@@ -193,7 +193,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/messages',
     anchor: '90--message-channel-list-0x90',
     bitsPerRow: 13,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText', 'MessageDeviceClass', 'MessageUnit', 'MessageOptions'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'MessageChannelFlags', 'Icon', 'StateText', 'MessageDeviceClass', 'MessageOptions'],
   },
 
   '95': {
