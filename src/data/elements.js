@@ -391,12 +391,6 @@ const elements = {
     span: 2,
     description: 'Conditional: only if `SignalMetaFlags` bit 2. Material Design Icons name (e.g. `"mdi:sine-wave"`)',
   },
-  OffDelay: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 10. Seconds after which a host returns a bool signal to off by itself, for a value pushed true and never pushed false',
-  },
   DisplayPrecision: {
     size: '1 byte',
     type: 'uint8',
