@@ -189,7 +189,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate. Bits 6–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasUnit. Bit 7 reserved',
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
@@ -197,6 +197,13 @@ const elements = {
     type: 'uint8',
     span: 3,
     description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–7 reserved',
+  },
+  MessageUnit: {
+    label: 'Unit',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if `ChannelFlags` bit 6. Symbol shown after the text',
   },
   MessageDeviceClass: {
     label: 'DeviceClass',
