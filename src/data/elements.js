@@ -189,7 +189,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = disabledByDefault, bit 4 = forceUpdate. Bits 5–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate. Bits 6–7 reserved',
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
@@ -197,6 +197,13 @@ const elements = {
     type: 'uint8',
     span: 3,
     description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–7 reserved',
+  },
+  MessageDeviceClass: {
+    label: 'DeviceClass',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `ChannelFlags` bit 3. What the text is, for a host that renders it (`"timestamp"`, `"date"`)',
   },
   EventDeviceClass: {
     label: 'DeviceClass',
