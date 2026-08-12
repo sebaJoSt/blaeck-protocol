@@ -186,10 +186,10 @@ const elements = {
   // diverge from bit 2, so each frame documents its own.
   MessageChannelFlags: {
     label: 'ChannelFlags',
-    size: '1 byte',
-    type: 'uint8',
+    size: '2 bytes',
+    type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasUnit. Bit 7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasUnit. Bits 7–15 reserved',
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
