@@ -287,10 +287,10 @@ const elements = {
     description: '`0` plain, `1` button, `2` switch, `3` number, `4` select, `5` text',
   },
   CommandFlags: {
-    size: '1 byte',
-    type: 'uint8',
+    size: '2 bytes',
+    type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasRange, 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved). Bit 7 reserved',
+    description: 'Bit 0 = hasRange, 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved). Bits 7–15 reserved',
   },
   RangeMin: {
     size: '4 bytes',
