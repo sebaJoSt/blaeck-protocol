@@ -196,7 +196,14 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bits 2–4 = device class (`0` none, `1` button, `2` doorbell, `3` motion), bit 5 = disabledByDefault. Bits 6–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–7 reserved',
+  },
+  EventDeviceClass: {
+    label: 'DeviceClass',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `ChannelFlags` bit 2. What the channel reports (`"button"`, `"doorbell"`, `"motion"`)',
   },
   Icon: {
     size: 'variable',

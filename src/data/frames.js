@@ -168,7 +168,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '80--event-channel-list-0x80',
     bitsPerRow: 18,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventTypeCount', 'EventType'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventDeviceClass', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
 
