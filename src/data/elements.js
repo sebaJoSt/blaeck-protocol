@@ -196,7 +196,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic. Bits 2–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bits 2–4 = device class (`0` none, `1` button, `2` doorbell, `3` motion), bit 5 = disabledByDefault. Bits 6–7 reserved',
   },
   Icon: {
     size: 'variable',

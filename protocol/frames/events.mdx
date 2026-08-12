@@ -12,6 +12,14 @@ An event channel reports occurrences drawn from a closed list declared up front.
 
 <Frame id="80" />
 
+Every channel carries at least one `EventType`: the list is what an occurrence is resolved
+against, and what a host needs to describe the channel at all, so a channel with none can neither
+report nor be shown.
+
+The device class is three bits rather than a string. Its list is short and closed, and a consumer
+that validates it strictly has nothing to fall back on when a name does not match - so the frame
+carries a number that cannot be misspelled.
+
 ---
 
 <Frame id="85" />
