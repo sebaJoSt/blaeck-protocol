@@ -242,8 +242,8 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'f0--signal-config-0xf0',
     bitsPerRow: 18,
-    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision'],
-    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision'],
+    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision', 'OffDelay'],
+    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'SignalOptions', 'DisplayPrecision', 'OffDelay'],
   },
 };
 
