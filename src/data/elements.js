@@ -193,10 +193,10 @@ const elements = {
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
-    size: '1 byte',
-    type: 'uint8',
+    size: '2 bytes',
+    type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–15 reserved',
   },
   MessageUnit: {
     label: 'Unit',
