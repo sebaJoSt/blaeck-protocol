@@ -340,7 +340,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` unspecified, `1` none, `2` measurement, `3` total, `4` total\\_increasing), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision. Bits 10–15 reserved',
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–4 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing), 5 = isDiagnostic, 6 = disabledByDefault, 7 = forceUpdate, 8 = hasDisplayPrecision. Bits 9–15 reserved',
   },
   SignalUnit: {
     label: 'Unit',
@@ -367,7 +367,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: 'Conditional: only if `SignalMetaFlags` bit 9. Decimal places to display',
+    description: 'Conditional: only if `SignalMetaFlags` bit 8. Decimal places to display',
   },
 };
 
