@@ -189,7 +189,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText. Bits 3–7 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = disabledByDefault, bit 4 = forceUpdate. Bits 5–7 reserved',
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
