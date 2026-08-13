@@ -10,7 +10,7 @@ A command list declares which custom commands the device accepts, Command Ack re
 [Elements](../elements) for field details.
 
 When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
-signal, `1` a message channel.
+signal, `1` a state channel.
 
 `CommandPayloadMax` repeats on every entry and is the same on all of them: one receive buffer
 serves the device. A host derives what a given command leaves for its parameters by subtracting

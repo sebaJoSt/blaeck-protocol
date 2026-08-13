@@ -23,8 +23,8 @@ superseded revisions still in the field.
 | --- | --- | --- |
 | `80`–`84` | `80` | [Event Channel List](frames/events) |
 | `85`–`88` | `85` | [Event](frames/events) |
-| `90`–`94` | `90` | [Message Channel List](frames/messages) |
-| `95`–`98` | `95` | [Message](frames/messages) |
+| `90`–`94` | `90` | [State Channel List](frames/states) |
+| `95`–`98` | `95` | [State](frames/states) |
 | `A0`–`A4` | `A0` | [Command List](frames/commands) |
 | `A5`–`A8` | `A5` | [Command Ack](frames/commands) |
 | `B2`–`B7` | `B6` | [Devices](frames/devices) |

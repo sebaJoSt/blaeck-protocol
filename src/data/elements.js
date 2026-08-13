@@ -184,12 +184,12 @@ const elements = {
   },
   // Both catalogs call this field ChannelFlags on the wire and share bits 0-1, but
   // diverge from bit 2, so each frame documents its own.
-  MessageChannelFlags: {
+  StateChannelFlags: {
     label: 'ChannelFlags',
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateText, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasOptions. Bits 7–15 reserved',
+    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateValue, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasOptions, bit 7 = hasUnit, bits 8–10 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), bit 11 = hasDisplayPrecision. Bits 12–15 reserved',
   },
   EventChannelFlags: {
     label: 'ChannelFlags',
@@ -203,21 +203,37 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 9. Comma-separated closed set of values the signal reports',
+    description: 'Conditional: only if `SignalMetaFlags` bit 10. Comma-separated closed set of values the signal reports',
   },
-  MessageOptions: {
+  StateOptions: {
     label: 'Options',
     size: 'variable',
     type: 'string',
     span: 3,
     description: 'Conditional: only if `ChannelFlags` bit 6. Comma-separated closed set of values the channel reports',
   },
-  MessageDeviceClass: {
+  StateDeviceClass: {
     label: 'DeviceClass',
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 3. What the text is, for a host that renders it (`"timestamp"`, `"date"`)',
+    description: 'Conditional: only if `ChannelFlags` bit 3. What the value is, for a host that renders it (`"timestamp"`, `"date"`, `"voltage"`)',
+  },
+  // Unit, state class and display precision are what make a host treat a channel as a number
+  // rather than as text, so they only mean anything on a channel whose ValueType is numeric.
+  StateUnit: {
+    label: 'Unit',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if `ChannelFlags` bit 7',
+  },
+  StateDisplayPrecision: {
+    label: 'DisplayPrecision',
+    size: '1 byte',
+    type: 'uint8',
+    span: 4,
+    description: 'Conditional: only if `ChannelFlags` bit 11. Decimal places to display',
   },
   EventDeviceClass: {
     label: 'DeviceClass',
@@ -232,23 +248,27 @@ const elements = {
     span: 2,
     description: 'Conditional: only if `ChannelFlags` bit 0. Material Design Icons name (e.g. `"mdi:script-text"`)',
   },
-  StateText: {
-    size: 'variable',
-    type: 'string',
+  // A channel declares one datatype and reports it in both frames, so the catalog and the
+  // pushes cannot disagree about how the value is read.
+  StateValueType: {
+    label: 'ValueType',
+    size: '1 byte',
+    type: 'uint8',
     span: 2,
-    description: 'Conditional: only if `ChannelFlags` bit 2. The channel\'s value when the frame was built',
+    description: 'Datatype code (`0x00`–`0x0A`) of this channel\'s value. See [Datatypes](datatypes)',
   },
-  TextLength: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Byte length of `Text`',
-  },
-  Text: {
+  StateValue: {
     size: 'variable',
-    type: 'string',
+    type: 'raw bytes',
     span: 2,
-    description: 'UTF-8 text, not NUL-terminated. Length given by `TextLength`',
+    description: 'Conditional: only if `ChannelFlags` bit 2. The channel\'s value when the frame was built, size per `ValueType`. Fixed width except `0x0A`, which is NUL-terminated like every other string in this frame',
+  },
+  StateChannelValue: {
+    label: 'Value',
+    size: 'variable',
+    type: 'raw bytes',
+    span: 2,
+    description: 'The channel\'s value, size per `ValueType`. Fixed width except `0x0A`, which is a 1-byte length followed by that many UTF-8 bytes - the same rule [DATA](datatypes) follows, so a value is read identically wherever it appears. Values longer than 255 bytes are truncated by the sender',
   },
   EventTypeCount: {
     size: '1 byte',
@@ -326,13 +346,13 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or message channel reflecting this command\'s state; which of the two is given by `StateSource`',
+    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or state channel reflecting this command\'s state; which of the two is given by `StateSource`',
   },
   StateSource: {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. What `StateSignal` names: `0` a signal, `1` a message channel',
+    description: 'Conditional: only if `CommandFlags` bit 3. What `StateSignal` names: `0` a signal, `1` a state channel',
   },
   TextMaxLen: {
     size: '2 bytes',
@@ -368,7 +388,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–4 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing), 5 = isDiagnostic, 6 = disabledByDefault, 7 = forceUpdate, 8 = hasDisplayPrecision, 9 = hasOptions. Bits 10–15 reserved',
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions. Bits 11–15 reserved',
   },
   SignalUnit: {
     label: 'Unit',
@@ -395,7 +415,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: 'Conditional: only if `SignalMetaFlags` bit 8. Decimal places to display',
+    description: 'Conditional: only if `SignalMetaFlags` bit 9. Decimal places to display',
   },
 };
 

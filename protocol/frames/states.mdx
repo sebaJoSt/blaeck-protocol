@@ -1,0 +1,33 @@
+---
+sidebar_position: 5
+---
+
+import Frame from '@site/src/components/Frame';
+
+# State Channels
+
+A state channel carries one value, composed at runtime, that is pushed when it changes rather
+than on the logging interval — so it is never written to a data store. `ChannelIndex` is the
+channel's position in the `90` catalog. See [Elements](../elements) for field details.
+
+Each channel declares a `ValueType`, so a channel can carry a number as readily as text and the
+host decides how it is rendered. The type is reported in both frames: unconditionally in the
+catalog, because a channel has a type whether or not it has a value yet, and again on every push,
+so a push can be read without the catalog in hand.
+
+A text value is capped at 255 bytes, the same as a string signal. The cap bounds how long one
+one push can hold the link: a frame is sent whole, so an unbounded value would delay every data
+frame queued behind it — at 115200 baud, 255 bytes is about 22 ms.
+
+A numeric channel may also declare a unit, a state class and a display precision, the same three
+a signal declares in [F0](signals). They are what makes a host present the channel as a number
+rather than as text, so they mean nothing on a channel whose `ValueType` is `0x0A`.
+
+A channel may also declare a `StateValue`, which the catalog carries as its value when the frame
+was built.
+
+<Frame id="90" />
+
+---
+
+<Frame id="95" />
