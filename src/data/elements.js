@@ -12,13 +12,13 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: '`0x01` = master, `0x02` = slave',
+    description: '`0x00` = single, `0x01` = master, `0x02` = slave',
   },
   SlaveID: {
     size: '1 byte',
     type: 'uint8',
     span: 2,
-    description: '`0x00` for master; device-specific for slaves',
+    description: '`0x00` for single and master; device-specific for slaves',
   },
   SymbolName: {
     size: 'variable',
