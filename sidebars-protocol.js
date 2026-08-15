@@ -13,7 +13,7 @@ const sidebars = {
         'frames/devices',
         'frames/data',
         'frames/control',
-        'frames/messages',
+        'frames/states',
         'frames/events',
         'frames/commands',
       ],
