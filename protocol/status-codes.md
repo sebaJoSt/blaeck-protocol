@@ -74,7 +74,7 @@ These are a separate namespace from the StatusByte codes above.
 |------|------|--------|-------------|
 | `0` | OK | accepted | Delivered to a handler; validation passed. |
 | `1` | UNKNOWN | rejected | No handler registered for the command. |
-| `2` | OUT_OF_RANGE | rejected | Number outside the advertised `[RangeMin, RangeMax]`. |
+| `2` | OUT_OF_RANGE | rejected | Number outside the advertised `[RangeMin, RangeMax]`. Never sent by a command that advertised no range — see [Command Frames](frames/commands). |
 | `3` | BAD_SWITCH | rejected | Switch value was not `0` or `1`. |
 | `4` | BAD_SELECT | rejected | Select value was neither a valid index nor an option name. |
 | `5` | TOO_LONG | rejected | Text value exceeded the advertised `TextMaxLen`. |
