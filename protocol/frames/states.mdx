@@ -15,6 +15,16 @@ host decides how it is rendered. The type is reported in both frames: unconditio
 catalog, because a channel has a type whether or not it has a value yet, and again on every push,
 so a push can be read without the catalog in hand.
 
+The catalog carries each channel's current value, which makes it the answer to a question a host
+cannot otherwise ask: what is everything set to right now. It is the reason a device announces
+its catalogs at startup (see [Control](control)) - a host that stayed connected across a restart
+is holding values the device no longer reports, because its variables are back at their startup
+defaults.
+
+A device that re-declares its channels while running sends this catalog again, unasked, for a
+different reason: a value is addressed by its position here, so a host reading pushes against the
+previous catalog would file them under the wrong names.
+
 A text value is capped at 255 bytes, the same as a string signal. The cap bounds how long one
 one push can hold the link: a frame is sent whole, so an unbounded value would delay every data
 frame queued behind it — at 115200 baud, 255 bytes is about 22 ms.

@@ -10,6 +10,11 @@ An event channel reports occurrences drawn from a closed list declared up front.
 `EventIndex` are positions in the `80` catalog. See
 [Elements](../elements) for field details.
 
+Both indices are positions, so a host reading occurrences against an out-of-date catalog files
+them under whatever now sits at them, with nothing in the frame to notice it by. A device
+announces this catalog at startup (see [Control](control)) and again whenever it re-declares
+while running, so a host is never left resolving against a list the device has moved on from.
+
 <Frame id="80" />
 
 Every channel carries at least one `EventType`: the list is what an occurrence is resolved

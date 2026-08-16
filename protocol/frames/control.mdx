@@ -7,3 +7,17 @@ import Frame from '@site/src/components/Frame';
 # Control
 
 <Frame id="C0" />
+
+Sent once, when a device starts, so a host that stayed connected learns it is no longer talking
+to the run it was talking to a moment ago. A host that connects afterwards never sees it: it is
+a notice, not a state, and nothing repeats it.
+
+A device follows it with everything it declares - its [state channel](states), [event
+channel](events) and [command](commands) catalogs - unasked. A host holding what the previous
+run declared has no reason to ask again, because nothing has told it anything changed. The state
+catalog is the one that is wrong after an ordinary restart, since it carries values and those
+are back at their startup defaults; the other two matter when a device declares conditionally
+and comes back offering something else.
+
+The catalogs are sent once the device has finished declaring, not while it is still doing so, so
+each describes the whole set rather than the part that existed when the frame was written.
