@@ -12,12 +12,20 @@ Sent once, when a device starts, so a host that stayed connected learns it is no
 to the run it was talking to a moment ago. A host that connects afterwards never sees it: it is
 a notice, not a state, and nothing repeats it.
 
-A device follows it with everything it declares - its [state channel](states), [event
-channel](events) and [command](commands) catalogs - unasked. A host holding what the previous
-run declared has no reason to ask again, because nothing has told it anything changed. The state
-catalog is the one that is wrong after an ordinary restart, since it carries values and those
-are back at their startup defaults; the other two matter when a device declares conditionally
-and comes back offering something else.
+A device follows it with everything it declares, unasked. A host holding what the previous run
+declared has no reason to ask again, because nothing has told it anything changed.
+
+| catalog | why it is sent |
+|---|---|
+| [State channels](states) | It carries each channel's value, and those are back at their startup defaults. The one that is actually wrong after an ordinary restart. |
+| [Event channels](events) | An occurrence names its channel and its type by position here, so a device that comes back declaring another set has them filed under whatever now sits at those indices. |
+| [Commands](commands) | Matched by name rather than position, so a stale one answers `UNKNOWN_COMMAND` instead of being taken for another - but a host still builds its controls from this. |
+| [Signal config](signals) | What a signal says about itself. The [schema hash](../schema-hash) covers a signal's name and type, so a unit or an icon that moved while the signals stayed put changes nothing a host can see. |
+
+Only the first is out of date after an ordinary restart. The rest matter when a device declares
+conditionally - on a sensor that answered at boot, on a setting read from storage - and so comes
+back offering something else. Sending all four is one rule rather than four cases: a device says
+what it has, every time it starts.
 
 The catalogs are sent once the device has finished declaring, not while it is still doing so, so
 each describes the whole set rather than the part that existed when the frame was written.

@@ -18,5 +18,12 @@ Signal Config carries how a signal is presented: unit, device class, icon, state
 precision. Only signals that declare something appear, so the frame may hold no entries at all;
 `SymbolID` gives each entry's signal.
 
+A device sends it at startup along with its other catalogs (see [Control](control)), and it is
+the only one of them the [schema hash](../schema-hash) cannot stand in for: the hash covers a
+signal's name and its type, so a unit or an icon that moved while the signals stayed put leaves
+it unchanged. Read against whichever symbol list the host holds, since `SymbolID` is a position
+in it - which is the right reading exactly while that list is unchanged. A list that did change
+is the hash's business.
+
 `SignalMetaFlags` determines the entry's structure. Each optional field follows only if its bit is
 set, in the order above.
