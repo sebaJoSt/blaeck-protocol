@@ -4,8 +4,9 @@ sidebar_position: 2
 
 # Catalog auto-announce (proposal)
 
-**Status:** proposed, not implemented. Written 2026-08-17, alongside
-[Command correlation](command-correlation).
+**Status:** implemented in BlaeckSerial on 2026-08-17, the day it was written. BlaeckTCP still
+to follow. The rule itself now lives in [Control](../frames/control); this page keeps the
+reasoning, and the two approaches that were rejected on the way.
 
 A device that changes a declaration while running has to tell the host, and today that is the
 sketch's job. This proposes the library take it over, and settles which declarations may change
