@@ -123,6 +123,36 @@ This wants deciding before the September pass, because it changes what a relay d
 it forwards - and a relay must forward `#42:` untouched either way, or the ack cannot find its way
 home.
 
+## What a relay renumbers, after this
+
+Decided and built on 2026-08-17, ahead of this proposal rather than with it: BlaeckSerial 7
+is unreleased, so the wire could still be changed without a migration.
+
+[State](../frames/states) and [Event](../frames/events) pushes now carry
+`MasterSlaveConfig` and `SlaveID` - the same two-byte slot every catalog frame has always
+carried, zero from a single board. A push's index is now a position in *that device's*
+catalog, so a relay rewrites identity and never renumbers a position it forwards. It costs
+two bytes on every state push, which is the one place it is felt: a chatty channel pays it
+each time.
+
+Two frames were deliberately left flat, and this records why so the question is not reopened
+each time someone reads the list.
+
+**`F0` and `D2` - one index space, shared.** Both address a signal by `SymbolId`, its
+position in the [`B0`](../frames/signals) symbol list. Giving `F0` per-device indices while
+`D2` kept merged ones would make the same `SymbolId` mean two different things in two frames,
+so it is both or neither. `D2` is the bulk frame: it carries many signals at once, and
+per-value identity is absurd while per-frame identity costs one frame per device and throws
+away the packing the frame exists for. So neither. Signals stay the one place a relay
+renumbers - which is where the efficiency argument actually applies.
+
+**`A5` - the id already attributes it.** A host that sent `#42` to a device knows whose ack
+`42` is, so no identity slot is proposed here. That is a second job the id does, and part of
+why it earns its place.
+
+BlaeckTCP needs the same two fields on `95` and `85` in the September pass, or a hub and a
+board will disagree about where a push's index starts.
+
 ## Compatibility
 
 - **Hand-written commands are unaffected.** No prefix, no change.

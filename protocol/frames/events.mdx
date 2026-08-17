@@ -7,13 +7,17 @@ import Frame from '@site/src/components/Frame';
 # Events
 
 An event channel reports occurrences drawn from a closed list declared up front. `ChannelIndex` and
-`EventIndex` are positions in the `80` catalog. See
-[Elements](../elements) for field details.
+`EventIndex` are positions in the `80` catalog for the device named by the occurrence's
+`MasterSlaveConfig` and `SlaveID`. See [Elements](../elements) for field details.
 
 Both indices are positions, so a host reading occurrences against an out-of-date catalog files
 them under whatever now sits at them, with nothing in the frame to notice it by. A device
 announces this catalog at startup (see [Control](control)) and again whenever it re-declares
 while running, so a host is never left resolving against a list the device has moved on from.
+
+They are positions in one device's catalog: the occurrence carries the same two identity bytes
+the catalog does, so an aggregator relaying several boards rewrites identity and leaves the
+indices as the originating device declared them.
 
 <Frame id="80" />
 

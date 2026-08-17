@@ -180,8 +180,8 @@ const frames = {
     description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '85--event-0x85',
-    bitsPerRow: 4,
-    elements: ['ChannelIndex', 'EventIndex'],
+    bitsPerRow: 6,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'EventIndex'],
   },
 
   '90': {
@@ -204,8 +204,8 @@ const frames = {
     description: 'Current value of a declared state channel, typed. Pushed when it changes; not telemetry and not stored.',
     page: '/blaeck-protocol/protocol/frames/states',
     anchor: '95--state-0x95',
-    bitsPerRow: 6,
-    elements: ['ChannelIndex', 'StateValueType', 'StateChannelValue'],
+    bitsPerRow: 8,
+    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'StateValueType', 'StateChannelValue'],
   },
 
   A0: {

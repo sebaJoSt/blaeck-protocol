@@ -8,7 +8,8 @@ import Frame from '@site/src/components/Frame';
 
 A state channel carries one value, composed at runtime, that is pushed when it changes rather
 than on the logging interval — so it is never written to a data store. `ChannelIndex` is the
-channel's position in the `90` catalog. See [Elements](../elements) for field details.
+channel's position in the `90` catalog for the device named by the push's `MasterSlaveConfig`
+and `SlaveID`. See [Elements](../elements) for field details.
 
 Each channel declares a `ValueType`, so a channel can carry a number as readily as text and the
 host decides how it is rendered. The type is reported in both frames: unconditionally in the
@@ -24,6 +25,10 @@ defaults.
 A device that re-declares its channels while running sends this catalog again, unasked, for a
 different reason: a value is addressed by its position here, so a host reading pushes against the
 previous catalog would file them under the wrong names.
+
+The push carries the same two identity bytes the catalog does, which is what keeps the index
+meaningful behind an aggregator: positions stay the ones the originating device declared, and a
+relay forwarding several boards rewrites identity rather than renumbering what it passes on.
 
 A text value is capped at 255 bytes, the same as a string signal. The cap bounds how long one
 one push can hold the link: a frame is sent whole, so an unbounded value would delay every data
