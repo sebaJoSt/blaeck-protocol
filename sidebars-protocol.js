@@ -29,6 +29,7 @@ const sidebars = {
       link: { type: 'generated-index', description: 'Designs agreed but not yet built.' },
       items: [
         'proposals/command-correlation',
+        'proposals/catalog-auto-announce',
       ],
     },
   ],
