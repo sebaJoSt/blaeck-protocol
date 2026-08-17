@@ -18,6 +18,7 @@ const sidebars = {
         'frames/commands',
       ],
     },
+    'catalogs',
     'elements',
     'status-codes',
     'datatypes',

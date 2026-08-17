@@ -30,26 +30,5 @@ what it has, every time it starts.
 The catalogs are sent once the device has finished declaring, not while it is still doing so, so
 each describes the whole set rather than the part that existed when the frame was written.
 
-## Announcing a change while running
-
-A device that changes what it declares after startup announces the catalog that changed, unasked,
-for the reason the restart notice sends all four: a host addresses entries by position, and one
-left resolving against a list the device has moved on from files values under the wrong names,
-with nothing in the frame to notice it by. A catalog that can be emptied and re-declared makes
-this the silent kind of wrong - a position that still exists and now means something else.
-
-The same four catalogs, and only those four. **A changed symbol list is not announced.** A host
-fixes its storage layout around the signals it was given when logging began, so a signal list
-that moves mid-session has no correct reading and the host is meant to stop rather than adapt to
-it. An announce could let it take the new schema and go on writing into a table whose columns no
-longer describe it, turning a loud and correct failure into a quiet wrong one. Signal *config* is
-announced, because a unit or an icon changes no column and moves no [schema hash](../schema-hash).
-
-An announce carries `MessageID` 1, the value used for a frame nobody asked for. It is also sent
-ahead of any [state](states) or [event](events) push that would otherwise reach a host before the
-catalog explaining it - an event especially, since an occurrence appears in no catalog and cannot
-be recovered from one afterwards.
-
-A host therefore has to accept any catalog at any time and re-resolve against it. One that reads
-catalogs only when it connects is no worse off than before: it ignores what it did not ask for,
-exactly as it ignores the startup announce.
+This is one of the three occasions a catalog is sent; the others, and what a host owes them, are
+under [Catalogs](../catalogs).
