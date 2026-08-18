@@ -198,19 +198,23 @@ const elements = {
     span: 3,
     description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–15 reserved',
   },
+  // Three frames carry a comma-separated option list, and they are not the same thing. These two
+  // describe what a read-only value may be - they label a sensor, and a host sends nothing back.
+  // A0's list is the other kind: the choices a select command accepts. Keeping that straight is
+  // what decides whether a host builds a control or a display, so each says which it is.
   SignalOptions: {
     label: 'Options',
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 10. Comma-separated closed set of values the signal reports',
+    description: 'Conditional: only if `SignalMetaFlags` bit 10. Comma-separated closed set of values the signal reports. Read-only: it names what may arrive, not choices a host may send - the writable list is a command\'s `SelectOptions`',
   },
   StateOptions: {
     label: 'Options',
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 6. Comma-separated closed set of values the channel reports',
+    description: 'Conditional: only if `ChannelFlags` bit 6. Comma-separated closed set of values the channel reports. Read-only, like a signal\'s `Options`. A channel a select command owns is given that command\'s list, so it can report an index as the option it names',
   },
   StateDeviceClass: {
     label: 'DeviceClass',
@@ -280,7 +284,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Declared event type. Repeated `EventTypeCount` times; position defines its index',
+    description: 'Declared event type. Repeated `EventTypeCount` times; position defines its index. A declared channel lists at least one, and none of them is blank: an event names its type by position, so a channel with none can neither report nor be shown, and a blank one holds an index nothing can be reported under',
   },
   ChannelIndex: {
     size: '2 bytes',
@@ -310,25 +314,19 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved). Bits 7–15 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep. Bits 8–15 reserved',
   },
   RangeMin: {
     size: '4 bytes',
     type: 'float32',
     span: 2,
-    description: 'Conditional: only if `CommandFlags` bit 0',
+    description: 'Conditional: only if `CommandFlags` bit 0. Lowest value the command accepts, inclusive',
   },
   RangeMax: {
     size: '4 bytes',
     type: 'float32',
     span: 2,
-    description: 'Conditional: only if `CommandFlags` bit 0',
-  },
-  RangeStep: {
-    size: '4 bytes',
-    type: 'float32',
-    span: 2,
-    description: 'Conditional: only if `CommandFlags` bit 0',
+    description: 'Conditional: only if `CommandFlags` bit 0. Highest value the command accepts, inclusive. A command that sets the bit declares a `RangeMax` above its `RangeMin`: the bit says a range was declared, and a window admitting a single value or none is not one',
   },
   Unit: {
     size: 'variable',
@@ -336,11 +334,11 @@ const elements = {
     span: 2,
     description: 'Conditional: only if `CommandFlags` bit 1',
   },
-  OptionsCsv: {
+  SelectOptions: {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 2. Comma-separated select options',
+    description: 'Conditional: only if `CommandFlags` bit 2. Comma-separated set of options a select command accepts, in the order their indices follow. Writable, unlike the `Options` a signal or a state channel declares: a host builds the control from this list, and the device takes either an option name or its index. A command that sets the bit lists at least one option and none of them is blank: every value is checked against the list, so an empty one accepts nothing and leaves a host with nothing to offer, and a blank one is a choice that shows nothing. Positions fix the indices values are carried as, so a blank option is refused at the source rather than dropped from the list',
   },
   StateSignal: {
     size: 'variable',
@@ -359,6 +357,12 @@ const elements = {
     type: 'uint16',
     span: 3,
     description: 'Conditional: only if `CommandFlags` bit 4. Maximum accepted text length',
+  },
+  RangeStep: {
+    size: '4 bytes',
+    type: 'float32',
+    span: 2,
+    description: 'Conditional: only if `CommandFlags` bit 7. Display resolution: never rounded to and never validated, so a value falling between two steps is still accepted. Carried on its own bit rather than with the range because the two are independently optional - a range with no step is ordinary, and the bit is what distinguishes that from a declared step of 0. A device may set bit 7 without bit 0, so do not assume a range is present whenever a step is',
   },
   CmdHash: {
     size: '4 bytes',

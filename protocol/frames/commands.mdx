@@ -13,10 +13,21 @@ When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `State
 signal, `1` a state channel.
 
 Bit 0 says a range was declared, not that the entry is a number. A number command whose device
-declared no range leaves the bit clear and omits `RangeMin`, `RangeMax` and `RangeStep`
+declared no range leaves the bit clear and omits `RangeMin` and `RangeMax`
 altogether; it accepts any value its handler will take, and never answers
 [`OUT_OF_RANGE`](../status-codes). A host builds the control from its own defaults in that case.
 It must not read absent limits as `0` to `0` — a window nothing but zero fits through.
+
+`RangeStep` has a bit of its own, bit 7, and is not part of that range. A step is display
+resolution: nothing is rounded to it and no value is refused for falling between two of them. So
+the two are declared independently — a command may state limits without a resolution, a
+resolution without limits, both, or neither. Because it is flagged rather than sent as a
+sentinel, an absent step is simply absent; there is no `0` a host has to know to read as "none".
+Optional fields follow in bit order, which is why the step trails the text length rather than
+sitting beside the min and max.
+
+A host may have a floor of its own — Home Assistant refuses a step below `0.001` — and is
+expected to drop that one control rather than quietly coarsen what the device asked for.
 
 `CommandPayloadMax` repeats on every entry and is the same on all of them: one receive buffer
 serves the device. A host derives what a given command leaves for its parameters by subtracting
