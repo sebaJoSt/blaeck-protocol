@@ -57,7 +57,7 @@ already draw.
 | `90` state channels | yes | feeds discovery, never storage layout |
 | `80` event channels | yes | same |
 | `A0` commands | yes | same |
-| `F0` signal config | yes | metadata only - unit, icon, device class, state class, precision |
+| `F0` signal config | yes | metadata only - unit, icon, device class, state class, precision, display name |
 | `B0` symbols | **never** | a signal list change mid-session is not a legal change |
 
 **`B0` is excluded on purpose, and it is the important half of this proposal.** A host fixes its

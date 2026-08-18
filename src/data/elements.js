@@ -209,6 +209,13 @@ const elements = {
     span: 3,
     description: 'Conditional: only if `SignalMetaFlags` bit 10. Comma-separated closed set of values the signal reports. Read-only: it names what may arrive, not choices a host may send - the writable list is a command\'s `SelectOptions`',
   },
+  SignalDisplayName: {
+    label: 'DisplayName',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `SignalMetaFlags` bit 11. Label a host shows in place of the signal\'s name, for a name doing a second job - carrying a unit into a logged column, say - that reads poorly on screen. Presentation only: the name stays what the symbol list gives, what a stored column is called, and what any identity a host derives is built from',
+  },
   StateOptions: {
     label: 'Options',
     size: 'variable',
@@ -314,7 +321,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep. Bits 8–15 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName. Bits 9–15 reserved',
   },
   RangeMin: {
     size: '4 bytes',
@@ -364,6 +371,13 @@ const elements = {
     span: 2,
     description: 'Conditional: only if `CommandFlags` bit 7. Display resolution: never rounded to and never validated, so a value falling between two steps is still accepted. Carried on its own bit rather than with the range because the two are independently optional - a range with no step is ordinary, and the bit is what distinguishes that from a declared step of 0. A device may set bit 7 without bit 0, so do not assume a range is present whenever a step is',
   },
+  CommandDisplayName: {
+    label: 'DisplayName',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `CommandFlags` bit 8. Label a host shows in place of `CommandName`, for a command whose name is an identifier a host sends back rather than something worth reading. Presentation only: the name stays what `<COMMAND,…>` carries and what any identity a host derives is built from',
+  },
   CmdHash: {
     size: '4 bytes',
     type: 'uint32',
@@ -392,7 +406,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions. Bits 11–15 reserved',
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions, 11 = hasDisplayName. Bits 12–15 reserved',
   },
   SignalUnit: {
     label: 'Unit',

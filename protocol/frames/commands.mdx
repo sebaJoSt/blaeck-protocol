@@ -12,6 +12,12 @@ A command list declares which custom commands the device accepts, Command Ack re
 When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
 signal, `1` a state channel.
 
+`DisplayName`, bit 8, is the label a host shows in place of `CommandName`. A command's name is an
+identifier a host sends back in `<COMMAND,…>`, so it is written to be matched rather than read —
+`SET_FREQ` names the command exactly and labels a control badly. The label changes what is shown and
+nothing else: the name stays what a host sends, and what any identity it derives is built from, so a
+command that gains a label later keeps the control a host already made for it.
+
 Bit 0 says a range was declared, not that the entry is a number. A number command whose device
 declared no range leaves the bit clear and omits `RangeMin` and `RangeMax`
 altogether; it accepts any value its handler will take, and never answers

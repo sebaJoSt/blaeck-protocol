@@ -217,8 +217,8 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
     bitsPerRow: 32,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep'],
-    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName'],
   },
 
   A5: {
@@ -238,12 +238,12 @@ const frames = {
     hex: '0xF0',
     category: 'signals',
     name: 'Signal Config',
-    description: 'Presentation metadata for signals that declare any: unit, device class, icon, state class, and display precision.',
+    description: 'Presentation metadata for signals that declare any: unit, device class, icon, state class, display precision, and the label to show in place of the name.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'f0--signal-config-0xf0',
     bitsPerRow: 18,
-    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions'],
-    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions'],
+    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
+    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
   },
 };
 

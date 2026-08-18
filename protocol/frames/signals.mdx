@@ -15,8 +15,14 @@ Repeated per signal. See [Elements](../elements) for field details.
 <Frame id="F0" />
 
 Signal Config carries how a signal is presented: unit, device class, icon, state class, display
-precision. Only signals that declare something appear, so the frame may hold no entries at all;
-`SymbolID` gives each entry's signal.
+precision, and the label to show in place of the name. Only signals that declare something appear,
+so the frame may hold no entries at all; `SymbolID` gives each entry's signal.
+
+`DisplayName` exists because a name can be doing a second job. A host that logs names its stored
+column after the signal, so an author who wants that column to say what it measured writes the unit
+into the name - and then reads `Output [V]` on screen with the unit after it again. The label is
+presentation and nothing more: the name stays what the symbol list gives, what a column is called,
+and what any identity a host derives is built from, so declaring one later moves nothing.
 
 A device sends it at startup along with its other catalogs (see [Control](control)), and it is
 the only one of them the [schema hash](../schema-hash) cannot stand in for: the hash covers a
