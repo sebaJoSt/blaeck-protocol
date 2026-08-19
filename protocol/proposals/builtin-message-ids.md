@@ -107,10 +107,9 @@ One spelling for one concept, on every command in the protocol. The parameter fo
 entirely — it exists because of a parser that no longer exists.
 
 **The handshake needs no compatibility machinery.** A bare `<BLAECK.GET_DEVICES>` parses
-identically on every version ever shipped: the parameter loop finds nothing and yields `0`, which
-is the id hosts send today anyway. A host may therefore open with the bare form before it knows
-the version, and only start sending ids once the catalog has told it what it is talking to. This
-is already what Loggbok does for `WRITE_SYMBOLS`.
+identically on every version ever shipped, so a host can open with it before it knows the version
+and start sending ids only once the catalog has answered. See
+[Ordering](#ordering-one-frame-decides-everything-after-it-is-conditional) for what that constrains.
 
 ### 2. `ACTIVATE` takes a plain decimal interval
 
@@ -174,6 +173,50 @@ BlaeckSerial ignores both. They exist for a `blaecktcpy` hub feature that was ne
 advertised and has no users. With them and the id parameters gone, no built-in except `ACTIVATE`
 takes positional parameters at all, so no old frame can be silently reinterpreted as a new one —
 the parameter counts do not overlap.
+
+## Ordering: one frame decides, everything after it is conditional
+
+This is the load-bearing constraint of the whole migration, so it is worth stating as a rule
+rather than leaving it implied.
+
+A host learns which library and version it is talking to from the **device frame** — the answer to
+`GET_DEVICES`. Nothing else carries it. So there is a window at the start of every session in
+which the host must speak without knowing who is listening, and every frame sent in that window
+must parse identically on 6.x and 7.x.
+
+Today that window contains exactly two frames, in this order:
+
+| frame | sent before version known | new form parses on pre-7? |
+|---|---|---|
+| `<BLAECK.DEACTIVATE>` | yes | yes — takes no parameters, unchanged |
+| `<BLAECK.GET_DEVICES>` | yes | yes — the parameter loop finds nothing and yields `0` |
+
+Both are safe, and neither needs a conditional. `DEACTIVATE` already takes nothing. `GET_DEVICES`
+is sent today as `<BLAECK.GET_DEVICES,0,0,0,0,Loggbok,app>`, and the bare form is what a pre-7
+device already computes from those zeros — so a host may simply send the bare form from the very
+first session and never branch.
+
+Everything sent *after* the device frame arrives is conditional on it:
+
+| frame | conditional on version because |
+|---|---|
+| `<BLAECK.WRITE_SYMBOLS>` | only if a `#id:` prefix is attached |
+| `<BLAECK.WRITE_COMMANDS>` | same |
+| `<BLAECK.WRITE_DATA>` | id prefix, and whether the requested bit can be trusted |
+| `<BLAECK.ACTIVATE>` | decimal interval on 7.x, four LE bytes on 6.x |
+| any typed command | id prefix, as already gated today |
+
+`ACTIVATE` is the only one whose *parameters* change, and therefore the only one a host must build
+two ways rather than merely decorate. The pattern is already in place for it: interval recovery
+after a restart already resolves through a call that takes the library name and version, so the
+branch has somewhere to live.
+
+**Why this ordering has to be got right.** A pre-7 device receiving a 7.x built-in does not
+recognise the name and, because built-ins are unacked on 6.x, answers nothing at all. There is no
+error to observe — the session simply stalls waiting for a frame that will never come. That is
+precisely the failure this proposal removes for 7.x onward, and precisely the one that still
+applies while talking to anything older. Keeping the neutral set to those two frames is what makes
+the stall unreachable.
 
 ## What a host can do afterwards
 
