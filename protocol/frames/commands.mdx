@@ -51,9 +51,10 @@ so it matches only when those are the bytes the sender wrote, whatever route the
 arrive. `CmdNameHash` covers the name alone, which sits before the first comma and so survives a
 frame the device could not take in full.
 
-The header's Message ID carries back the correlation id the command was sent with, or `0` when it
-was sent without one. When an id is present it decides which command is being answered, and the
-hashes only say how it arrived:
+The header's Message ID carries back the [message id](../commands#--message-id) the command was
+sent with, or `0` when it was sent without one — the same field, and the same meaning, that a
+`BLAECK.*` response echoes. When an id is present it decides which command is being answered, and
+the hashes only say how it arrived:
 
 | Message ID | CmdHash | Meaning |
 |------------|---------|---------|

@@ -22,7 +22,7 @@ Zero or more sigil-tagged items may precede the command name, each closed by `:`
 
 ```
 <SET_AMP,0.9>          typed by hand — no prefix
-<#42:SET_AMP,0.9>      correlate the acknowledgement
+<#42:SET_AMP,0.9>      give the command a message id
 ```
 
 A reader consumes prefix items while the leading character is a sigil it knows, then treats the
@@ -35,13 +35,23 @@ fails to match and is reported, rather than being silently discarded.
 rather than create one it can never receive. Two sigils are spoken for: `#` below, and `@` for
 routing a command through a hub to the device behind it.
 
-### `#` — Correlation Id
+### `#` — Message Id
+
+A `BLAECK.*` request sends a message id in its parameters and gets it back in the response frame's
+header, so the host knows which request the response answers. A command frame has nowhere to put
+one — every parameter belongs to the handler — which is what this prefix supplies. It is the same
+message id, in the same header field, meaning the same thing.
 
 | Rule | Value |
 |------|-------|
 | Range | `1`–`65535`; `0` means "no id" and must not be sent |
 | Format | decimal, unpadded, at most five digits |
 | Reuse | a sender must not reuse an id while an acknowledgement for it is outstanding |
+| Issuer | only the host that waits for the acknowledgement; a relay forwards ids and mints none |
+
+The narrower range is the one difference from the parameter form, and it is paid for in characters
+of a receive buffer small enough to be counted: five digits and two delimiters are a bearable share
+of it, ten digits are not.
 
 The device echoes the id in the [Command Ack](frames/commands) header's Message ID field, and
 echoes `0` for a command that carried none. Nothing is added to the frame.
@@ -54,9 +64,6 @@ tell which of two same-named commands is being answered — dragging a slider se
 bytes. A prefix is addressing rather than content: a routing item may be consumed before the
 frame reaches the device that answers it, so a hash over what arrived would cover different
 characters depending on the path taken, and would never match what the sender hashed.
-
-Sixteen bits, because the cost is characters in a receive buffer small enough to be counted:
-five digits and two delimiters are a bearable share of it, ten digits are not.
 
 Firmware that predates this reads `#42:SET_AMP` as a name, finds no such command, and answers
 `UNKNOWN_COMMAND`. A host should therefore send ids only to versions that accept them.

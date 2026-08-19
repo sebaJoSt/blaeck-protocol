@@ -11,6 +11,9 @@ the prefix section, not the bytes the device received, because a routing item ma
 before the frame arrives and a hash over what arrived would then depend on the path taken.
 Routing itself is still unimplemented — BlaeckSerial does not parse `@`, so a frame addressed
 elsewhere fails to match a name and is answered `UNKNOWN_COMMAND` rather than run by mistake.
+This page calls the id a *correlation id*; the spec calls it a **message id**, because that is
+what it is — the same number a `BLAECK.*` request sends in its parameters and gets back in the
+response header, finally available to a command frame that had nowhere to put one.
 
 A host cannot reliably tell which command a [Command Ack](../frames/commands) answers. This
 proposes an optional identifier the device echoes, and settles how it composes with the routing
