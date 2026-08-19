@@ -323,20 +323,20 @@ frame type for something the ack fields already express, and it leaves the gener
 
 - **Nothing on the wire grows.** The id rides in a header field that exists; the flag rides in a
   status byte that exists.
-- **A pre-7 host reading a new data frame** parses the status byte as `restart_flag == 1`, so a
-  frame that is both a restart and requested (`0b11`) would be read as *not* a restart, losing a
-  warning. It only affects a frame that is both at once, and only for hosts already shipped, but
-  it is a real regression and the reason the spec should state that readers test **bit 0**, not
-  equality.
-- **A pre-7 device receiving `<#7:BLAECK.WRITE_DATA>`** does not find the name and answers
-  nothing, since built-ins are unacked there. So a host gates ids by version, exactly as it
-  already gates the command prefix — and opens with the bare form, which works everywhere.
-- **A pre-7 host receiving acks for built-ins** will fail to pair them and log them as unpaired.
-  Worth checking it does nothing louder than that.
+- **No shipped host sees any of this.** Loggbok gates on a version range and refused anything above
+  `6.99.99` until the day 7.0.0 was started; an out-of-range device is rejected at the catalog with
+  "Only devices with BlaeckSerial Version from v3 to v6 are supported". So a released Loggbok never
+  reaches a 7.x data frame, ack or status byte. The 7.x changes need no host-side migration story —
+  only the unreleased Loggbok has to keep up.
+- **Readers should still test bit 0 of the status byte** rather than comparing the whole byte to
+  `1`, since more bits are now defined. That is a rule for what gets written next, not a fix for
+  anything already shipped.
+- **A pre-7 device receiving `<#7:BLAECK.WRITE_DATA>`** does not find the name and answers nothing,
+  since built-ins are unacked there. This is the direction that does need care: a host gates ids by
+  version, exactly as it already gates the command prefix, and opens with the bare form, which
+  works everywhere.
 - **A 6.x sketch calling `setIntervalMs(500)`** no longer compiles. Deliberate: the alternative is
   a board that quietly streams at whatever the host asks for, having been told to do otherwise.
-- **A host still reading `185273100`** never sees it again, which is the same as today, since it
-  never recognised it.
 
 ## What it touches
 
