@@ -321,7 +321,7 @@ const elements = {
     size: '4 bytes',
     type: 'uint32',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass, 12 = hasIcon. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 13–31 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 14–31 reserved',
   },
   RangeMin: {
     size: '4 bytes',
@@ -384,6 +384,13 @@ const elements = {
     type: 'string',
     span: 3,
     description: 'Conditional: only if `CommandFlags` bit 11. What kind of thing the control acts on, drawn from the host\'s own vocabulary. The vocabulary differs by `CommandKind` and is narrower than a signal\'s: a number takes a measurable quantity, a switch takes only `outlet` or `switch`, and a button takes only `restart`, `identify` or `update`. Presentation for the most part - an icon, the wording of on and off - but for a number a host may also convert the value into the reader\'s own units. That conversion runs in both directions and never reaches the device: a control declared in Celsius is entered in Fahrenheit and arrives converted back, so `RangeMin`, `RangeMax` and every value on the wire stay in the unit the device declared. Declare `Unit` alongside a converting class, or a host converts from an assumption. A name the host does not know fails its check and costs that one entity, so a device declares nothing rather than guessing',
+  },
+  CommandPressPayload: {
+    label: 'Press payload',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `CommandFlags` bit 13. What a press of a button sends, in place of the empty payload a bare press carries. Arguments are comma separated, written as any command sent to the device is written, so a button labelled "Activate all DUTs" can stand for a call with `1,40` already filled in and the handler reads the parameters as it would from any other sender. Meaningful only on a button; a device leaves the bit clear on every other kind, where the value a host sends is the payload and a fixed one would overwrite it. Unvalidated: a button is the one kind whose parameters have no declared signature to check against, so a payload with the wrong separator or too few arguments reaches the handler as written',
   },
   CommandIcon: {
     label: 'Icon',
