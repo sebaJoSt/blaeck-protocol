@@ -4,8 +4,13 @@ sidebar_position: 1
 
 # Command correlation and routing (proposal)
 
-**Status:** proposed, not implemented. Written 2026-08-17, for the pass that brings BlaeckTCP
-level with BlaeckSerial 7.
+**Status:** implemented in BlaeckSerial on 2026-08-17. The rules themselves now live in
+[Commands](../commands#prefix-section) and [Command Frames](../frames/commands); this page keeps
+the reasoning. One thing changed on the way in: the ack's frame hash covers the payload *after*
+the prefix section, not the bytes the device received, because a routing item may be consumed
+before the frame arrives and a hash over what arrived would then depend on the path taken.
+Routing itself is still unimplemented — BlaeckSerial does not parse `@`, so a frame addressed
+elsewhere fails to match a name and is answered `UNKNOWN_COMMAND` rather than run by mistake.
 
 A host cannot reliably tell which command a [Command Ack](../frames/commands) answers. This
 proposes an optional identifier the device echoes, and settles how it composes with the routing

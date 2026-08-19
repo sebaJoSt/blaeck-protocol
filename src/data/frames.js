@@ -226,7 +226,7 @@ const frames = {
     hex: '0xA5',
     category: 'commands',
     name: 'Command Ack',
-    description: 'Outcome of a dispatched command, matched to the request by command hash, or by name hash when the bytes differ.',
+    description: 'Outcome of a dispatched command. The header MessageID echoes the correlation id the command carried, or 0 when it carried none; the hashes then say whether the bytes arrived as written.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a5--command-ack-0xa5',
     bitsPerRow: 7,
