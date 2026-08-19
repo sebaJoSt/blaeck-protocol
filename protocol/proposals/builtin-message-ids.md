@@ -38,16 +38,29 @@ Nothing about `15,15,15,15` tells a reader it means "please send data now". Noth
 `185273100` tells a reader it means "this device's interval was fixed by its sketch". Both facts
 are real and worth knowing; neither is discoverable.
 
-### It has already broken
+### One of the constants works only because nobody decodes it
 
 A device sends `185273100` instead of `185273099` when the sketch pinned the interval with
-`setIntervalMs()`. Loggbok defines only `185273099` and compares with `==`. So against a
-sketch-fixed board its timed-log counter never advances, its timed-log timer never resets, and its
-progress indicators take the wrong branch.
+`setIntervalMs()`, added in 6.0.0. Loggbok defines only `185273099` and compares with `==`, so the
+sketch-fixed value matches nothing.
 
-That is exactly the failure mode a private constant table produces: one side adds a value, the
-other side does not learn about it, and nothing anywhere reports a mismatch. It has been live for
-as long as both features have existed.
+That is deliberate, and it is worth being precise about why, because it looks like a bug. Loggbok
+is never told what interval the sketch chose. Recognising the frame as timed would arm its
+timed-log timer with `LoggingIntervalUsed` — *its own* configured interval — and draw a progress
+bar counting down to a moment the device has no intention of sending at. Failing to recognise the
+value suppresses the indicator instead of drawing a wrong one.
+
+So the constant is carrying a real and useful fact: *this frame was timed, but not at the rate you
+think*. The objection is not to the fact. It is to the means. The fact survives only as long as
+exactly one host exists and its ignorance of one constant holds; a second implementation that
+reasonably decoded `185273100` as "timed" would produce a confidently wrong countdown, and so
+would a maintainer of this one who noticed the asymmetry and "fixed" it by adding the value to the
+table. A protocol should not depend on a reader not knowing something.
+
+It also only ever says what the rate *is not*. Loggbok suppresses the indicator because it cannot
+draw it — the effective interval is not on the wire anywhere, and `getIntervalMs()` exists only on
+the device. The honest expression of this is a frame that says which rate is in force, so a host
+can draw the right bar rather than none.
 
 ### A host counts when it should correlate
 
@@ -151,6 +164,22 @@ public setter a sketch may call at any time, from `loop()`, a button or an inter
 advertised once in the device frame would go stale the moment a sketch changed its mind; a bit
 sampled as each frame is built cannot.
 
+Bit 2 therefore becomes **rate fixed by the device**: set when the sketch pinned the interval or
+locked streaming off, clear when the host is free to set it. This is what `185273100` was saying,
+said in a way a reader can decode rather than one it must fail to decode.
+
+**And the effective interval should be readable — but where is an open question.** A host that
+knows only "not your rate" can suppress an indicator; it cannot draw a correct one. The device
+knows the number, it is what `getIntervalMs()` returns, and it is nowhere on the wire.
+
+The obvious home is the device frame, except that runs into the same staleness the paragraph above
+just used to reject it: a sketch can change the interval at any time. Three ways out, none free —
+put it in every data frame (four bytes on the chattiest frame there is, to answer a question that
+rarely changes); put it in the device frame and have a device that changes its rate re-announce,
+reusing the mechanism from [Catalog auto-announce](./catalog-auto-announce); or leave it out and
+accept that a fixed-rate board shows no countdown, as today. The middle one looks right, and it is
+the one thing in this proposal that is not yet settled.
+
 ### 4. Every command is acked, including built-ins
 
 Delete the `strncmp(..., "BLAECK.", 7)` carve-out. One rule replaces a per-command table of which
@@ -237,8 +266,10 @@ MQTT discovery, and the CLI's log-now key.
 
 ## Alternatives that do not work
 
-**Add `185273100` to the host's table.** Fixes the live bug and nothing else. The next value has
-the same problem, and a host that was not told still cannot read the field.
+**Add `185273100` to the host's table.** Not a fix but a regression, for the reasons above: the
+host would draw a countdown at its own rate against a board running the sketch's. The asymmetry is
+load-bearing, which is the strongest argument for replacing it with something that says the same
+thing out loud.
 
 **Keep the tags but let the host choose them.** Host-chosen ids that encode "timed" or "requested"
 are the same overloading in nicer clothes, and worse for a third party: only the author of the id
@@ -276,5 +307,9 @@ September pass.
 
 ## Until then
 
-A host should accept **185273100** alongside **185273099** as a timed-data tag. That is the live
-bug above, it is one line, and it is worth doing whether or not the rest of this is ever built.
+Nothing. The earlier draft of this page recommended that a host accept `185273100` alongside
+`185273099`, having read the asymmetry as an oversight. That would arm the timed-log timer with
+the host's own interval against a board running someone else's, replacing a missing progress bar
+with a wrong one. It is recorded here because it is the mistake this design invites: a constant
+whose meaning lives in one reader's absence of knowledge looks exactly like a constant somebody
+forgot to add.
