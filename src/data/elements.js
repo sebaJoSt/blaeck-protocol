@@ -351,7 +351,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or state channel reflecting this command\'s state; which of the two is given by `StateSource`',
+    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or state channel reflecting this command\'s state; which of the two is given by `StateSource`. What the named source carries is read in the command\'s own vocabulary: a switch\'s state is `1` or `0`, the two values its handler accepts, and a select\'s is an option name rather than an index. A device reporting a switch some other way - `ON`, `true` - leaves a host matching against payloads it was never given, so the state is not read at all',
   },
   StateSource: {
     size: '1 byte',
