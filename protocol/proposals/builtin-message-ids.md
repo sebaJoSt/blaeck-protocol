@@ -10,8 +10,9 @@ unreleased and the wire can be changed without a migration. It follows
 this one asks what the built-ins should do now that such a thing exists.
 
 The short version: the `MessageID` header field is doing three unrelated jobs, two of them with
-magic numbers a host has to be told about. This proposes it do one job, and that the facts the
-magic numbers were carrying move somewhere they can be read without a lookup table.
+magic numbers a host has to be told about. This proposes it do one job, that the facts the magic
+numbers were carrying move somewhere they can be read without a lookup table, and that one of
+those facts stop needing to be carried at all.
 
 ## What goes wrong now
 
@@ -38,7 +39,7 @@ Nothing about `15,15,15,15` tells a reader it means "please send data now". Noth
 `185273100` tells a reader it means "this device's interval was fixed by its sketch". Both facts
 are real and worth knowing; neither is discoverable.
 
-### One of the constants works only because nobody decodes it
+### One constant works only because nobody decodes it
 
 A device sends `185273100` instead of `185273099` when the sketch pinned the interval with
 `setIntervalMs()`, added in 6.0.0. Loggbok defines only `185273099` and compares with `==`, so the
@@ -50,17 +51,18 @@ timed-log timer with `LoggingIntervalUsed` — *its own* configured interval —
 bar counting down to a moment the device has no intention of sending at. Failing to recognise the
 value suppresses the indicator instead of drawing a wrong one.
 
-So the constant is carrying a real and useful fact: *this frame was timed, but not at the rate you
-think*. The objection is not to the fact. It is to the means. The fact survives only as long as
-exactly one host exists and its ignorance of one constant holds; a second implementation that
-reasonably decoded `185273100` as "timed" would produce a confidently wrong countdown, and so
-would a maintainer of this one who noticed the asymmetry and "fixed" it by adding the value to the
-table. A protocol should not depend on a reader not knowing something.
+So the constant carries a real fact: *this frame was timed, but not at the rate you think*. The
+objection is not to the fact but to the means, which survives only as long as exactly one host
+exists and its ignorance of one constant holds. A second implementation that reasonably decoded
+`185273100` as "timed" would draw a confidently wrong countdown — and so would a maintainer of
+this one who noticed the asymmetry and "fixed" it by adding the value to the table.
 
-It also only ever says what the rate *is not*. Loggbok suppresses the indicator because it cannot
-draw it — the effective interval is not on the wire anywhere, and `getIntervalMs()` exists only on
-the device. The honest expression of this is a frame that says which rate is in force, so a host
-can draw the right bar rather than none.
+It also only ever says what the rate *is not*. The effective interval is nowhere on the wire;
+`getIntervalMs()` exists only on the device, and returns the mode rather than the rate in force.
+So a host cannot draw the right bar even in principle.
+
+Everything above is downstream of one feature: the **fixed-rate interval lock**. Proposal 6 removes
+it, which is why this page proposes no frame for reporting a rate. See there for why.
 
 ### A host counts when it should correlate
 
@@ -87,12 +89,13 @@ else if (equalsFlash(_parsedCommand, F(BLAECK_BUILTIN_ACTIVATE)))
 }
 ```
 
-There is no `else`. When the sketch has pinned the interval — or locked streaming off — `ACTIVATE`
-and `DEACTIVATE` do nothing and send nothing. A host asks for 500 ms streaming and receives
-neither a rate change nor a refusal, which it cannot tell apart from a dead link.
+There is no `else`. When the sketch has locked streaming off — or, until proposal 6, pinned the
+interval — `ACTIVATE` and `DEACTIVATE` do nothing and send nothing. A host asks for 500 ms
+streaming and receives neither a rate change nor a refusal, which it cannot tell apart from a dead
+link.
 
-This is not a host bug that better code would avoid. It is two sides legitimately disagreeing
-about who owns the rate, and only the device knows the answer.
+This is not a host bug that better code would avoid. The device is entitled to refuse; it is only
+the silence that is wrong.
 
 Built-ins cannot report this because both ack sites are guarded:
 
@@ -159,26 +162,13 @@ Both are worth keeping, because they answer different questions. The **id** tell
 Deriving one from the other — reading `id == 0` as "timed" — would reintroduce exactly the
 overloading this proposal removes.
 
-**Who owns the interval belongs on the flag, not in the catalog.** `setIntervalMs()` is a plain
-public setter a sketch may call at any time, from `loop()`, a button or an interlock. A fact
-advertised once in the device frame would go stale the moment a sketch changed its mind; a bit
-sampled as each frame is built cannot.
+**Who owns the rate needs no bit of its own.** With the fixed-rate lock removed by proposal 6,
+there are only two situations left: the host sets the rate, or the device refuses to stream at all
+and says so when asked. Neither needs announcing on every frame, because a device that has locked
+streaming off sends no frames to announce it on.
 
-Bit 2 therefore becomes **rate fixed by the device**: set when the sketch pinned the interval or
-locked streaming off, clear when the host is free to set it. This is what `185273100` was saying,
-said in a way a reader can decode rather than one it must fail to decode.
-
-**And the effective interval should be readable — but where is an open question.** A host that
-knows only "not your rate" can suppress an indicator; it cannot draw a correct one. The device
-knows the number, it is what `getIntervalMs()` returns, and it is nowhere on the wire.
-
-The obvious home is the device frame, except that runs into the same staleness the paragraph above
-just used to reject it: a sketch can change the interval at any time. Three ways out, none free —
-put it in every data frame (four bytes on the chattiest frame there is, to answer a question that
-rarely changes); put it in the device frame and have a device that changes its rate re-announce,
-reusing the mechanism from [Catalog auto-announce](./catalog-auto-announce); or leave it out and
-accept that a fixed-rate board shows no countdown, as today. The middle one looks right, and it is
-the one thing in this proposal that is not yet settled.
+That is the whole reason this proposal adds one bit and not three, and adds no frame for reporting
+an interval. Remove the feature and the reporting problem goes with it.
 
 ### 4. Every command is acked, including built-ins
 
@@ -193,8 +183,8 @@ Ack-first matters: it is what lets a host tell a refusal from an answer that has
 An ack costs about 27 bytes — header, two hashes, status, reason — against a data frame carrying
 real signals. Only *requested* data pays it; timed streaming is not a command and is never acked.
 
-This is what finally gives `ACTIVATE` a voice. When the sketch has pinned the interval, it can
-refuse with a reason instead of falling silent.
+This is what finally gives `ACTIVATE` a voice. A device that has locked streaming off can refuse
+with a reason instead of falling silent.
 
 ### 5. `GET_DEVICES` drops `ClientName` / `ClientType`
 
@@ -202,6 +192,47 @@ BlaeckSerial ignores both. They exist for a `blaecktcpy` hub feature that was ne
 advertised and has no users. With them and the id parameters gone, no built-in except `ACTIVATE`
 takes positional parameters at all, so no old frame can be silently reinterpreted as a new one —
 the parameter counts do not overlap.
+
+### 6. Drop the fixed-rate interval lock; keep the off lock
+
+`setIntervalMs()` currently takes three kinds of value: a fixed rate in milliseconds,
+`BLAECK_INTERVAL_OFF`, and `BLAECK_INTERVAL_CLIENT`. This proposes the fixed rate go away, leaving
+off and client-controlled.
+
+The fixed-rate lock is the origin of nearly everything this page has had to work around. It is the
+only reason `185273100` exists, the only reason a host must be told a rate it did not choose, and
+the only reason a rate would have to be reported on the wire at all — which would have cost a new
+catalog frame, a new built-in to request it, a new host poll, and a re-announce rule to keep it
+from going stale. That is a substantial amount of protocol for one setting.
+
+Against which: it appears in two examples, **both commented out**; it is documented in the README
+and nowhere in this specification; and it was added in 6.0.0 to mirror `blaecktcpy`, not to answer
+a need on a microcontroller. A sketch that wants its own cadence already has one — drive
+`writeAllData()` from its own timer and never depend on the library's.
+
+**The off lock stays.** "This board must not be made to stream" is worth being able to say on a
+constrained link, and it costs nothing to express: there is no rate to report, no constant to
+invent, no staleness, and with proposal 4 the refusal is a complete answer rather than a
+suppressed indicator. That is the whole difference — off needs one bit of policy the device
+enforces locally, fixed-rate needs a number the host has to be kept in sync with.
+
+**On diverging from `blaecktcpy`.** Its `local_interval_ms` keeps all three modes and should. A
+Python server fronting several clients has reason to pin a rate; a board with one host does not.
+The hub's per-upstream `interval_ms` is unaffected either way — it pins a rate by sending
+`ACTIVATE` itself and withholding the client's, which never used the board's own lock:
+
+```python
+if upstream.interval_ms >= 0:
+    b = upstream.interval_ms.to_bytes(4, "little")
+    upstream.transport.send_command(f"BLAECK.ACTIVATE,{params}")
+```
+
+That is also proposal 2 in the wild. With a decimal interval it becomes
+`f"BLAECK.ACTIVATE,{upstream.interval_ms}"`.
+
+**This is a breaking API change** for any 6.x sketch calling `setIntervalMs()` with a rate, which
+is what the major version is for. It should be a compile error rather than a silently ignored
+argument, so a sketch that relied on it is told.
 
 ## Ordering: one frame decides, everything after it is conditional
 
@@ -266,17 +297,23 @@ MQTT discovery, and the CLI's log-now key.
 
 ## Alternatives that do not work
 
-**Add `185273100` to the host's table.** Not a fix but a regression, for the reasons above: the
-host would draw a countdown at its own rate against a board running the sketch's. The asymmetry is
-load-bearing, which is the strongest argument for replacing it with something that says the same
-thing out loud.
+**Add `185273100` to the host's table.** Not a fix but a regression: the host would draw a
+countdown at its own rate against a board running the sketch's. The asymmetry is load-bearing,
+which is why the answer is to remove what it was compensating for.
 
 **Keep the tags but let the host choose them.** Host-chosen ids that encode "timed" or "requested"
 are the same overloading in nicer clothes, and worse for a third party: only the author of the id
 knows what it means.
 
-**Advertise interval ownership in the device frame.** Sent once, and `setIntervalMs()` can be
-called at any time afterwards, so a host's copy goes stale with no way to notice.
+**Keep the fixed-rate lock and report the rate on the wire.** Workable, and costed out before it
+was dropped: a new catalog frame carrying interval and state, a new built-in to request it, a new
+host poll, and a re-announce rule — because a value sent once at handshake goes stale the moment a
+sketch calls `setIntervalMs()` again. All of it in service of a feature no example uses.
+
+**Keep the fixed-rate lock and widen the device frame instead.** Cheaper-looking, and worse. The
+shipped device parser reads devices until the bytes run out, so appended fields are read as the
+start of another device rather than skipped; it would need a new frame key. And the value would
+still go stale, which is the actual problem.
 
 **Give `ACTIVATE` a dedicated response frame instead of an ack.** Self-describing, but it is a new
 frame type for something the ack fields already express, and it leaves the general rule — which
@@ -296,14 +333,18 @@ frame type for something the ack fields already express, and it leaves the gener
   already gates the command prefix — and opens with the bare form, which works everywhere.
 - **A pre-7 host receiving acks for built-ins** will fail to pair them and log them as unpaired.
   Worth checking it does nothing louder than that.
+- **A 6.x sketch calling `setIntervalMs(500)`** no longer compiles. Deliberate: the alternative is
+  a board that quietly streams at whatever the host asks for, having been told to do otherwise.
+- **A host still reading `185273100`** never sees it again, which is the same as today, since it
+  never recognised it.
 
 ## What it touches
 
-BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command,
-`ACTIVATE` refusing out loud), this spec (built-in parameter tables, `MessageID` semantics, the
-status byte), Loggbok (emit ids, correlate the requested frame, read the flag, keep the old
-readings behind a version gate), and `blaecktcpy`'s encoder. BlaeckTCP needs the same in the
-September pass.
+BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command, the
+fixed-rate lock removed, `ACTIVATE` refusing out loud), this spec (built-in parameter tables,
+`MessageID` semantics, the status byte), Loggbok (emit ids, correlate the requested frame, read the
+flag, keep the old readings behind a version gate), and `blaecktcpy`'s command encoder — though its
+own `local_interval_ms` keeps all three modes. BlaeckTCP needs the same in the September pass.
 
 ## Until then
 
