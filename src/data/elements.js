@@ -321,7 +321,7 @@ const elements = {
     size: '4 bytes',
     type: 'uint32',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 14–31 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = input mode, 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload. The input mode is read against `CommandKind`, which is what lets one pair of bits serve two kinds - no entry is ever both. On a number command it says how the value is most usefully entered (`0` auto, `1` box, `2` slider, `3` reserved); on a text command whether the field should be masked while it is typed (`0` plain, `1` password, `2`–`3` reserved). A hint about presentation only, and on a text command a hint about presentation alone: the value still travels the wire as the characters it is, so masking hides it from someone watching the screen and from nothing on the network. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number or a text command; a device sets these bits to `0` on every other kind. Bits 14–31 reserved',
   },
   RangeMin: {
     size: '4 bytes',
@@ -363,7 +363,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 4. Maximum accepted text length',
+    description: 'Conditional: only if `CommandFlags` bit 4. Maximum accepted text length, in decoded bytes, with `0` meaning no limit. The field is a `uint16`, but a device should keep the value at `255` or below: Home Assistant caps any entity state at 255 characters and its MQTT text schema refuses a larger maximum outright, dropping the whole control rather than shortening it. A host bridging to one should leave the key out and say so rather than pass a larger value on',
   },
   RangeStep: {
     size: '4 bytes',
