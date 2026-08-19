@@ -315,13 +315,13 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: '`0` plain, `1` button, `2` switch, `3` number, `4` select, `5` text',
+    description: '`0` plain, `1` number, `2` switch, `3` select, `4` button, `5` text',
   },
   CommandFlags: {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName. Bits 9–15 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 12–15 reserved',
   },
   RangeMin: {
     size: '4 bytes',
@@ -377,6 +377,13 @@ const elements = {
     type: 'string',
     span: 3,
     description: 'Conditional: only if `CommandFlags` bit 8. Label a host shows in place of `CommandName`, for a command whose name is an identifier a host sends back rather than something worth reading. Presentation only: the name stays what `<COMMAND,…>` carries and what any identity a host derives is built from',
+  },
+  CommandDeviceClass: {
+    label: 'DeviceClass',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if `CommandFlags` bit 11. What kind of thing the control acts on, drawn from the host\'s own vocabulary. The vocabulary differs by `CommandKind` and is narrower than a signal\'s: a number takes a measurable quantity, a switch takes only `outlet` or `switch`, and a button takes only `restart`, `identify` or `update`. Presentation for the most part - an icon, the wording of on and off - but for a number a host may also convert the value into the reader\'s own units. That conversion runs in both directions and never reaches the device: a control declared in Celsius is entered in Fahrenheit and arrives converted back, so `RangeMin`, `RangeMax` and every value on the wire stay in the unit the device declared. Declare `Unit` alongside a converting class, or a host converts from an assumption. A name the host does not know fails its check and costs that one entity, so a device declares nothing rather than guessing',
   },
   CmdHash: {
     size: '4 bytes',
