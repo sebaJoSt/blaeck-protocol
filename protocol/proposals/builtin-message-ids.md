@@ -230,9 +230,26 @@ if upstream.interval_ms >= 0:
 That is also proposal 2 in the wild. With a decimal interval it becomes
 `f"BLAECK.ACTIVATE,{upstream.interval_ms}"`.
 
-**This is a breaking API change** for any 6.x sketch calling `setIntervalMs()` with a rate, which
-is what the major version is for. It should be a compile error rather than a silently ignored
-argument, so a sketch that relied on it is told.
+**A 6.x sketch calling `setIntervalMs(500)` needs no new handling.** The setter already ends with a
+branch for a value that is none of the accepted modes: it refuses the call, leaves the previous
+mode in place, and reports on the debug stream.
+
+```cpp
+else if (_debugStream != nullptr)
+{
+  _debugStream->print("Invalid interval mode: ");
+  _debugStream->println(interval_ms);
+}
+```
+
+Removing the fixed rate simply makes `500` one of those values, handled the way this library
+already handles bad input. An earlier draft asked for a compile error instead, which would mean
+changing the parameter to an enum type — a larger break to the public signature than the removal
+it was guarding, for one benefit: the author is forced to notice at build time.
+
+The residual risk of not doing that is real and worth stating: the debug message only prints if a
+debug stream is attached, so a sketch that pinned its rate can quietly become host-controlled. That
+is what the migration note in the changelog is for.
 
 ## Ordering: one frame decides, everything after it is conditional
 
@@ -335,8 +352,8 @@ frame type for something the ack fields already express, and it leaves the gener
   since built-ins are unacked there. This is the direction that does need care: a host gates ids by
   version, exactly as it already gates the command prefix, and opens with the bare form, which
   works everywhere.
-- **A 6.x sketch calling `setIntervalMs(500)`** no longer compiles. Deliberate: the alternative is
-  a board that quietly streams at whatever the host asks for, having been told to do otherwise.
+- **A 6.x sketch calling `setIntervalMs(500)`** falls into the setter's existing invalid-mode
+  branch: the call is refused, the previous mode stays, and a debug stream is told. See proposal 6.
 
 ## What it touches
 
