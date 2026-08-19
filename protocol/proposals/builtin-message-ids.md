@@ -89,9 +89,9 @@ else if (equalsFlash(_parsedCommand, F(BLAECK_BUILTIN_ACTIVATE)))
 }
 ```
 
-There is no `else`. When the sketch has locked streaming off — or, until proposal 6, pinned the
-interval — `ACTIVATE` and `DEACTIVATE` do nothing and send nothing. A host asks for 500 ms
-streaming and receives neither a rate change nor a refusal, which it cannot tell apart from a dead
+There is no `else`. When the sketch has locked timed data off — or, until proposal 6, pinned the
+interval — `ACTIVATE` and `DEACTIVATE` do nothing and send nothing. A host asks for data every
+500 ms and receives neither a rate change nor a refusal, which it cannot tell apart from a dead
 link.
 
 This is not a host bug that better code would avoid. The device is entitled to refuse; it is only
@@ -163,9 +163,9 @@ Deriving one from the other — reading `id == 0` as "timed" — would reintrodu
 overloading this proposal removes.
 
 **Who owns the rate needs no bit of its own.** With the fixed-rate lock removed by proposal 6,
-there are only two situations left: the host sets the rate, or the device refuses to stream at all
-and says so when asked. Neither needs announcing on every frame, because a device that has locked
-streaming off sends no frames to announce it on.
+there are only two situations left: the host sets the rate, or the device refuses to send timed data
+at all and says so when asked. Neither needs announcing on every frame, because a device that has
+locked timed data off sends no frames to announce it on.
 
 That is the whole reason this proposal adds one bit and not three, and adds no frame for reporting
 an interval. Remove the feature and the reporting problem goes with it.
@@ -181,9 +181,9 @@ frame counts as an answer:
 Ack-first matters: it is what lets a host tell a refusal from an answer that has not arrived yet.
 
 An ack costs about 27 bytes — header, two hashes, status, reason — against a data frame carrying
-real signals. Only *requested* data pays it; timed streaming is not a command and is never acked.
+real signals. Only *requested* data pays it; timed data is not a command and is never acked.
 
-This is what finally gives `ACTIVATE` a voice. A device that has locked streaming off can refuse
+This is what finally gives `ACTIVATE` a voice. A device that has locked timed data off can refuse
 with a reason instead of falling silent.
 
 ### 5. `GET_DEVICES` drops `ClientName` / `ClientType`
@@ -210,7 +210,8 @@ and nowhere in this specification; and it was added in 6.0.0 to mirror `blaecktc
 a need on a microcontroller. A sketch that wants its own cadence already has one — drive
 `writeAllData()` from its own timer and never depend on the library's.
 
-**The off lock stays.** "This board must not be made to stream" is worth being able to say on a
+**The off lock stays.** "This board must not be made to send timed data" is worth being able to say
+on a
 constrained link, and it costs nothing to express: there is no rate to report, no constant to
 invent, no staleness, and with proposal 4 the refusal is a complete answer rather than a
 suppressed indicator. That is the whole difference — off needs one bit of policy the device
@@ -250,6 +251,30 @@ it was guarding, for one benefit: the author is forced to notice at build time.
 The residual risk of not doing that is real and worth stating: the debug message only prints if a
 debug stream is attached, so a sketch that pinned its rate can quietly become host-controlled. That
 is what the migration note in the changelog is for.
+
+**What the removal leaves behind: a getter that no longer says anything.** `getIntervalMs()`
+returns `_fixedInterval_ms`, so once the fixed rate is gone it can only answer `BLAECK_INTERVAL_OFF`
+or `BLAECK_INTERVAL_CLIENT`. It is a mode getter wearing a duration's name, and its own
+documentation already admits the mismatch — "in client-controlled mode this reports the mode, not
+whatever a host has since asked for". A board sending timed data every 1000 ms answers `-1`.
+Nothing in the library, the examples or this specification calls it.
+
+Meanwhile the two values a sketch might actually want are private: the rate in force
+(`_timedInterval_ms`) and whether anything is being sent (`_timedActivated`). So a sketch cannot
+read back what a host asked for — it cannot print the cadence on a status channel, cannot drive its
+own logic from it, and cannot persist it to EEPROM to come back at the same rate after a power cut.
+
+Since the old name has no callers to break, give it to the value that deserves it:
+`getIntervalMs()` reports the rate in force, `isTimedDataActive()` reports whether timed data is
+being sent at all — the name the library already uses internally, and the state `ACTIVATE` and
+`DEACTIVATE` switch — and the surviving lock gets a predicate of its own rather than sharing the
+accessor.
+
+This is a library surface, not a wire change — nothing new is transmitted. A host does not need to
+be told the rate: after proposal 6 nothing can outrank its `ACTIVATE`, and a device that reboots
+says so with the restart flag already in the data frame, which is enough for a host to re-send the
+interval it chose. The getter exists for the sketch, which today has no way to observe a setting
+made on its behalf.
 
 ## Ordering: one frame decides, everything after it is conditional
 
@@ -358,7 +383,8 @@ frame type for something the ack fields already express, and it leaves the gener
 ## What it touches
 
 BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command, the
-fixed-rate lock removed, `ACTIVATE` refusing out loud), this spec (built-in parameter tables,
+fixed-rate lock removed, the interval getters reporting the live state, `ACTIVATE` refusing out
+loud), this spec (built-in parameter tables,
 `MessageID` semantics, the status byte), Loggbok (emit ids, correlate the requested frame, read the
 flag, keep the old readings behind a version gate), and `blaecktcpy`'s command encoder — though its
 own `local_interval_ms` keeps all three modes. BlaeckTCP needs the same in the September pass.
