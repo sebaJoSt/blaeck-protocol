@@ -217,8 +217,8 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
     bitsPerRow: 32,
-    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass'],
-    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass'],
+    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon'],
   },
 
   A5: {
