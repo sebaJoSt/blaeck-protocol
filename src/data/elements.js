@@ -318,10 +318,10 @@ const elements = {
     description: '`0` plain, `1` number, `2` switch, `3` select, `4` button, `5` text',
   },
   CommandFlags: {
-    size: '2 bytes',
-    type: 'uint16',
+    size: '4 bytes',
+    type: 'uint32',
     span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass, 12 = hasIcon. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 13–15 reserved',
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = number render mode (`0` auto, `1` box, `2` slider, `3` reserved), 11 = hasDeviceClass, 12 = hasIcon. The render mode says how a number is most usefully entered - a typed box or a dragged slider - and is a hint about presentation only: the range is what bounds the value, and a host may ignore it. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number command; a device sets these bits to `0` on every other kind. Bits 13–31 reserved',
   },
   RangeMin: {
     size: '4 bytes',
