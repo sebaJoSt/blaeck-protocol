@@ -39,6 +39,13 @@ Nothing about `15,15,15,15` tells a reader it means "please send data now". Noth
 `185273100` tells a reader it means "this device's interval was fixed by its sketch". Both facts
 are real and worth knowing; neither is discoverable.
 
+And `185273100` does not mean only that. Shipped `blaecktcpy` sends the same number for a
+hub-overridden interval — a different fact, about a different device, on the same wire. One
+constant, two meanings, written down in neither implementation. That is what a private language
+does once it has more than one speaker. The hub goes away in `blaecktcpy` 3 and takes its meaning
+with it, which is the same cure this page prescribes throughout: remove the feature and the
+reporting problem goes with it.
+
 ### One constant works only because nobody decodes it
 
 A device sends `185273100` instead of `185273099` when the sketch pinned the interval with
@@ -122,6 +129,11 @@ Every built-in accepts the same `#id:` prefix a typed command accepts, and none 
 One spelling for one concept, on every command in the protocol. The parameter form goes away
 entirely — it exists because of a parser that no longer exists.
 
+**An id is 1 to 65535.** That is what the prefix parser accepts, and it is narrower than the four
+bytes it is echoed into: `0` is not a value a sender may use, because `0` in the header is how a
+frame says it answers no request. Worth writing into the spec, since the parameter form it
+replaces could carry any 32-bit number and nothing said otherwise.
+
 **The handshake needs no compatibility machinery.** A bare `<BLAECK.GET_DEVICES>` parses
 identically on every version ever shipped, so a host can open with it before it knows the version
 and start sending ids only once the catalog has answered. See
@@ -141,8 +153,9 @@ current byte-wise decode sidesteps this by never parsing a number above 255.
 
 ### 3. A trigger flag in the data frame, replacing the device-invented tags
 
-The data frame already carries a status byte, currently written as `0` or `1` for the restart
-flag, with seven bits unused:
+The data frame already carries a [`RestartFlag`](../schema-hash) byte, currently written as `0` or
+`1`, with seven bits unused. Not the [StatusByte](../status-codes), which is a value rather than a
+bit field and already spends `0x01`, `0x80` and `0x81`:
 
 ```cpp
 bool restartFlagSnapshot = _sendRestartFlag;
@@ -179,9 +192,13 @@ frame counts as an answer:
 > then the response frame.
 
 Ack-first matters: it is what lets a host tell a refusal from an answer that has not arrived yet.
+It is also a reordering, not only an addition: today the ack is written after the handler has run,
+so a typed command whose handler pushes a state frame already puts that frame on the wire first.
+Commands that are acked today change order too.
 
-An ack costs about 27 bytes — header, two hashes, status, reason — against a data frame carrying
-real signals. Only *requested* data pays it; timed data is not a command and is never acked.
+An ack costs 35 bytes on the wire — frame markers, header, two hashes, status, reason — against a
+data frame carrying real signals. Only *requested* data pays it; timed data is not a command and is
+never acked.
 
 This is what finally gives `ACTIVATE` a voice. A device that has locked timed data off can refuse
 with a reason instead of falling silent.
@@ -189,7 +206,7 @@ with a reason instead of falling silent.
 ### 5. `GET_DEVICES` drops `ClientName` / `ClientType`
 
 BlaeckSerial ignores both. They exist for a `blaecktcpy` hub feature that was never publicly
-advertised and has no users. With them and the id parameters gone, no built-in except `ACTIVATE`
+advertised, has no users, and is itself being removed in `blaecktcpy` 3. With them and the id parameters gone, no built-in except `ACTIVATE`
 takes positional parameters at all, so no old frame can be silently reinterpreted as a new one —
 the parameter counts do not overlap.
 
@@ -219,17 +236,12 @@ enforces locally, fixed-rate needs a number the host has to be kept in sync with
 
 **On diverging from `blaecktcpy`.** Its `local_interval_ms` keeps all three modes and should. A
 Python server fronting several clients has reason to pin a rate; a board with one host does not.
-The hub's per-upstream `interval_ms` is unaffected either way — it pins a rate by sending
-`ACTIVATE` itself and withholding the client's, which never used the board's own lock:
+That is a property of the server itself and survives everything below.
 
-```python
-if upstream.interval_ms >= 0:
-    b = upstream.interval_ms.to_bytes(4, "little")
-    upstream.transport.send_command(f"BLAECK.ACTIVATE,{params}")
-```
-
-That is also proposal 2 in the wild. With a decimal interval it becomes
-`f"BLAECK.ACTIVATE,{upstream.interval_ms}"`.
+The hub does not. It is being removed in `blaecktcpy` 3, and with it the only code in the ecosystem
+that *sends* `ACTIVATE` rather than receiving it — so there is nothing here to stay compatible
+with. What remains is the receiving side: the server decodes a client's `ACTIVATE`, and proposal 2
+makes that a decimal rather than four bytes.
 
 **A 6.x sketch calling `setIntervalMs(500)` needs no new handling.** The setter already ends with a
 branch for a value that is none of the accepted modes: it refuses the call, leaves the previous
@@ -257,7 +269,9 @@ returns `_fixedInterval_ms`, so once the fixed rate is gone it can only answer `
 or `BLAECK_INTERVAL_CLIENT`. It is a mode getter wearing a duration's name, and its own
 documentation already admits the mismatch — "in client-controlled mode this reports the mode, not
 whatever a host has since asked for". A board sending timed data every 1000 ms answers `-1`.
-Nothing in the library, the examples or this specification calls it.
+No sketch calls it: not an example, not this specification, and nowhere in the library itself. Its
+one caller is the `@code` block in its own documentation, which CI extracts and compiles — so the
+rename below costs a doc rewrite rather than a broken build.
 
 Meanwhile the two values a sketch might actually want are private: the rate in force
 (`_timedInterval_ms`) and whether anything is being sent (`_timedActivated`). So a sketch cannot
@@ -309,9 +323,11 @@ Everything sent *after* the device frame arrives is conditional on it:
 | any typed command | id prefix, as already gated today |
 
 `ACTIVATE` is the only one whose *parameters* change, and therefore the only one a host must build
-two ways rather than merely decorate. The pattern is already in place for it: interval recovery
-after a restart already resolves through a call that takes the library name and version, so the
-branch has somewhere to live.
+two ways rather than merely decorate. The pattern is already in place for it: the host builds this
+command through a call that takes the library name and version, and already branches inside it —
+BlaeckSerial older than 4.0.0 is sent the interval in seconds rather than four bytes, with a
+warning when that form cannot hold the value. The 7.x form is a third case in a function that
+exists.
 
 **Why this ordering has to be got right.** A pre-7 device receiving a 7.x built-in does not
 recognise the name and, because built-ins are unacked on 6.x, answers nothing at all. There is no
@@ -334,8 +350,8 @@ The counter, the magic constant and the 30 ms polling timer are all replaced by 
 the id. A frame requested by somebody else no longer satisfies it. And a missing ack fails in
 milliseconds with a real reason, instead of three seconds ending in a shrug.
 
-The same simplification applies wherever the constant is used today — an initial value fetch after
-MQTT discovery, and the CLI's log-now key.
+The same simplification applies to the constant's other reader: the CLI, which uses it for its
+log-now key and for the final log it requests before stopping.
 
 ## Alternatives that do not work
 
@@ -364,15 +380,20 @@ frame type for something the ack fields already express, and it leaves the gener
 ## Compatibility
 
 - **Nothing on the wire grows.** The id rides in a header field that exists; the flag rides in a
-  status byte that exists.
+  `RestartFlag` byte that exists.
 - **No shipped host sees any of this.** Loggbok gates on a version range and refused anything above
   `6.99.99` until the day 7.0.0 was started; an out-of-range device is rejected at the catalog with
   "Only devices with BlaeckSerial Version from v3 to v6 are supported". So a released Loggbok never
-  reaches a 7.x data frame, ack or status byte. The 7.x changes need no host-side migration story —
+  reaches a 7.x data frame, ack or `RestartFlag`. The 7.x changes need no host-side migration —
   only the unreleased Loggbok has to keep up.
-- **Readers should still test bit 0 of the status byte** rather than comparing the whole byte to
-  `1`, since more bits are now defined. That is a rule for what gets written next, not a fix for
-  anything already shipped.
+- **The same Loggbok release raises the `blaecktcpy` floor to 3.** So the host that learns to read
+  ids and the flag never meets a hub, never meets the four-byte `ACTIVATE` it sends, and never sees
+  `185273100` meaning "hub-overridden". The two removals land in the same release and cover for
+  each other.
+- **Readers should still test bit 0 of the `RestartFlag` byte** rather than comparing the whole
+  byte to `1`, since more bits are now defined. That is a rule for what gets written next, not a
+  fix for anything already shipped. It says nothing about the StatusByte, which is a separate
+  element and stays a value.
 - **A pre-7 device receiving `<#7:BLAECK.WRITE_DATA>`** does not find the name and answers nothing,
   since built-ins are unacked there. This is the direction that does need care: a host gates ids by
   version, exactly as it already gates the command prefix, and opens with the bare form, which
@@ -384,10 +405,12 @@ frame type for something the ack fields already express, and it leaves the gener
 
 BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command, the
 fixed-rate lock removed, the interval getters reporting the live state, `ACTIVATE` refusing out
-loud), this spec (built-in parameter tables,
-`MessageID` semantics, the status byte), Loggbok (emit ids, correlate the requested frame, read the
-flag, keep the old readings behind a version gate), and `blaecktcpy`'s command encoder — though its
-own `local_interval_ms` keeps all three modes. BlaeckTCP needs the same in the September pass.
+loud, and `getIntervalMs()`'s doc example rewritten with it), this spec (built-in parameter tables,
+`MessageID` semantics and range, the `RestartFlag` byte), Loggbok (emit ids, correlate the
+requested frame, read the flag, keep the old readings behind a version gate), and `blaecktcpy`'s
+`ACTIVATE` decoder — though its own `local_interval_ms` keeps all three modes, and its hub, the one
+piece that sent commands rather than answering them, is gone in 3. BlaeckTCP needs the same in the
+September pass.
 
 ## Until then
 
