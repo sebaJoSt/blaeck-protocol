@@ -68,8 +68,8 @@ It also only ever says what the rate *is not*. The effective interval is nowhere
 `getIntervalMs()` exists only on the device, and returns the mode rather than the rate in force.
 So a host cannot draw the right bar even in principle.
 
-Everything above is downstream of one feature: the **fixed-rate interval lock**. Proposal 6 removes
-it, which is why this page proposes no frame for reporting a rate. See there for why.
+Everything above is downstream of one feature: the **interval lock**. Proposal 6 removes it in both
+its forms, which is why this page proposes no frame for reporting a rate. See there for why.
 
 ### A host counts when it should correlate
 
@@ -96,15 +96,13 @@ else if (equalsFlash(_parsedCommand, F(BLAECK_BUILTIN_ACTIVATE)))
 }
 ```
 
-There is no `else`. When the sketch has locked timed data off — or, until proposal 6, pinned the
-interval — `ACTIVATE` and `DEACTIVATE` do nothing and send nothing. A host asks for data every
-500 ms and receives neither a rate change nor a refusal, which it cannot tell apart from a dead
-link.
+There is no `else`. When the sketch has locked the interval — pinned or off — `ACTIVATE` and
+`DEACTIVATE` do nothing and send nothing. A host asks for data every 500 ms and receives neither a
+rate change nor a refusal, which it cannot tell apart from a dead link.
 
-This is not a host bug that better code would avoid. The device is entitled to refuse; it is only
-the silence that is wrong.
-
-Built-ins cannot report this because both ack sites are guarded:
+Proposal 6 removes the lock in both its forms, which removes this case at the root: nothing on the
+device can decline an `ACTIVATE` any more. What remains is the other half of the silence — a host
+still has no way to know its request arrived at all, whatever the answer:
 
 ```cpp
 if (sendAck && strncmp(_parsedCommand, "BLAECK.", 7) != 0)
@@ -112,7 +110,8 @@ if (sendAck && strncmp(_parsedCommand, "BLAECK.", 7) != 0)
 ```
 
 Anything beginning with `BLAECK.` is exempt from acks. That is right for a built-in whose response
-frame *is* its answer, and leaves no channel at all for one that has no answer to give.
+frame *is* its answer, and leaves nothing at all for `ACTIVATE` and `DEACTIVATE`, which have no
+answer to give.
 
 ## Proposal
 
@@ -188,10 +187,9 @@ Both are worth keeping, because they answer different questions. The **id** tell
 Deriving one from the other — reading `id == 0` as "timed" — would reintroduce exactly the
 overloading this proposal removes.
 
-**Who owns the rate needs no bit of its own.** With the fixed-rate lock removed by proposal 6,
-there are only two situations left: the host sets the rate, or the device refuses to send timed data
-at all and says so when asked. Neither needs announcing on every frame, because a device that has
-locked timed data off sends no frames to announce it on.
+**Who owns the rate needs no bit of its own.** With the interval lock removed by proposal 6, there
+is one situation left: the host sets the rate. Nothing on the device can pin it, refuse it, or
+outrank it, so there is nothing left for a frame to announce.
 
 That is the whole reason this proposal adds one bit and not three, and adds no frame for reporting
 an interval. Remove the feature and the reporting problem goes with it.
@@ -213,21 +211,26 @@ An ack costs 35 bytes on the wire — frame markers, header, two hashes, status,
 data frame carrying real signals. Only *requested* data pays it; timed data is not a command and is
 never acked.
 
-This is what finally gives `ACTIVATE` a voice. A device that has locked timed data off can refuse
-with a reason instead of falling silent.
+This is what finally gives `ACTIVATE` a voice. Not to refuse — after proposal 6 it has nothing to
+refuse with — but to say it arrived. A host that sends a rate and hears nothing back cannot tell a
+device that took it from a link that dropped it.
 
 ### 5. `GET_DEVICES` drops `ClientName` / `ClientType`
 
 BlaeckSerial ignores both. They exist for a `blaecktcpy` hub feature that was never publicly
-advertised, has no users, and is itself being removed in `blaecktcpy` 3. With them and the id parameters gone, no built-in except `ACTIVATE`
-takes positional parameters at all, so no old frame can be silently reinterpreted as a new one —
-the parameter counts do not overlap.
+advertised, has no users, and is itself being removed in `blaecktcpy` 3. With them and the id
+parameters gone, no built-in except `ACTIVATE` takes positional parameters at all, so no old frame
+can be silently reinterpreted as a new one — the parameter counts do not overlap.
 
-### 6. Drop the fixed-rate interval lock; keep the off lock
+The `B6` device frame drops the two fields with them. Nothing would set them once the command
+stops carrying them, and a field nobody fills is worse than no field: a reader cannot tell an
+empty name from a client that declined to give one.
+
+### 6. Drop the interval lock
 
 `setIntervalMs()` currently takes three kinds of value: a fixed rate in milliseconds,
-`BLAECK_INTERVAL_OFF`, and `BLAECK_INTERVAL_CLIENT`. This proposes the fixed rate go away, leaving
-off and client-controlled.
+`BLAECK_INTERVAL_OFF`, and `BLAECK_INTERVAL_CLIENT`. All three go, and the setter with them. The
+host sets the rate; the device has no say to express.
 
 The fixed-rate lock is the origin of nearly everything this page has had to work around. It is the
 only reason `185273100` exists, the only reason a host must be told a rate it did not choose, and
@@ -240,12 +243,14 @@ and nowhere in this specification; and it was added in 6.0.0 to mirror `blaecktc
 a need on a microcontroller. A sketch that wants its own cadence already has one — drive
 `writeAllData()` from its own timer and never depend on the library's.
 
-**The off lock stays.** "This board must not be made to send timed data" is worth being able to say
-on a
-constrained link, and it costs nothing to express: there is no rate to report, no constant to
-invent, no staleness, and with proposal 4 the refusal is a complete answer rather than a
-suppressed indicator. That is the whole difference — off needs one bit of policy the device
-enforces locally, fixed-rate needs a number the host has to be kept in sync with.
+**The off lock goes too.** An earlier draft kept it: "this board must not be made to send timed
+data" costs nothing to express, and with acks it could be refused out loud rather than in silence.
+But it buys a policy no sketch has asked for, at the price of a device that can decline a host —
+and a refusal needs a reason code the wire does not have, a ninth value defined for one setting.
+A sketch that does not want a stream can decline to call `tick()`, which needs no protocol at all.
+
+Removing it also settles proposal 4: with nothing left to refuse, an ack on a built-in means the
+device heard the request, and only that.
 
 **On diverging from `blaecktcpy`.** Its `local_interval_ms` keeps all three modes and should. A
 Python server fronting several clients has reason to pin a rate; a board with one host does not.
@@ -256,30 +261,15 @@ that *sends* `ACTIVATE` rather than receiving it — so there is nothing here to
 with. What remains is the receiving side: the server decodes a client's `ACTIVATE`, and proposal 2
 makes that a decimal rather than four bytes.
 
-**A 6.x sketch calling `setIntervalMs(500)` needs no new handling.** The setter already ends with a
-branch for a value that is none of the accepted modes: it refuses the call, leaves the previous
-mode in place, and reports on the debug stream.
-
-```cpp
-else if (_debugStream != nullptr)
-{
-  _debugStream->print("Invalid interval mode: ");
-  _debugStream->println(interval_ms);
-}
-```
-
-Removing the fixed rate simply makes `500` one of those values, handled the way this library
-already handles bad input. An earlier draft asked for a compile error instead, which would mean
-changing the parameter to an enum type — a larger break to the public signature than the removal
-it was guarding, for one benefit: the author is forced to notice at build time.
-
-The residual risk of not doing that is real and worth stating: the debug message only prints if a
-debug stream is attached, so a sketch that pinned its rate can quietly become host-controlled. That
-is what the migration note in the changelog is for.
+**A 6.x sketch calling `setIntervalMs()` stops compiling.** That is the right failure. An earlier
+draft dropped only the fixed rate, which left the call valid and the value refused at runtime on a
+debug stream nobody may have attached — a sketch could quietly become host-controlled and never say
+so. Taking the whole method away puts the break where the author sees it, without the enum-typed
+parameter that partial removal would have needed.
 
 **What the removal leaves behind: a getter that no longer says anything.** `getIntervalMs()`
-returns `_fixedInterval_ms`, so once the fixed rate is gone it can only answer `BLAECK_INTERVAL_OFF`
-or `BLAECK_INTERVAL_CLIENT`. It is a mode getter wearing a duration's name, and its own
+returns `_fixedInterval_ms`, the field the lock lived in — so once the lock is gone it has nothing
+left to report. It is a mode getter wearing a duration's name, and its own
 documentation already admits the mismatch — "in client-controlled mode this reports the mode, not
 whatever a host has since asked for". A board sending timed data every 1000 ms answers `-1`.
 No sketch calls it: not an example, not this specification, and nowhere in the library itself. Its
@@ -292,10 +282,10 @@ read back what a host asked for — it cannot print the cadence on a status chan
 own logic from it, and cannot persist it to EEPROM to come back at the same rate after a power cut.
 
 Since the old name has no callers to break, give it to the value that deserves it:
-`getIntervalMs()` reports the rate in force, `isTimedDataActive()` reports whether timed data is
-being sent at all — the name the library already uses internally, and the state `ACTIVATE` and
-`DEACTIVATE` switch — and the surviving lock gets a predicate of its own rather than sharing the
-accessor.
+`getIntervalMs()` reports the rate in force, and `isTimedDataActive()` reports whether timed data
+is being sent at all — the name the library already uses internally, and the state `ACTIVATE` and
+`DEACTIVATE` switch. Two getters and no setter, which is the shape of a value the host owns and the
+sketch may read.
 
 This is a library surface, not a wire change — nothing new is transmitted. A host does not need to
 be told the rate: after proposal 6 nothing can outrank its `ACTIVATE`, and a device that reboots
@@ -411,13 +401,13 @@ frame type for something the ack fields already express, and it leaves the gener
   since built-ins are unacked there. This is the direction that does need care: a host gates ids by
   version, exactly as it already gates the command prefix, and opens with the bare form, which
   works everywhere.
-- **A 6.x sketch calling `setIntervalMs(500)`** falls into the setter's existing invalid-mode
-  branch: the call is refused, the previous mode stays, and a debug stream is told. See proposal 6.
+- **A 6.x sketch calling `setIntervalMs()`** stops compiling, the method being gone. That is a
+  source break, not a wire one, and it is the failure worth having. See proposal 6.
 
 ## What it touches
 
 BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command, the
-fixed-rate lock removed, the interval getters reporting the live state, `ACTIVATE` refusing out
+interval lock removed along with `setIntervalMs()`, the getters reporting the live state, `ACTIVATE` answering out
 loud, and `getIntervalMs()`'s doc example rewritten with it), this spec (built-in parameter tables,
 `MessageID` semantics and range, `RestartFlag` renamed to `FrameFlags` in the element and frame
 tables), Loggbok (emit ids, correlate the
