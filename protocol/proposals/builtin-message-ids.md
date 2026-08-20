@@ -153,17 +153,30 @@ current byte-wise decode sidesteps this by never parsing a number above 255.
 
 ### 3. A trigger flag in the data frame, replacing the device-invented tags
 
-The data frame already carries a [`RestartFlag`](../schema-hash) byte, currently written as `0` or
-`1`, with seven bits unused. Not the [StatusByte](../status-codes), which is a value rather than a
-bit field and already spends `0x01`, `0x80` and `0x81`:
+The data frame already carries a one-byte flag, currently written as `0` or `1` for the restart
+flag, with seven bits unused:
 
 ```cpp
 bool restartFlagSnapshot = _sendRestartFlag;
 _bufByte(restartFlagSnapshot ? 1 : 0);
 ```
 
-Bit 1 becomes **requested**: set when this frame answers a `WRITE_DATA`, clear when the device
-sent it on its own schedule.
+Bit 1 becomes **requested**: set when this frame answers a `WRITE_DATA`, clear when it is a timed
+frame. That is the whole question a host has to answer about an arriving frame, and one bit
+answers it.
+
+**The element gets renamed with it: `RestartFlag` becomes `FrameFlags`** — bit 0 restart, bit 1
+requested, bits 2-7 reserved. A byte holding two facts should not be named after one of them, and
+this is a documentation change: the byte is where it always was. Not to be confused with the
+[StatusByte](../status-codes), which is a different element carrying a value rather than bits, and
+already spends `0x01`, `0x80` and `0x81`. Naming the new one anything with "status" in it would
+rebuild that confusion on purpose.
+
+**One bit is enough because the host owns the rate.** A timed frame is timed at the interval the
+host set with `ACTIVATE`, and after proposal 6 nothing on the device can outrank it. A sketch that
+drives `writeAllData()` from its own loop is not doing timed data and is not what this bit
+describes — the frame carries no id and no requested bit, and a host that never sent `ACTIVATE` is
+not drawing a countdown to arm wrongly.
 
 This is the fact `185273099` and `252645135` were encoding, moved somewhere self-describing. A
 second client, a sniffer, or a replayed log can read it without knowing anybody's constants. The
@@ -380,20 +393,20 @@ frame type for something the ack fields already express, and it leaves the gener
 ## Compatibility
 
 - **Nothing on the wire grows.** The id rides in a header field that exists; the flag rides in a
-  `RestartFlag` byte that exists.
+  byte that exists, renamed but not moved.
 - **No shipped host sees any of this.** Loggbok gates on a version range and refused anything above
   `6.99.99` until the day 7.0.0 was started; an out-of-range device is rejected at the catalog with
   "Only devices with BlaeckSerial Version from v3 to v6 are supported". So a released Loggbok never
-  reaches a 7.x data frame, ack or `RestartFlag`. The 7.x changes need no host-side migration —
+  reaches a 7.x data frame, ack or `FrameFlags` byte. The 7.x changes need no host-side migration —
   only the unreleased Loggbok has to keep up.
 - **The same Loggbok release raises the `blaecktcpy` floor to 3.** So the host that learns to read
   ids and the flag never meets a hub, never meets the four-byte `ACTIVATE` it sends, and never sees
   `185273100` meaning "hub-overridden". The two removals land in the same release and cover for
   each other.
-- **Readers should still test bit 0 of the `RestartFlag` byte** rather than comparing the whole
-  byte to `1`, since more bits are now defined. That is a rule for what gets written next, not a
-  fix for anything already shipped. It says nothing about the StatusByte, which is a separate
-  element and stays a value.
+- **Readers should test bit 0 of `FrameFlags`** rather than comparing the whole byte to `1`, since
+  more bits are now defined. That is a rule for what gets written next, not a fix for anything
+  already shipped. It says nothing about the StatusByte, which is a separate element and stays a
+  value.
 - **A pre-7 device receiving `<#7:BLAECK.WRITE_DATA>`** does not find the name and answers nothing,
   since built-ins are unacked there. This is the direction that does need care: a host gates ids by
   version, exactly as it already gates the command prefix, and opens with the bare form, which
@@ -406,7 +419,8 @@ frame type for something the ack fields already express, and it leaves the gener
 BlaeckSerial (prefix on built-ins, decimal interval, trigger bit, ack for every command, the
 fixed-rate lock removed, the interval getters reporting the live state, `ACTIVATE` refusing out
 loud, and `getIntervalMs()`'s doc example rewritten with it), this spec (built-in parameter tables,
-`MessageID` semantics and range, the `RestartFlag` byte), Loggbok (emit ids, correlate the
+`MessageID` semantics and range, `RestartFlag` renamed to `FrameFlags` in the element and frame
+tables), Loggbok (emit ids, correlate the
 requested frame, read the flag, keep the old readings behind a version gate), and `blaecktcpy`'s
 `ACTIVATE` decoder — though its own `local_interval_ms` keeps all three modes, and its hub, the one
 piece that sent commands rather than answering them, is gone in 3. BlaeckTCP needs the same in the
