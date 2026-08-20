@@ -139,11 +139,11 @@ const frames = {
     hex: '0xB6',
     category: 'devices',
     name: 'Devices',
-    description: 'Device identity with DeviceCount, per-device fields, and client trailer (ClientNo, ClientDataEnabled, ClientName, ClientType).',
+    description: 'Device identity with DeviceCount, per-device fields, and client trailer (ClientNo, ClientDataEnabled).',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
     bitsPerRow: 33,
-    elements: ['DeviceCount', 'MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientNo', 'ClientDataEnabled', 'ClientName', 'ClientType'],
+    elements: ['DeviceCount', 'MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientNo', 'ClientDataEnabled'],
     repeat: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
 

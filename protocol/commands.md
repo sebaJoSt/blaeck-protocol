@@ -37,10 +37,9 @@ routing a command through a hub to the device behind it.
 
 ### `#` — Message Id
 
-A `BLAECK.*` request sends a message id in its parameters and gets it back in the response frame's
-header, so the host knows which request the response answers. A command frame has nowhere to put
-one — every parameter belongs to the handler — which is what this prefix supplies. It is the same
-message id, in the same header field, meaning the same thing.
+Every command carries its message id here, built-ins included. A device echoes it in the header of
+whatever it sends back, so a host knows which request an answer belongs to. The prefix is where it
+goes because a command frame has nowhere else to put one: every parameter belongs to the handler.
 
 | Rule | Value |
 |------|-------|
@@ -49,9 +48,8 @@ message id, in the same header field, meaning the same thing.
 | Reuse | a sender must not reuse an id while an acknowledgement for it is outstanding |
 | Issuer | only the host that waits for the acknowledgement; a relay forwards ids and mints none |
 
-The narrower range is the one difference from the parameter form, and it is paid for in characters
-of a receive buffer small enough to be counted: five digits and two delimiters are a bearable share
-of it, ten digits are not.
+Five digits rather than ten, because the id is paid for in characters of a receive buffer small
+enough to be counted. Five digits and two delimiters are a bearable share of it.
 
 The device echoes the id in the [Command Ack](frames/commands) header's Message ID field, and
 echoes `0` for a command that carried none. Nothing is added to the frame.
@@ -65,24 +63,28 @@ bytes. A prefix is addressing rather than content: a routing item may be consume
 frame reaches the device that answers it, so a hash over what arrived would cover different
 characters depending on the path taken, and would never match what the sender hashed.
 
-Firmware that predates this reads `#42:SET_AMP` as a name, finds no such command, and answers
-`UNKNOWN_COMMAND`. A host should therefore send ids only to versions that accept them.
-
 ## Built-in Commands
 
 | Command | Parameters | Description | Response |
 |---------|-----------|-------------|----------|
-| `BLAECK.WRITE_SYMBOLS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal schema | [Signals](frames/signals) |
-| `BLAECK.GET_DEVICES` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3], ClientName, ClientType</small> | Request device identity | [Device frames](frames/devices) |
-| `BLAECK.WRITE_SIGNAL_CONFIG` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal presentation metadata | [Signal Config](frames/signals) |
-| `BLAECK.WRITE_DATA` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request single data frame | [Data frame](frames/data) |
-| `BLAECK.WRITE_COMMANDS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request command catalog | [Command List](frames/commands) |
-| `BLAECK.WRITE_STATE_CHANNELS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request state channel catalog | [State Channel List](frames/states) |
-| `BLAECK.WRITE_EVENT_CHANNELS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request event channel catalog | [Event Channel List](frames/events) |
-| `BLAECK.ACTIVATE` | <small>Interval[0], Interval[1], Interval[2], Interval[3]</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
+| `BLAECK.WRITE_SYMBOLS` | — | Request signal schema | [Signals](frames/signals) |
+| `BLAECK.GET_DEVICES` | — | Request device identity | [Device frames](frames/devices) |
+| `BLAECK.WRITE_SIGNAL_CONFIG` | — | Request signal presentation metadata | [Signal Config](frames/signals) |
+| `BLAECK.WRITE_DATA` | — | Request single data frame | [Data frame](frames/data) |
+| `BLAECK.WRITE_COMMANDS` | — | Request command catalog | [Command List](frames/commands) |
+| `BLAECK.WRITE_STATE_CHANNELS` | — | Request state channel catalog | [State Channel List](frames/states) |
+| `BLAECK.WRITE_EVENT_CHANNELS` | — | Request event channel catalog | [Event Channel List](frames/events) |
+| `BLAECK.ACTIVATE` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
 
-Bracketed parameters encode a uint32 in little-endian byte order as four comma-separated bytes.
+`ACTIVATE` takes one parameter: the interval in milliseconds, as a plain decimal.
+
+```
+<BLAECK.ACTIVATE,1000>     one second
+```
+
+No built-in takes a message id as a parameter. The `#` prefix carries it, the same way it does for
+a custom command.
 
 The `BLAECK.` prefix is reserved for built-in commands.
 
@@ -98,23 +100,15 @@ Any command name without the `BLAECK.` prefix is user-defined. Parameters are de
 
 ## Response with Message ID
 
-`WRITE_SYMBOLS`, `GET_DEVICES`, `WRITE_SIGNAL_CONFIG`, `WRITE_DATA`, `WRITE_COMMANDS`, `WRITE_STATE_CHANNELS` and `WRITE_EVENT_CHANNELS` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
+Every built-in that answers with a frame echoes the id from the prefix in that frame's header. For
+example, requesting the signal schema with message id 1:
 
 ```
-Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
+Command:  <#1:BLAECK.WRITE_SYMBOLS>
 Response: <BLAECK: B0 : 01 00 00 00 : …………… /BLAECK>\r\n
                    Key  Message ID    Frame
 ```
 
+A request that carried no prefix is answered with `0` in that field.
+
 See [Frames](category/frames) for all frame types.
-
-## Client Identity
-
-`GET_DEVICES` has two parameters — `ClientName` and `ClientType` — that let TCP clients identify themselves to the server:
-
-| Field | Description |
-|-------|-------------|
-| ClientName | Human-readable name of the client application |
-| ClientType | Type of client (e.g., `"app"`, `"hub"`, `"script"`) |
-
-The server stores this identity per TCP connection for logging, management UIs, and diagnostics. The [B6](frames/devices) response echoes these values back as `ClientName` and `ClientType`, alongside the server-assigned `ClientNo` and `ClientDataEnabled` fields.
