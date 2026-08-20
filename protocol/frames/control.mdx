@@ -8,12 +8,10 @@ import Frame from '@site/src/components/Frame';
 
 <Frame id="C0" />
 
-Sent once, when a device starts, so a host that stayed connected learns it is no longer talking
-to the run it was talking to a moment ago. A host that connects afterwards never sees it: it is
-a notice, not a state, and nothing repeats it.
+Sent once, when a device starts. It is a notice rather than a state: nothing repeats it, so a host
+that connects afterwards never sees it.
 
-A device follows it with everything it declares, unasked. A host holding what the previous run
-declared has no reason to ask again, because nothing has told it anything changed.
+A device follows it with everything it declares, unasked.
 
 | catalog | why it is sent |
 |---|---|
@@ -22,13 +20,11 @@ declared has no reason to ask again, because nothing has told it anything change
 | [Commands](commands) | Matched by name rather than position, so a stale one answers `UNKNOWN_COMMAND` instead of being taken for another - but a host still builds its controls from this. |
 | [Signal config](signals) | What a signal says about itself. The [schema hash](../schema-hash) covers a signal's name and type, so a unit or an icon that moved while the signals stayed put changes nothing a host can see. |
 
-Only the first is out of date after an ordinary restart. The rest matter when a device declares
-conditionally - on a sensor that answered at boot, on a setting read from storage - and so comes
-back offering something else. Sending all four is one rule rather than four cases: a device says
-what it has, every time it starts.
+Only the first is out of date after an ordinary restart; the rest matter when a device declares
+conditionally and comes back offering something else. All four are sent either way.
 
-The catalogs are sent once the device has finished declaring, not while it is still doing so, so
-each describes the whole set rather than the part that existed when the frame was written.
+The catalogs go out once the device has finished declaring, so each describes the whole set rather
+than the part that existed when the frame was written.
 
-This is one of the three occasions a catalog is sent; the others, and what a host owes them, are
-under [Catalogs](../catalogs).
+This is one of the three occasions a catalog is sent; the others are under
+[Catalogs](../catalogs).

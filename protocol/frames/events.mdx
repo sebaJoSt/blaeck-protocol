@@ -10,24 +10,21 @@ An event channel reports occurrences drawn from a closed list declared up front.
 `EventIndex` are positions in the `80` catalog for the device named by the occurrence's
 `MasterSlaveConfig` and `SlaveID`. See [Elements](../elements) for field details.
 
-Both indices are positions, so a host reading occurrences against an out-of-date catalog files
-them under whatever now sits at them, with nothing in the frame to notice it by. A device
-announces this catalog at startup (see [Control](control)) and again whenever it re-declares
-while running, so a host is never left resolving against a list the device has moved on from.
+Both indices are positions, and nothing in the frame reveals a stale reading. A device sends this
+catalog at startup (see [Control](control)) and again whenever it re-declares while running.
 
-They are positions in one device's catalog: the occurrence carries the same two identity bytes
-the catalog does, so an aggregator relaying several boards rewrites identity and leaves the
-indices as the originating device declared them.
+The indices belong to one device's catalog: the occurrence carries the same two identity bytes the
+catalog does, so an aggregator relaying several boards rewrites identity and leaves the indices as
+the originating device declared them.
 
 <Frame id="80" />
 
-Every channel carries at least one `EventType`: the list is what an occurrence is resolved
-against, and what a host needs to describe the channel at all, so a channel with none can neither
-report nor be shown.
+Every channel carries at least one `EventType`. The list is what an occurrence is resolved against,
+so a channel declaring none can neither report nor be shown.
 
-The device class is carried as written, like a signal's: the frame holds no list of what a
-consumer will accept. A consumer that validates strictly and finds no match has nothing to
-fall back on, so an unrecognised name costs the entity rather than the field.
+The device class is carried as written, like a signal's; the frame holds no list of what a consumer
+will accept. A consumer that validates strictly and finds no match drops the entity rather than the
+field.
 
 ---
 

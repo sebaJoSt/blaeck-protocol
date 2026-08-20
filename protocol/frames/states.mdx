@@ -11,28 +11,20 @@ than on the logging interval — so it is never written to a data store. `Channe
 channel's position in the `90` catalog for the device named by the push's `MasterSlaveConfig`
 and `SlaveID`. See [Elements](../elements) for field details.
 
-Each channel declares a `ValueType`, so a channel can carry a number as readily as text and the
-host decides how it is rendered. The type is reported in both frames: unconditionally in the
-catalog, because a channel has a type whether or not it has a value yet, and again on every push,
-so a push can be read without the catalog in hand.
+Each channel declares a `ValueType`, so a channel may carry a number as readily as text. The type
+appears in both frames: unconditionally in the catalog, and again on every push, so a push can be
+read without the catalog in hand.
 
-The catalog carries each channel's current value, which makes it the answer to a question a host
-cannot otherwise ask: what is everything set to right now. It is the reason a device announces
-its catalogs at startup (see [Control](control)) - a host that stayed connected across a restart
-is holding values the device no longer reports, because its variables are back at their startup
-defaults.
+The catalog carries each channel's current value, so it answers what everything is set to at that
+moment. It is re-sent at startup (see [Control](control)) and whenever a device re-declares its
+channels while running, since a push is addressed by position here.
 
-A device that re-declares its channels while running sends this catalog again, unasked, for a
-different reason: a value is addressed by its position here, so a host reading pushes against the
-previous catalog would file them under the wrong names.
+The push carries the same two identity bytes the catalog does, so positions stay the ones the
+originating device declared: a relay forwarding several boards rewrites identity rather than
+renumbering what it passes on.
 
-The push carries the same two identity bytes the catalog does, which is what keeps the index
-meaningful behind an aggregator: positions stay the ones the originating device declared, and a
-relay forwarding several boards rewrites identity rather than renumbering what it passes on.
-
-A text value is capped at 255 bytes, the same as a string signal. The cap bounds how long one
-one push can hold the link: a frame is sent whole, so an unbounded value would delay every data
-frame queued behind it — at 115200 baud, 255 bytes is about 22 ms.
+A text value is capped at 255 bytes, the same as a string signal. A frame is sent whole, so the cap
+bounds how long one push can hold the link — at 115200 baud, 255 bytes is about 22 ms.
 
 A numeric channel may also declare a unit, a state class and a display precision, the same three
 a signal declares in [F0](signals). They are what makes a host present the channel as a number

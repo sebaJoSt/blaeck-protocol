@@ -18,18 +18,14 @@ Signal Config carries how a signal is presented: unit, device class, icon, state
 precision, and the label to show in place of the name. Only signals that declare something appear,
 so the frame may hold no entries at all; `SymbolID` gives each entry's signal.
 
-`DisplayName` exists because a name can be doing a second job. A host that logs names its stored
-column after the signal, so an author who wants that column to say what it measured writes the unit
-into the name - and then reads `Output [V]` on screen with the unit after it again. The label is
-presentation and nothing more: the name stays what the symbol list gives, what a column is called,
-and what any identity a host derives is built from, so declaring one later moves nothing.
+`DisplayName` is the label a host shows in place of the name. Presentation only: the name stays
+what the symbol list gives, what a logged column is called, and what any identity a host derives is
+built from, so declaring one later moves nothing.
 
-A device sends it at startup along with its other catalogs (see [Control](control)), and it is
-the only one of them the [schema hash](../schema-hash) cannot stand in for: the hash covers a
-signal's name and its type, so a unit or an icon that moved while the signals stayed put leaves
-it unchanged. Read against whichever symbol list the host holds, since `SymbolID` is a position
-in it - which is the right reading exactly while that list is unchanged. A list that did change
-is the hash's business.
+A device sends this catalog at startup with the others (see [Control](control)). The
+[schema hash](../schema-hash) cannot stand in for it: the hash covers a signal's name and type, so
+a unit or an icon that moved while the signals stayed put leaves it unchanged. Read entries against
+whichever symbol list the host holds, `SymbolID` being a position in it.
 
 `SignalMetaFlags` determines the entry's structure. Each optional field follows only if its bit is
 set, in the order above.

@@ -25,21 +25,19 @@ Zero or more sigil-tagged items may precede the command name, each closed by `:`
 <#42:SET_AMP,0.9>      give the command a message id
 ```
 
-A reader consumes prefix items while the leading character is a sigil it knows, then treats the
-remainder exactly as it would a frame with no prefix at all. Each item names itself, so order
-carries no meaning and a later concern can be added without renegotiating this one. An item a
-device does not recognise is left unconsumed, which makes it part of the name — so the command
-fails to match and is reported, rather than being silently discarded.
+A reader consumes prefix items while the leading character is a sigil it knows, then reads the
+remainder as it would a frame with no prefix. Items are self-naming, so their order carries no
+meaning. An unrecognised item is left unconsumed and so becomes part of the command name, which
+then matches nothing and is reported as unknown.
 
-**A command name may not begin with a sigil.** A device should refuse to register such a name
-rather than create one it can never receive. Two sigils are spoken for: `#` below, and `@` for
-routing a command through a hub to the device behind it.
+**A command name may not begin with a sigil**, and a device refuses to register one that does. Two
+sigils are defined: `#` below, and `@` for routing a command through a hub to the device behind it.
 
 ### `#` — Message Id
 
-Every command carries its message id here, built-ins included. A device echoes it in the header of
-whatever it sends back, so a host knows which request an answer belongs to. The prefix is where it
-goes because a command frame has nowhere else to put one: every parameter belongs to the handler.
+Every command carries its message id here, built-ins included. The device echoes it in the header
+of whatever it sends back — a response frame, or the [Command Ack](frames/commands) Message ID
+field — and echoes `0` for a command that carried none.
 
 | Rule | Value |
 |------|-------|
@@ -48,20 +46,12 @@ goes because a command frame has nowhere else to put one: every parameter belong
 | Reuse | a sender must not reuse an id while an acknowledgement for it is outstanding |
 | Issuer | only the host that waits for the acknowledgement; a relay forwards ids and mints none |
 
-Five digits rather than ten, because the id is paid for in characters of a receive buffer small
-enough to be counted. Five digits and two delimiters are a bearable share of it.
-
-The device echoes the id in the [Command Ack](frames/commands) header's Message ID field, and
-echoes `0` for a command that carried none. Nothing is added to the frame.
-
-The id pairs; the hashes verify. Without one, a host matching an acknowledgement by hash cannot
-tell which of two same-named commands is being answered — dragging a slider sends a burst of
-`SET_AMP`, and pairing the wrong one reports bytes that differ when nothing was corrupted.
+The id pairs an answer with its command; the hashes say whether the bytes arrived as sent. Without
+an id, same-named commands in flight together cannot be told apart.
 
 **The acknowledgement's `CmdHash` covers the payload after the prefix section**, not the received
-bytes. A prefix is addressing rather than content: a routing item may be consumed before the
-frame reaches the device that answers it, so a hash over what arrived would cover different
-characters depending on the path taken, and would never match what the sender hashed.
+bytes — a prefix is addressing rather than content, and a routing item may be consumed before the
+frame reaches the device that answers it.
 
 ## Built-in Commands
 
@@ -83,10 +73,8 @@ characters depending on the path taken, and would never match what the sender ha
 <BLAECK.ACTIVATE,1000>     one second
 ```
 
-No built-in takes a message id as a parameter. The `#` prefix carries it, the same way it does for
-a custom command.
-
-The `BLAECK.` prefix is reserved for built-in commands.
+No built-in takes a message id as a parameter; the `#` prefix carries it, as for any command. The
+`BLAECK.` prefix is reserved for built-ins.
 
 ## Custom Commands
 
@@ -100,8 +88,7 @@ Any command name without the `BLAECK.` prefix is user-defined. Parameters are de
 
 ## Response with Message ID
 
-Every built-in that answers with a frame echoes the id from the prefix in that frame's header. For
-example, requesting the signal schema with message id 1:
+A built-in that answers with a frame echoes the id from the prefix in that frame's header:
 
 ```
 Command:  <#1:BLAECK.WRITE_SYMBOLS>

@@ -18,47 +18,36 @@ the first entry to the last, and addressed afterwards by position. Five frames a
 `F0` is named for its contents rather than as a list, but it is one: an entry per signal that
 declared something, in the order the symbol list gives them, sent whole.
 
-Addressing by position is what makes a catalog's timing matter. A host reading a value against a
-catalog the device has moved on from does not fail - it files the value under whatever now sits at
-that position. Nothing in the later frame says otherwise, which is why the rules below are about
-making sure a host always holds the current one.
+Addressing is positional, so a host reading a value against a catalog the device has moved on from
+does not fail - it files the value under whatever now sits at that position. Nothing in the later
+frame says otherwise.
 
 ## When a catalog is sent
 
-**On request.** Each has a built-in command, listed under [Commands](commands). A host asks when
-it connects, and whenever it has reason to believe what it holds is stale.
+**On request.** Each has a built-in command, listed under [Commands](commands).
 
-**At startup.** All five go out behind the [restart notice](frames/control), unasked, because a
-host that stayed connected has no reason to ask - nothing has told it anything changed. That page
-carries the reasoning for each.
+**At startup.** All five go out behind the [restart notice](frames/control), unasked.
 
 **When it changes while running.** A device that alters what it declares sends the affected
-catalog, unasked, with one exception described below. The announce carries `MessageID` 1, the
-value used for a frame nobody asked for, and goes out ahead of any [state](frames/states) or
+catalog, unasked, with the one exception below. The announce carries `MessageID` `0`, the value
+every frame nobody asked for carries, and precedes any [state](frames/states) or
 [event](frames/events) push that would otherwise arrive before the catalog explaining it. An event
-matters most there: an occurrence appears in no catalog, so one filed against a stale list cannot
-be repaired from the announce that follows, the way a state value can.
+filed against a stale list cannot be repaired afterwards, since an occurrence appears in no
+catalog of its own.
 
 ## The symbol list is not announced
 
-**A changed `B0` is never sent unasked**, and this is deliberate rather than an omission.
+**A changed `B0` is never sent unasked.** The other four describe how a device presents itself;
+`B0` describes what a host stores, one column per signal, fixed when logging began. A signal list
+that moves mid-session has no correct reading, and a host that adopted a fresh one would go on
+writing into a table whose columns no longer describe the data. The mismatch is meant to stop the
+session, so the protocol offers no way to paper over it.
 
-The other four describe how a device presents itself. `B0` describes what a host *stores*: a host
-fixes its storage layout around the signals it was given when logging began - one column per
-signal - so a signal list that moves mid-session has no correct reading. The right behaviour is to
-stop and say so.
-
-Announcing it would work against that. A host that takes a fresh symbol list may adopt the schema
-that came with it, which silences the mismatch it was supposed to raise and lets it go on writing
-into a table whose columns no longer describe the data. A loud, correct failure becomes a quiet
-wrong one. A device that changes its signal list mid-session is outside what a host can honour, and
-the protocol does not offer it a way to look otherwise.
-
-`F0` is on the other side of that line and *is* announced: a unit or an icon changes no column and
-moves no [schema hash](schema-hash), so it is an ordinary change to how a signal is presented.
+`F0` *is* announced: a unit or an icon changes no column and moves no
+[schema hash](schema-hash).
 
 ## What this asks of a host
 
-That a catalog may arrive at any time, and must be re-read and re-resolved against when it does. A
-host that reads catalogs only when it connects is no worse off than it was before: it ignores a
-frame it did not request, exactly as it ignores the startup announce.
+A catalog may arrive at any time and must be re-read, and anything addressed by position
+re-resolved against it. A host that reads catalogs only on connect ignores the announce, as it
+ignores the startup one.

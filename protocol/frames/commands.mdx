@@ -12,33 +12,26 @@ A command list declares which custom commands the device accepts, Command Ack re
 When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
 signal, `1` a state channel.
 
-`DisplayName`, bit 8, is the label a host shows in place of `CommandName`. A command's name is an
-identifier a host sends back in `<COMMAND,…>`, so it is written to be matched rather than read —
-`SET_FREQ` names the command exactly and labels a control badly. The label changes what is shown and
-nothing else: the name stays what a host sends, and what any identity it derives is built from, so a
-command that gains a label later keeps the control a host already made for it.
+`DisplayName`, bit 8, is the label a host shows in place of `CommandName`. Presentation only: the
+name remains what a host sends and what any identity it derives is built from, so a command that
+gains a label later keeps the control a host already made for it.
 
-Bit 0 says a range was declared, not that the entry is a number. A number command whose device
-declared no range leaves the bit clear and omits `RangeMin` and `RangeMax`
-altogether; it accepts any value its handler will take, and never answers
-[`OUT_OF_RANGE`](../status-codes). A host builds the control from its own defaults in that case.
-It must not read absent limits as `0` to `0` — a window nothing but zero fits through.
+Bit 0 says a range was declared, not that the entry is a number. With the bit clear, `RangeMin` and
+`RangeMax` are absent and the command accepts any value its handler will take, never answering
+[`OUT_OF_RANGE`](../status-codes). A host must build the control from its own defaults and must not
+read absent limits as `0` to `0`.
 
-`RangeStep` has a bit of its own, bit 7, and is not part of that range. A step is display
-resolution: nothing is rounded to it and no value is refused for falling between two of them. So
-the two are declared independently — a command may state limits without a resolution, a
-resolution without limits, both, or neither. Because it is flagged rather than sent as a
-sentinel, an absent step is simply absent; there is no `0` a host has to know to read as "none".
-Optional fields follow in bit order, which is why the step trails the text length rather than
-sitting beside the min and max.
+`RangeStep` is flagged separately, bit 7, and is not part of the range. It is display resolution
+only: no value is rounded to it and none is refused for falling between two steps. Limits and step
+are therefore independent — either, both or neither may be declared. Optional fields follow in bit
+order, so the step trails the text length rather than sitting beside the min and max.
 
-A host may have a floor of its own — Home Assistant refuses a step below `0.001` — and is
-expected to drop that one control rather than quietly coarsen what the device asked for.
+A host with a floor of its own — Home Assistant refuses a step below `0.001` — drops that control
+rather than coarsening what the device declared.
 
-`CommandPayloadMax` repeats on every entry and is the same on all of them: one receive buffer
-serves the device. A host derives what a given command leaves for its parameters by subtracting
-the name and the separating comma, and compares that against the value it is about to send —
-encoded, since encoding happens before the frame is built.
+`CommandPayloadMax` repeats on every entry and is identical on all of them: one receive buffer
+serves the device. What a given command leaves for its parameters is that figure less the name and
+the separating comma, compared against the encoded value about to be sent.
 
 <Frame id="A0" />
 
@@ -50,15 +43,13 @@ Every command produces exactly one acknowledgement, `BLAECK.*` included. A comma
 answer sends the acknowledgement first, then the response frame. A name the device does not have is
 answered `UNKNOWN_COMMAND`.
 
-`CmdHash` covers the command as written — the payload after any [prefix section](../commands#prefix-section),
-so it matches only when those are the bytes the sender wrote, whatever route the frame took to
-arrive. `CmdNameHash` covers the name alone, which sits before the first comma and so survives a
-frame the device could not take in full.
+`CmdHash` covers the command as written — the payload after any [prefix section](../commands#prefix-section)
+— so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
+alone, which sits before the first comma and so survives a frame the device could not take in full.
 
 The header's Message ID carries back the [message id](../commands#--message-id) the command was
-sent with, or `0` when it was sent without one — the same field, and the same meaning, that a
-`BLAECK.*` response echoes. When an id is present it decides which command is being answered, and
-the hashes only say how it arrived:
+sent with, or `0` when it carried none. An id present decides which command is being answered; the
+hashes then say only how it arrived:
 
 | Message ID | CmdHash | Meaning |
 |------------|---------|---------|
