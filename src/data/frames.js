@@ -65,11 +65,11 @@ const frames = {
     hex: '0xD1',
     category: 'data',
     name: 'Data',
-    description: 'Signal values with RestartFlag, 4-byte Timestamp, StatusByte, and CRC32.',
+    description: 'Signal values with FrameFlags, 4-byte Timestamp, StatusByte, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd1--data-0xd1',
     bitsPerRow: 10,
-    elements: ['RestartFlag', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+    elements: ['FrameFlags', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
     repeat: ['SymbolID', 'DATA'],
   },
 
@@ -82,7 +82,7 @@ const frames = {
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd2--data-0xd2',
     bitsPerRow: 16,
-    elements: ['RestartFlag', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
+    elements: ['FrameFlags', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
     repeat: ['SymbolID', 'DATA'],
   },
 

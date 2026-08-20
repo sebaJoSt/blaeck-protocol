@@ -56,11 +56,11 @@ const elements = {
     span: 2,
     description: 'Integrity checksum. See [CRC32](crc32)',
   },
-  RestartFlag: {
+  FrameFlags: {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: '`0x00` = normal, `0x01` = first frame after restart',
+    description: 'Bit 0 = first frame after restart. Bit 1 = the frame answers a `BLAECK.WRITE_DATA` rather than the interval a host set (D2 only). Bits 2-7 reserved, sent clear. Test the bits; do not compare the byte',
   },
   TimestampMode: {
     size: '1 byte',

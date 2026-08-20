@@ -23,7 +23,7 @@ The hash is computed over the **signal names and datatype codes** that make up t
 ## Position in Frame
 
 ```
-RestartFlag(1B) : SchemaHash(2B) : TimestampMode(1B) ...
+FrameFlags(1B) : SchemaHash(2B) : TimestampMode(1B) ...
 ```
 
 ## Usage Pattern

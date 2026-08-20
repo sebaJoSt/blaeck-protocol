@@ -46,6 +46,10 @@ encoded, since encoding happens before the frame is built.
 
 <Frame id="A5" />
 
+Every command produces exactly one acknowledgement, `BLAECK.*` included. A command that also has an
+answer sends the acknowledgement first, then the response frame. A name the device does not have is
+answered `UNKNOWN_COMMAND`.
+
 `CmdHash` covers the command as written — the payload after any [prefix section](../commands#prefix-section),
 so it matches only when those are the bytes the sender wrote, whatever route the frame took to
 arrive. `CmdNameHash` covers the name alone, which sits before the first comma and so survives a

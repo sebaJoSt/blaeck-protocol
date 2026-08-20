@@ -24,15 +24,6 @@ const sidebars = {
     'datatypes',
     'schema-hash',
     'crc32',
-    {
-      type: 'category',
-      label: 'Proposals',
-      link: { type: 'generated-index', description: 'Designs agreed but not yet built.' },
-      items: [
-        'proposals/command-correlation',
-        'proposals/catalog-auto-announce',
-      ],
-    },
   ],
 };
 
