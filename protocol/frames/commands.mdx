@@ -13,8 +13,8 @@ When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `State
 signal, `1` a state channel.
 
 Bit 14 asks a host to create the control but leave it switched off until someone enables
-it — Home Assistant's `enabled_by_default`. The device answers the command either way; the
-bit says what a host shows, not what the firmware accepts.
+it — Home Assistant's `enabled_by_default`. It changes what a host shows, not the command:
+the topic is advertised as usual and the device still runs it when one arrives.
 
 `DisplayName`, bit 8, is the label a host shows in place of `CommandName`. Presentation only: the
 name remains what a host sends and what any identity it derives is built from, so a command that
