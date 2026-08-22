@@ -18,8 +18,8 @@ gains a label later keeps the control a host already made for it.
 
 Bit 0 says a range was declared, not that the entry is a number. With the bit clear, `RangeMin` and
 `RangeMax` are absent and the command accepts any value its handler will take, never answering
-[`OUT_OF_RANGE`](../status-codes). A host must build the control from its own defaults and must not
-read absent limits as `0` to `0`.
+[`OUT_OF_RANGE`](../status-codes). A host may build the control from its own defaults or decline to
+offer it, but must not read absent limits as `0` to `0`.
 
 `RangeStep` is flagged separately, bit 7, and is not part of the range. It is display resolution
 only: no value is rounded to it and none is refused for falling between two steps. Limits and step
