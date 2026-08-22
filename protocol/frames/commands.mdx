@@ -21,6 +21,11 @@ Bit 0 says a range was declared, not that the entry is a number. With the bit cl
 [`OUT_OF_RANGE`](../status-codes). A host may build the control from its own defaults or decline to
 offer it, but must not read absent limits as `0` to `0`.
 
+A select value may be sent as an option name or as its index. A name is matched exactly:
+two options differing only in case are two entries a host lists separately, so folding
+them would leave the second unreachable. Neither answers [`BAD_SELECT`](../status-codes)
+unless it matches no option at all.
+
 `RangeStep` is flagged separately, bit 7, and is not part of the range. It is display resolution
 only: no value is rounded to it and none is refused for falling between two steps. Limits and step
 are therefore independent — either, both or neither may be declared. Optional fields follow in bit
