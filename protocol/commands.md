@@ -66,12 +66,38 @@ frame reaches the device that answers it.
 | `BLAECK.WRITE_EVENT_CHANNELS` | — | Request event channel catalog | [Event Channel List](frames/events) |
 | `BLAECK.ACTIVATE` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
+| `BLAECK.PAUSE_WRITES` | <small>Duration</small> | Send no frames for a period | n/a |
+| `BLAECK.RESUME_WRITES` | — | End a pause early | n/a |
 
 `ACTIVATE` takes one parameter: the interval in milliseconds, as a plain decimal.
 
 ```
 <BLAECK.ACTIVATE,1000>     one second
 ```
+
+## Pausing Writes
+
+`PAUSE_WRITES` stops every frame leaving the device — data, states, events, catalogs and
+acknowledgements alike — for a duration in milliseconds.
+
+```
+<BLAECK.PAUSE_WRITES,1000>     one second of silence
+<BLAECK.PAUSE_WRITES>          the device's default
+<BLAECK.RESUME_WRITES>         end it now
+```
+
+The pause expires on its own, so `RESUME_WRITES` is never required to return a device to
+service. A device applies a ceiling to the duration; a host may not silence one indefinitely.
+
+`DEACTIVATE` stops timed streaming only. A device that writes frames on its own schedule keeps
+writing through it, and `PAUSE_WRITES` is what stops that.
+
+The pause takes effect after the device has read the command, and frames already in flight still
+arrive. A host that pauses in order to close the connection safely must wait for the link to fall
+silent rather than close on the command alone.
+
+The acknowledgement of `PAUSE_WRITES` is sent before the pause begins. Commands received during a
+pause are executed but not acknowledged.
 
 No built-in takes a message id as a parameter; the `#` prefix carries it, as for any command. The
 `BLAECK.` prefix is reserved for built-ins.
