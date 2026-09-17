@@ -87,13 +87,8 @@ acknowledgements alike — for a duration in milliseconds.
 <BLAECK.RESUME_WRITES>            end it now
 ```
 
-The duration is optional. Without one, or with `0`, the device pauses for a default of its own
-choosing. A device also caps the duration, so a timed pause always ends on its own and
-`RESUME_WRITES` is never needed to bring a device back.
-
-`FOREVER` is the one parameter that is not a number, and the one pause with no cap. It is
-matched exactly and in capitals; any other text counts as `0` and gets the default. A device
-held this way sends nothing until `RESUME_WRITES` or a reset, even to a host that reconnects.
+Without a duration, or with `0`, the device uses its own default. A device caps the duration,
+so a timed pause always ends on its own. `FOREVER` is not capped and must be in capitals.
 
 `DEACTIVATE` stops timed streaming only. A device that writes frames on its own schedule keeps
 writing through it, and `PAUSE_WRITES` is what stops that.
