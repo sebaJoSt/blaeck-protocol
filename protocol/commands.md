@@ -87,8 +87,9 @@ acknowledgements alike — for a duration in milliseconds.
 <BLAECK.RESUME_WRITES>            end it now
 ```
 
-Without a duration, or with `0`, the device uses its own default. A device caps the duration,
-so a timed pause always ends on its own. `FOREVER` is not capped and must be in capitals.
+Without a duration, or with `0`, the device uses its own default. Each device also has a
+maximum, and a longer duration is shortened to it, so a timed pause always ends on its own.
+Use `FOREVER` if you want the pause unlimited.
 
 `DEACTIVATE` stops timed streaming only. A device that writes frames on its own schedule keeps
 writing through it, and `PAUSE_WRITES` is what stops that.
