@@ -66,7 +66,7 @@ frame reaches the device that answers it.
 | `BLAECK.WRITE_EVENT_CHANNELS` | — | Request event channel catalog | [Event Channel List](frames/events) |
 | `BLAECK.ACTIVATE` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
-| `BLAECK.PAUSE_WRITES` | <small>Duration</small> | Send no frames for a period | n/a |
+| `BLAECK.PAUSE_WRITES` | <small>Duration or `FOREVER`</small> | Send no frames for a period | n/a |
 | `BLAECK.RESUME_WRITES` | — | End a pause early | n/a |
 
 `ACTIVATE` takes one parameter: the interval in milliseconds, as a plain decimal.
@@ -81,13 +81,19 @@ frame reaches the device that answers it.
 acknowledgements alike — for a duration in milliseconds.
 
 ```
-<BLAECK.PAUSE_WRITES,1000>     one second of silence
-<BLAECK.PAUSE_WRITES>          the device's default
-<BLAECK.RESUME_WRITES>         end it now
+<BLAECK.PAUSE_WRITES,1000>        one second of silence
+<BLAECK.PAUSE_WRITES>             the device's default duration
+<BLAECK.PAUSE_WRITES,FOREVER>     until resumed or reset
+<BLAECK.RESUME_WRITES>            end it now
 ```
 
-The pause expires on its own, so `RESUME_WRITES` is never required to return a device to
-service. A device applies a ceiling to the duration; a host may not silence one indefinitely.
+The duration is optional. Without one, or with `0`, the device pauses for a default of its own
+choosing. A device also caps the duration, so a timed pause always ends on its own and
+`RESUME_WRITES` is never needed to bring a device back.
+
+`FOREVER` is the one parameter that is not a number, and the one pause with no cap. It is
+matched exactly and in capitals; any other text counts as `0` and gets the default. A device
+held this way sends nothing until `RESUME_WRITES` or a reset, even to a host that reconnects.
 
 `DEACTIVATE` stops timed streaming only. A device that writes frames on its own schedule keeps
 writing through it, and `PAUSE_WRITES` is what stops that.
