@@ -3,6 +3,7 @@ const sidebars = {
   protocolSidebar: [
     'intro',
     'commands',
+    'connections',
     'message-keys',
     {
       type: 'category',
