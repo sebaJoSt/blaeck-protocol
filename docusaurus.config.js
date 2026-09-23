@@ -121,7 +121,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'Blaeck Protocol',
+        title: '',
         logo: {
           alt: 'Blaeck Protocol Logo',
           src: 'img/blaeckProtocol-light.svg',

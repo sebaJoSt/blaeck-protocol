@@ -32,11 +32,8 @@
   --ifm-navbar-background-color: #ffffff;
 }
 
-.navbar__title {
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin-top: 8px;
+.navbar__logo img {
+  margin-top: 4px;
 }
 
 .header-icon {
