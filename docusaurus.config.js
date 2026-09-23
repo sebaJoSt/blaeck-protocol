@@ -95,7 +95,7 @@ const config = {
         sidebarPath: './sidebars-blaecktcp.js',
         lastVersion: 'current',
         versions: {
-          current: { label: '6.0.0', path: '' },
+          current: { label: '7.0.0', path: '' },
         },
       },
     ],
