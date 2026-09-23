@@ -124,7 +124,8 @@ const config = {
         title: 'Blaeck Protocol',
         logo: {
           alt: 'Blaeck Protocol Logo',
-          src: 'img/logo.png',
+          src: 'img/blaeckProtocol-light.svg',
+          srcDark: 'img/blaeckProtocol-dark.svg',
         },
         items: [
           {
