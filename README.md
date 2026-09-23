@@ -1,4 +1,10 @@
-# Blaeck Protocol
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="static/img/blaeckProtocol-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="static/img/blaeckProtocol-light.svg">
+  <img src="static/img/blaeckProtocol-light.svg" alt="Blaeck Protocol" height="75">
+</picture>
+
+---
 
 Binary protocol specification for the Blaeck ecosystem — [BlaeckSerial](https://github.com/sebaJoSt/BlaeckSerial), [BlaeckTCP](https://github.com/sebaJoSt/BlaeckTCP), and [blaecktcpy](https://github.com/sebaJoSt/blaecktcpy).
 
