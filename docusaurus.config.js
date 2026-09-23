@@ -5,7 +5,12 @@ import { themes as prismThemes } from 'prism-react-renderer';
 const config = {
   title: 'Blaeck Protocol',
   tagline: 'Binary protocol specification for the Blaeck ecosystem',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.svg',
+  headTags: [
+    { tagName: 'link', attributes: { rel: 'icon', href: '/blaeck-protocol/img/favicon.ico', sizes: '32x32' } },
+    { tagName: 'link', attributes: { rel: 'apple-touch-icon', href: '/blaeck-protocol/img/apple-touch-icon.png' } },
+    { tagName: 'link', attributes: { rel: 'manifest', href: '/blaeck-protocol/site.webmanifest' } },
+  ],
 
   future: {
     v4: true,
