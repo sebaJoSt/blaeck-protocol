@@ -6,11 +6,6 @@ const config = {
   title: 'Blaeck Protocol',
   tagline: 'Binary protocol specification for the Blaeck ecosystem',
   favicon: 'img/favicon.ico',
-  headTags: [
-    { tagName: 'link', attributes: { rel: 'icon', href: '/blaeck-protocol/img/favicon.svg', type: 'image/svg+xml' } },
-    { tagName: 'link', attributes: { rel: 'apple-touch-icon', href: '/blaeck-protocol/img/apple-touch-icon.png' } },
-    { tagName: 'link', attributes: { rel: 'manifest', href: '/blaeck-protocol/site.webmanifest' } },
-  ],
 
   future: {
     v4: true,
@@ -23,7 +18,6 @@ const config = {
   projectName: 'blaeck-protocol',
 
   onBrokenLinks: 'throw',
-  clientModules: [require.resolve('./src/faviconRefresh.js')],
 
   markdown: {
     mermaid: true,

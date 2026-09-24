@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-42 40 160 160">
-  <style>
-    .fg { fill: #121318; } .drop { fill: #3355C4; }
-    @media (prefers-color-scheme: dark) { .fg { fill: #F4F2EC; } .drop { fill: #2340A8; } }
-  </style>
-  <path class="fg" d="M0 40H26V106.14A50 50 0 1 1 26 193.86V200H0Z"/>
-  <path class="drop" d="M40.00 118.00L66.77 137.09A22 22 0 1 1 32.57 150.03Z"/>
-</svg>
