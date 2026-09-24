@@ -17,3 +17,22 @@ SymbolID + DATA repeat per signal. See [Elements](../elements) for field details
 ---
 
 <Frame id="D2" />
+
+## D2 reporting flags
+
+| Bit | Meaning |
+| --- | --- |
+| 0 (`0x01`) | First data frame after restart |
+| 1 (`0x02`) | Reply to `BLAECK.WRITE_DATA` |
+| 2 (`0x04`) | Includes a report triggered by the host's interval |
+
+Explicit sketch writes and immediate on-change reports leave bits 1 and 2 clear.
+A frame combining interval reports and immediate changes sets bit 2. Bits 1 and 2
+are mutually exclusive; the restart bit is independent. Bits 3-7 remain reserved.
+
+Hosts reset their interval indicator only for interval reports, not every unrequested
+frame. An interval with no qualifying signals may produce no frame.
+
+Message IDs still identify the request being answered, or are zero for unsolicited data.
+Legacy firmware uses its existing message-ID classification; these flags define the
+unified `blaeck` v7 behavior.
