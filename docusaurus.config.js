@@ -23,6 +23,7 @@ const config = {
   projectName: 'blaeck-protocol',
 
   onBrokenLinks: 'throw',
+  clientModules: [require.resolve('./src/faviconRefresh.js')],
 
   markdown: {
     mermaid: true,
