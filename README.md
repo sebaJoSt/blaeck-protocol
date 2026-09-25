@@ -6,7 +6,7 @@
 
 ---
 
-Binary protocol specification for the Blaeck ecosystem — [BlaeckSerial](https://github.com/sebaJoSt/BlaeckSerial), [BlaeckTCP](https://github.com/sebaJoSt/BlaeckTCP), and [blaecktcpy](https://github.com/sebaJoSt/blaecktcpy).
+Binary protocol specification for the Blaeck ecosystem — [blaeck](https://github.com/sebaJoSt/blaeck) (from 7.0.0; it unifies [BlaeckSerial](https://github.com/sebaJoSt/BlaeckSerial) and [BlaeckTCP](https://github.com/sebaJoSt/BlaeckTCP), which end at 6.0.0), and [blaecktcpy](https://github.com/sebaJoSt/blaecktcpy).
 
 **Live site:** https://sebajost.github.io/blaeck-protocol/
 

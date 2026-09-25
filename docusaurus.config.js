@@ -76,14 +76,24 @@ const config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'blaeckserial',
-        path: 'blaeckserial',
-        routeBasePath: 'blaeckserial',
-        sidebarPath: './sidebars-blaeckserial.js',
+        id: 'blaeck',
+        path: 'blaeck',
+        routeBasePath: 'blaeck',
+        sidebarPath: './sidebars-blaeck.js',
         lastVersion: 'current',
         versions: {
           current: { label: '7.0.0', path: '' },
         },
+      },
+    ],
+    // BlaeckSerial and BlaeckTCP end at 6.0.0; version 7 is the unified blaeck library.
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'blaeckserial',
+        path: 'blaeckserial',
+        routeBasePath: 'blaeckserial',
+        includeCurrentVersion: false,
       },
     ],
     [
@@ -92,11 +102,7 @@ const config = {
         id: 'blaecktcp',
         path: 'blaecktcp',
         routeBasePath: 'blaecktcp',
-        sidebarPath: './sidebars-blaecktcp.js',
-        lastVersion: 'current',
-        versions: {
-          current: { label: '7.0.0', path: '' },
-        },
+        includeCurrentVersion: false,
       },
     ],
     [
@@ -137,16 +143,23 @@ const config = {
             type: 'dropdown',
             label: 'Libraries',
             position: 'left',
-            activeBaseRegex: 'blaeckserial|blaecktcp|blaecktcpy',
+            activeBaseRegex: '/blaeck/|blaeckserial|blaecktcp|blaecktcpy',
             items: [
-              { label: 'BlaeckSerial', to: '/blaeckserial/overview' },
-              { label: 'BlaeckTCP', to: '/blaecktcp/overview' },
+              { label: 'blaeck', to: '/blaeck/overview' },
               { label: 'blaecktcpy', to: '/blaecktcpy/overview' },
+              { label: 'BlaeckSerial (until 6.0.0)', to: '/blaeckserial/overview' },
+              { label: 'BlaeckTCP (until 6.0.0)', to: '/blaecktcp/overview' },
             ],
           },
           {
             type: 'custom-libraryLabel',
             position: 'left',
+          },
+          {
+            type: 'docsVersionDropdown',
+            docsPluginId: 'blaeck',
+            position: 'left',
+            className: 'version-blaeck',
           },
           {
             type: 'docsVersionDropdown',
