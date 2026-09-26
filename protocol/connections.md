@@ -29,7 +29,7 @@ uses to watch and type.
 ### Becoming the host
 
 Every connection starts as a terminal. It becomes the host when it sends any command whose name
-starts with `BLAECK.` — known or not, with or without a [prefix](commands#prefix-section).
+starts with `BLAECK.` — known or not, with or without a [message id](commands#message-id).
 It stays the host until it disconnects or another connection takes over. A host that
 reconnects starts as a terminal again.
 

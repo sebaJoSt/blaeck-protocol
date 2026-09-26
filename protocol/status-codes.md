@@ -80,6 +80,7 @@ These are a separate namespace from the StatusByte codes above.
 | `5` | TOO_LONG | rejected | Text value exceeded the advertised `TextMaxLen`. |
 | `6` | MISSING_VALUE | rejected | Command carries a value but the frame supplied none. |
 | `7` | TRUNCATED | rejected | Frame did not fit: more parameters than the device accepts, or longer than its receive buffer. |
+| `8` | DEVICE_NOT_RESPONDING | rejected | The command's sub-device is marked missing. |
 
 Codes `2`–`6` are only produced for commands the device advertises with a
 [CommandKind](elements) other than plain, since validation is driven by the metadata in the

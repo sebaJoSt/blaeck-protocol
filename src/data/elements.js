@@ -18,7 +18,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 2,
-    description: '`0x00` for single and master; device-specific for slaves',
+    description: '`0x00` for single and master; for a slave, its `DeviceID` in the [B7](frames/devices) device list',
   },
   SymbolName: {
     size: 'variable',
@@ -114,7 +114,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Library version (e.g., `"6.0.0"`)',
+    description: 'Library version (e.g., `"7.0.0"`)',
   },
   LibName: {
     size: 'variable',
@@ -156,7 +156,44 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Number of device entries in the frame',
+    description: 'Number of device entries in the frame. In B7: `1`–`255`, the board plus its sub-devices',
+  },
+  DeviceID: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 2,
+    description: '`0` = the board; `1`–`254` = a sub-device, the same number as `SlaveID` in the catalogs. `255` is reserved',
+  },
+  ParentID: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 2,
+    description: '`DeviceID` of the device it sits below. `0` for the board itself and for every sub-device (one level)',
+  },
+  DeviceFlags: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Which optional fields follow the versions, one bit each. All bits reserved and sent as `0`',
+  },
+  DeviceState: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: 'Bit 0 NotResponding (marked missing now); bit 1 Restarted (a restart not yet reported to a host). Bits 2–7 reserved, `0`',
+  },
+  DeviceOptionalFields: {
+    label: 'OptionalFields',
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'One null-terminated string per bit set in `DeviceFlags`, in bit order. None are defined yet',
+  },
+  DeviceEvent: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: '`0x01` restarted, `0x02` not responding, `0x03` responding again. `0x00` and `0x04`–`0xFF` reserved',
   },
   CommandPayloadMax: {
     size: '2 bytes',

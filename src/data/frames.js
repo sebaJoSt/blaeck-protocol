@@ -147,6 +147,31 @@ const frames = {
     repeat: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
 
+  B7: {
+    key: 'B7',
+    hex: '0xB7',
+    category: 'devices',
+    name: 'Device List',
+    description: 'The board and its sub-devices: library, then per device its ID, parent, flags, state and names.',
+    page: '/blaeck-protocol/protocol/frames/devices',
+    anchor: 'b7--device-list-0xb7',
+    bitsPerRow: 20,
+    elements: ['LibName', 'LibVersion', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
+    repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
+  },
+
+  C1: {
+    key: 'C1',
+    hex: '0xC1',
+    category: 'control',
+    name: 'Device Notification',
+    description: 'A device restarted, stopped responding, or responds again.',
+    page: '/blaeck-protocol/protocol/frames/control',
+    anchor: 'c1--device-notification-0xc1',
+    bitsPerRow: 5,
+    elements: ['DeviceID', 'DeviceEvent'],
+  },
+
   C0: {
     key: 'C0',
     hex: '0xC0',

@@ -20,6 +20,8 @@ When a device's signal schema changes (signals added, removed, renamed, or retyp
 
 The hash is computed over the **signal names and datatype codes** that make up the schema.
 
+A sub-device's signal is hashed as `<sub-device name>/<signal name>`.
+
 ## Position in Frame
 
 ```

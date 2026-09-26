@@ -53,11 +53,11 @@ Every command produces exactly one acknowledgement, `BLAECK.*` included. A comma
 answer sends the acknowledgement first, then the response frame. A name the device does not have is
 answered `UNKNOWN_COMMAND`.
 
-`CmdHash` covers the command as written — the payload after any [prefix section](../commands#prefix-section)
+`CmdHash` covers the command as written — the payload after any [message id](../commands#message-id)
 — so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
 alone, which sits before the first comma and so survives a frame the device could not take in full.
 
-The header's Message ID carries back the [message id](../commands#--message-id) the command was
+The header's Message ID carries back the [message id](../commands#message-id) the command was
 sent with, or `0` when it carried none. An id present decides which command is being answered; the
 hashes then say only how it arrived:
 

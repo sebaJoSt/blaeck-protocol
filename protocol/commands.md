@@ -16,28 +16,17 @@ Parameters are comma-separated tokens. An empty field between commas preserves i
 <MYCMD,10,,20>   → Param0="10", Param1="", Param2="20"
 ```
 
-## Prefix Section
+## Message Id
 
-Zero or more sigil-tagged items may precede the command name, each closed by `:`:
+A command may start with `#<id>:`. A command name may not begin with `#`.
 
 ```
-<SET_AMP,0.9>          typed by hand — no prefix
-<#42:SET_AMP,0.9>      give the command a message id
+<SET_AMP,0.9>          no message id
+<#42:SET_AMP,0.9>      message id 42
 ```
 
-A reader consumes prefix items while the leading character is a sigil it knows, then reads the
-remainder as it would a frame with no prefix. Items are self-naming, so their order carries no
-meaning. An unrecognised item is left unconsumed and so becomes part of the command name, which
-then matches nothing and is reported as unknown.
-
-**A command name may not begin with a sigil**, and a device refuses to register one that does. Two
-sigils are defined: `#` below, and `@` for routing a command through a hub to the device behind it.
-
-### `#` — Message Id
-
-Every command carries its message id here, built-ins included. The device echoes it in the header
-of whatever it sends back — a response frame, or the [Command Ack](frames/commands) Message ID
-field — and echoes `0` for a command that carried none.
+The device echoes the id in the header of whatever it sends back — a response frame, or the
+[Command Ack](frames/commands) Message ID field — and echoes `0` for a command that carried none.
 
 | Rule | Value |
 |------|-------|
@@ -49,16 +38,14 @@ field — and echoes `0` for a command that carried none.
 The id pairs an answer with its command; the hashes say whether the bytes arrived as sent. Without
 an id, same-named commands in flight together cannot be told apart.
 
-**The acknowledgement's `CmdHash` covers the payload after the prefix section**, not the received
-bytes — a prefix is addressing rather than content, and a routing item may be consumed before the
-frame reaches the device that answers it.
+**The acknowledgement's `CmdHash` covers the command after the message id.**
 
 ## Built-in Commands
 
 | Command | Parameters | Description | Response |
 |---------|-----------|-------------|----------|
 | `BLAECK.WRITE_SYMBOLS` | — | Request signal schema | [Signals](frames/signals) |
-| `BLAECK.GET_DEVICES` | — | Request device identity | [Device frames](frames/devices) |
+| `BLAECK.GET_DEVICES` | — | Request the board and its sub-devices | [Device List](frames/devices) |
 | `BLAECK.WRITE_SIGNAL_CONFIG` | — | Request signal presentation metadata | [Signal Config](frames/signals) |
 | `BLAECK.WRITE_DATA` | — | Request single data frame | [Data frame](frames/data) |
 | `BLAECK.WRITE_COMMANDS` | — | Request command catalog | [Command List](frames/commands) |

@@ -27,3 +27,13 @@ B6 uses a `DeviceCount` byte followed by repeated device entries and a one-time 
 ---
 
 <Frame id="B6" />
+
+---
+
+<Frame id="B7" />
+
+- The board first, then its sub-devices.
+- Sent only on request. Fixed per session, except `DeviceState`.
+- `Restarted` is reported once: here or in [C1](control), whichever reaches a host first.
+- Sub-devices: signal, state channel and event channel names are unique per device; command
+  names per board. A missing sub-device's signals are left out of [data frames](data).
