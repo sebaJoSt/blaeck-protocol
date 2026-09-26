@@ -6,32 +6,7 @@ import Frame from '@site/src/components/Frame';
 
 # State Channels
 
-A state channel carries one value, composed at runtime, that is pushed when it changes rather
-than on the logging interval — so it is never written to a data store. `ChannelIndex` is the
-channel's position in the `90` catalog for the device named by the push's `MasterSlaveConfig`
-and `SlaveID`. See [Elements](../elements) for field details.
-
-Each channel declares a `ValueType`, so a channel may carry a number as readily as text. The type
-appears in both frames: unconditionally in the catalog, and again on every push, so a push can be
-read without the catalog in hand.
-
-The catalog carries each channel's current value, so it answers what everything is set to at that
-moment. It is re-sent at startup (see [Control](control)) and whenever a device re-declares its
-channels while running, since a push is addressed by position here.
-
-The push carries the same two identity bytes the catalog does, so positions stay the ones the
-originating device declared: a relay forwarding several boards rewrites identity rather than
-renumbering what it passes on.
-
-A text value is capped at 255 bytes, the same as a string signal. A frame is sent whole, so the cap
-bounds how long one push can hold the link — at 115200 baud, 255 bytes is about 22 ms.
-
-A numeric channel may also declare a unit, a state class and a display precision, the same three
-a signal declares in [F0](signals). They are what makes a host present the channel as a number
-rather than as text, so they mean nothing on a channel whose `ValueType` is `0x0A`.
-
-A channel may also declare a `StateValue`, which the catalog carries as its value when the frame
-was built.
+Repeated per channel. See [Elements](../elements) for field details.
 
 <Frame id="90" />
 

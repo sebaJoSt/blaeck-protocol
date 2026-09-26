@@ -8,30 +8,6 @@ import Frame from '@site/src/components/Frame';
 
 <Frame id="C0" />
 
-Sent once, when a device starts. It is a notice rather than a state: nothing repeats it, so a host
-that connects afterwards never sees it.
-
-A device follows it with everything it declares, unasked.
-
-| catalog | why it is sent |
-|---|---|
-| [State channels](states) | It carries each channel's value, and those are back at their startup defaults. The one that is actually wrong after an ordinary restart. |
-| [Event channels](events) | An occurrence names its channel and its type by position here, so a device that comes back declaring another set has them filed under whatever now sits at those indices. |
-| [Commands](commands) | Matched by name rather than position, so a stale one answers `UNKNOWN_COMMAND` instead of being taken for another - but a host still builds its controls from this. |
-| [Signal config](signals) | What a signal says about itself. The [schema hash](../schema-hash) covers a signal's name and type, so a unit or an icon that moved while the signals stayed put changes nothing a host can see. |
-
-Only the first is out of date after an ordinary restart; the rest matter when a device declares
-conditionally and comes back offering something else. All four are sent either way.
-
-The catalogs go out once the device has finished declaring, so each describes the whole set rather
-than the part that existed when the frame was written.
-
-This is one of the three occasions a catalog is sent; the others are under
-[Catalogs](../catalogs).
-
 ---
 
 <Frame id="C1" />
-
-One event per frame, `MessageID` `0`. Held back until a host can receive frames. A board restart
-(`DeviceID` `0`) is followed by the same catalogs as C0.

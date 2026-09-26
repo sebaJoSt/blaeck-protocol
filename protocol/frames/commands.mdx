@@ -6,73 +6,11 @@ import Frame from '@site/src/components/Frame';
 
 # Command Frames
 
-A command list declares which custom commands the device accepts, Command Ack reports the outcome of those commands (see [Commands](../commands)). `CommandFlags` bits 5–6 carry the Home Assistant entity category, so a device setting can be marked as such without a trailing field. See
-[Elements](../elements) for field details.
-
-When `CommandFlags` bit 3 is set, `StateSignal` is followed by a one-byte `StateSource`: `0` a
-signal, `1` a state channel.
-
-Bit 14 asks a host to create the control but leave it switched off until someone enables
-it — Home Assistant's `enabled_by_default`. A host passes the flag on rather than acting on
-it; Home Assistant is what hides the entity. The command is untouched: the topic is
-advertised as usual and the device still runs it when one arrives.
-
-`DisplayName`, bit 8, is the label a host shows in place of `CommandName`. Presentation only: the
-name remains what a host sends and what any identity it derives is built from, so a command that
-gains a label later keeps the control a host already made for it.
-
-Bit 0 says a range was declared, not that the entry is a number. With the bit clear, `RangeMin` and
-`RangeMax` are absent and the command accepts any value its handler will take, never answering
-[`OUT_OF_RANGE`](../status-codes). A host may build the control from its own defaults or decline to
-offer it, but must not read absent limits as `0` to `0`.
-
-A select value may be sent as an option name or as its index. A name is matched exactly:
-two options differing only in case are two entries a host lists separately, so folding
-them would leave the second unreachable. Neither answers [`BAD_SELECT`](../status-codes)
-unless it matches no option at all.
-
-`RangeStep` is flagged separately, bit 7, and is not part of the range. It is display resolution
-only: no value is rounded to it and none is refused for falling between two steps. Limits and step
-are therefore independent — either, both or neither may be declared. Optional fields follow in bit
-order, so the step trails the text length rather than sitting beside the min and max.
-
-A host with a floor of its own — Home Assistant refuses a step below `0.001` — drops that control
-rather than coarsening what the device declared.
-
-`CommandPayloadMax` repeats on every entry and is identical on all of them: one receive buffer
-serves the device. What a given command leaves for its parameters is that figure less the name and
-the separating comma, compared against the encoded value about to be sent.
+See [Commands](../commands) for syntax and acknowledgement, and [Elements](../elements) for field
+details.
 
 <Frame id="A0" />
 
 ---
 
 <Frame id="A5" />
-
-Every command produces exactly one acknowledgement, `BLAECK.*` included. A command that also has an
-answer sends the acknowledgement first, then the response frame. A name the device does not have is
-answered `UNKNOWN_COMMAND`.
-
-`CmdHash` covers the command as written — the payload after any [message id](../commands#message-id)
-— so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
-alone, which sits before the first comma and so survives a frame the device could not take in full.
-
-The header's Message ID carries back the [message id](../commands#message-id) the command was
-sent with, or `0` when it carried none. An id present decides which command is being answered; the
-hashes then say only how it arrived:
-
-| Message ID | CmdHash | Meaning |
-|------------|---------|---------|
-| a command still outstanding | match | Acknowledged that command, received intact |
-| a command still outstanding | no match | That command, different bytes: it did not arrive as sent |
-| not one this sender issued | — | Not ours; ignore |
-
-Without an id there is nothing to pair on but the hashes, and a burst of same-named commands
-cannot be told apart:
-
-| CmdHash | CmdNameHash | Meaning |
-|---------|-------------|---------|
-| match | match | Acknowledged command received intact |
-| no match | match | Same command, different bytes: it did not arrive as sent |
-| no match | no match | Not a command this sender issued |
-

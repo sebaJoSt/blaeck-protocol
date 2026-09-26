@@ -6,8 +6,8 @@
  *   - library overview pages  (active frames per version)
  *   - src/components/FrameTable.js
  *
- * Mermaid diagrams are generated dynamically from elements + bitsPerRow
- * via generateMermaid() in elements.js.
+ * Mermaid diagrams are generated from the elements by generateMermaid() in elements.js,
+ * which also picks the row width.
  */
 
 const frames = {
@@ -19,7 +19,6 @@ const frames = {
     description: 'Signal schema: names, types, master/slave config.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'b0--symbol-list-0xb0',
-    bitsPerRow: 11,
     elements: ['MasterSlaveConfig', 'SlaveID', 'SymbolName', 'DTYPE'],
   },
 
@@ -31,7 +30,6 @@ const frames = {
     description: 'Signal schema: ID, name, and type. No multi-device support.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'b0--symbol-list-0xb0',
-    bitsPerRow: 8,
     elements: ['SymbolID', 'SymbolName', 'DTYPE'],
   },
 
@@ -43,7 +41,6 @@ const frames = {
     description: 'Signal values with StatusByte and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'b1--data-0xb1',
-    bitsPerRow: 10,
     elements: ['SymbolID', 'DATA', 'StatusByte', 'CRC32'],
     repeat: ['SymbolID', 'DATA'],
   },
@@ -56,7 +53,6 @@ const frames = {
     description: 'Signal values without integrity check.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'b1--data-0xb1',
-    bitsPerRow: 5,
     elements: ['SymbolID', 'DATA'],
   },
 
@@ -68,7 +64,6 @@ const frames = {
     description: 'Signal values with FrameFlags, 4-byte Timestamp, StatusByte, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd1--data-0xd1',
-    bitsPerRow: 10,
     elements: ['FrameFlags', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
     repeat: ['SymbolID', 'DATA'],
   },
@@ -81,7 +76,6 @@ const frames = {
     description: 'Signal values with SchemaHash, 8-byte Timestamp, StatusByte, StatusPayload, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd2--data-0xd2',
-    bitsPerRow: 16,
     elements: ['FrameFlags', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
     repeat: ['SymbolID', 'DATA'],
   },
@@ -94,7 +88,6 @@ const frames = {
     description: 'Device identity: name, hardware, firmware, and library version.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b2--devices-0xb2',
-    bitsPerRow: 18,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion'],
   },
 
@@ -106,7 +99,6 @@ const frames = {
     description: 'Device identity with LibName.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b3--devices-0xb3',
-    bitsPerRow: 21,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 
@@ -118,7 +110,6 @@ const frames = {
     description: 'Device identity with LibName, ClientNo, and ClientDataEnabled.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b4--devices-0xb4',
-    bitsPerRow: 27,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled'],
   },
 
@@ -130,7 +121,6 @@ const frames = {
     description: 'Device identity with LibName, ClientNo, ClientDataEnabled, and ServerRestarted.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b5--devices-0xb5',
-    bitsPerRow: 31,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted'],
   },
 
@@ -142,7 +132,6 @@ const frames = {
     description: 'Device identity with DeviceCount, per-device fields, and client trailer (ClientNo, ClientDataEnabled).',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b6--devices-0xb6',
-    bitsPerRow: 33,
     elements: ['DeviceCount', 'MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientNo', 'ClientDataEnabled'],
     repeat: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent'],
   },
@@ -155,7 +144,6 @@ const frames = {
     description: 'The board and its sub-devices: library, then per device its ID, parent, flags, state and names.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b7--device-list-0xb7',
-    bitsPerRow: 20,
     elements: ['LibName', 'LibVersion', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
     repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
   },
@@ -168,7 +156,6 @@ const frames = {
     description: 'A device restarted, stopped responding, or responds again.',
     page: '/blaeck-protocol/protocol/frames/control',
     anchor: 'c1--device-notification-0xc1',
-    bitsPerRow: 5,
     elements: ['DeviceID', 'DeviceEvent'],
   },
 
@@ -180,7 +167,6 @@ const frames = {
     description: 'Notifies that a device restarted. Same layout as B3.',
     page: '/blaeck-protocol/protocol/frames/control',
     anchor: 'c0--restart-notification-0xc0',
-    bitsPerRow: 21,
     elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
   },
 
@@ -192,7 +178,6 @@ const frames = {
     description: 'Event channel catalog: name, flags, optional icon, and the closed list of event types each channel may emit.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '80--event-channel-list-0x80',
-    bitsPerRow: 18,
     elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventDeviceClass', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
@@ -205,7 +190,6 @@ const frames = {
     description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '85--event-0x85',
-    bitsPerRow: 6,
     elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'EventIndex'],
   },
 
@@ -217,7 +201,6 @@ const frames = {
     description: 'State channel catalog: name, flags, datatype, optional icon, optional current value, and optional numeric metadata.',
     page: '/blaeck-protocol/protocol/frames/states',
     anchor: '90--state-channel-list-0x90',
-    bitsPerRow: 13,
     elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'StateChannelFlags', 'StateValueType', 'Icon', 'StateValue', 'StateDeviceClass', 'StateOptions', 'StateUnit', 'StateDisplayPrecision'],
   },
 
@@ -229,7 +212,6 @@ const frames = {
     description: 'Current value of a declared state channel, typed. Pushed when it changes; not telemetry and not stored.',
     page: '/blaeck-protocol/protocol/frames/states',
     anchor: '95--state-0x95',
-    bitsPerRow: 8,
     elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'StateValueType', 'StateChannelValue'],
   },
 
@@ -241,7 +223,6 @@ const frames = {
     description: 'Command catalog: every command the device accepts, with kind, flags, how long a command the device can receive, and optional metadata.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
-    bitsPerRow: 32,
     elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
     repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
   },
@@ -254,7 +235,6 @@ const frames = {
     description: 'Outcome of a dispatched command. The header MessageID echoes the message id the command carried in its # prefix, or 0 when it carried none; the hashes then say whether the bytes arrived as written.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a5--command-ack-0xa5',
-    bitsPerRow: 7,
     elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason'],
   },
 
@@ -266,7 +246,6 @@ const frames = {
     description: 'Presentation metadata for signals that declare any: unit, device class, icon, state class, display precision, and the label to show in place of the name.',
     page: '/blaeck-protocol/protocol/frames/signals',
     anchor: 'f0--signal-config-0xf0',
-    bitsPerRow: 18,
     elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
     repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
   },

@@ -1,7 +1,6 @@
 import React from 'react';
-import Mermaid from '@theme/Mermaid';
 import { frames } from '@site/src/data/frames';
-import { generateMermaid } from '@site/src/data/elements';
+import PacketDiagram from '@site/src/components/PacketDiagram';
 
 export default function FrameTable({ keys, showDiagrams = false }) {
   const selected = keys
@@ -38,7 +37,7 @@ export default function FrameTable({ keys, showDiagrams = false }) {
               {f.key} — {f.name} (<code>{f.hex}</code>)
             </h3>
             <p>{f.description}</p>
-            <Mermaid value={generateMermaid(f.elements, f.bitsPerRow, f.repeat)} />
+            <PacketDiagram elements={f.elements} repeat={f.repeat} />
           </div>
         ))}
     </>

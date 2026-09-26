@@ -11,13 +11,13 @@ const elements = {
   MasterSlaveConfig: {
     size: '1 byte',
     type: 'uint8',
-    span: 4,
+    span: 5,
     description: '`0x00` = single, `0x01` = master, `0x02` = slave',
   },
   SlaveID: {
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: '`0x00` for single and master; for a slave, its `DeviceID` in the [B7](frames/devices) device list',
   },
   SymbolName: {
@@ -60,7 +60,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA` (D2 only). Bit 2 = includes a host-interval report (D2 only). Explicit sketch writes and immediate change reports leave bits 1 and 2 clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
+    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA` (D2 only). Bit 2 = includes a host-interval report, also when mixed with change reports (D2 only). Bits 1 and 2 never both set; explicit writes and change reports leave both clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
   },
   TimestampMode: {
     size: '1 byte',
@@ -161,13 +161,13 @@ const elements = {
   DeviceID: {
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: '`0` = the board; `1`–`254` = a sub-device, the same number as `SlaveID` in the catalogs. `255` is reserved',
   },
   ParentID: {
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: '`DeviceID` of the device it sits below. `0` for the board itself and for every sub-device (one level)',
   },
   DeviceFlags: {
@@ -186,7 +186,7 @@ const elements = {
     label: 'OptionalFields',
     size: 'variable',
     type: 'string',
-    span: 3,
+    span: 4,
     description: 'One null-terminated string per bit set in `DeviceFlags`, in bit order. None are defined yet',
   },
   DeviceEvent: {
@@ -198,8 +198,8 @@ const elements = {
   CommandPayloadMax: {
     size: '2 bytes',
     type: 'uint16',
-    span: 3,
-    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised',
+    span: 5,
+    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised. The same on every entry',
   },
   ChannelName: {
     size: 'variable',
@@ -290,13 +290,13 @@ const elements = {
     label: 'ValueType',
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: 'Datatype code (`0x00`–`0x0A`) of this channel\'s value. See [Datatypes](datatypes)',
   },
   StateValue: {
     size: 'variable',
     type: 'raw bytes',
-    span: 2,
+    span: 3,
     description: 'Conditional: only if `ChannelFlags` bit 2. The channel\'s value when the frame was built, size per `ValueType`. Fixed width except `0x0A`, which is NUL-terminated like every other string in this frame',
   },
   StateChannelValue: {
@@ -321,13 +321,13 @@ const elements = {
   ChannelIndex: {
     size: '2 bytes',
     type: 'uint16',
-    span: 2,
-    description: 'Zero-based index of the channel in the catalog frame',
+    span: 3,
+    description: 'Zero-based index of the channel in the catalog of the device named by `MasterSlaveConfig` and `SlaveID`',
   },
   EventIndex: {
     size: '2 bytes',
     type: 'uint16',
-    span: 2,
+    span: 3,
     description: 'Zero-based index into the channel\'s `EventType` list',
   },
   CommandName: {
@@ -345,19 +345,19 @@ const elements = {
   CommandFlags: {
     size: '4 bytes',
     type: 'uint32',
-    span: 3,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = input mode, 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload. The input mode is read against `CommandKind`, which is what lets one pair of bits serve two kinds - no entry is ever both. On a number command it says how the value is most usefully entered (`0` auto, `1` box, `2` slider, `3` reserved); on a text command whether the field should be masked while it is typed (`0` plain, `1` password, `2`–`3` reserved). A hint about presentation only, and on a text command a hint about presentation alone: the value still travels the wire as the characters it is, so masking hides it from someone watching the screen and from nothing on the network. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number or a text command; a device sets these bits to `0` on every other kind. Bits 14–31 reserved',
+    span: 4,
+    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = input mode, 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload, 14 = disabledByDefault (create the control switched off; the command still runs). Optional fields follow in bit order. The input mode is read against `CommandKind`, which is what lets one pair of bits serve two kinds - no entry is ever both. On a number command it says how the value is most usefully entered (`0` auto, `1` box, `2` slider, `3` reserved); on a text command whether the field should be masked while it is typed (`0` plain, `1` password, `2`–`3` reserved). A hint about presentation only, and on a text command a hint about presentation alone: the value still travels the wire as the characters it is, so masking hides it from someone watching the screen and from nothing on the network. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number or a text command; a device sets these bits to `0` on every other kind. Bits 15–31 reserved',
   },
   RangeMin: {
     size: '4 bytes',
     type: 'float32',
-    span: 2,
-    description: 'Conditional: only if `CommandFlags` bit 0. Lowest value the command accepts, inclusive',
+    span: 3,
+    description: 'Conditional: only if `CommandFlags` bit 0. Lowest value the command accepts, inclusive. Without bit 0 both limits are absent and any value is accepted; do not read them as `0`',
   },
   RangeMax: {
     size: '4 bytes',
     type: 'float32',
-    span: 2,
+    span: 3,
     description: 'Conditional: only if `CommandFlags` bit 0. Highest value the command accepts, inclusive. A command that sets the bit declares a `RangeMax` above its `RangeMin`: the bit says a range was declared, and a window admitting a single value or none is not one',
   },
   Unit: {
@@ -369,8 +369,8 @@ const elements = {
   SelectOptions: {
     size: 'variable',
     type: 'string',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 2. Comma-separated set of options a select command accepts, in the order their indices follow. Writable, unlike the `Options` a signal or a state channel declares: a host builds the control from this list, and the device takes either an option name or its index. A command that sets the bit lists at least one option and none of them is blank: every value is checked against the list, so an empty one accepts nothing and leaves a host with nothing to offer, and a blank one is a choice that shows nothing. Positions fix the indices values are carried as, so a blank option is refused at the source rather than dropped from the list',
+    span: 4,
+    description: 'Conditional: only if `CommandFlags` bit 2. Comma-separated set of options a select command accepts, in the order their indices follow. Writable, unlike the `Options` a signal or a state channel declares: a host builds the control from this list, and the device takes either an option name, matched exactly with case, or its index. A command that sets the bit lists at least one option and none of them is blank: every value is checked against the list, so an empty one accepts nothing and leaves a host with nothing to offer, and a blank one is a choice that shows nothing. Positions fix the indices values are carried as, so a blank option is refused at the source rather than dropped from the list',
   },
   StateSignal: {
     size: 'variable',
@@ -393,7 +393,7 @@ const elements = {
   RangeStep: {
     size: '4 bytes',
     type: 'float32',
-    span: 2,
+    span: 3,
     description: 'Conditional: only if `CommandFlags` bit 7. Display resolution: never rounded to and never validated, so a value falling between two steps is still accepted. Carried on its own bit rather than with the range because the two are independently optional - a range with no step is ordinary, and the bit is what distinguishes that from a declared step of 0. A device may set bit 7 without bit 0, so do not assume a range is present whenever a step is',
   },
   CommandDisplayName: {
@@ -414,7 +414,7 @@ const elements = {
     label: 'Press payload',
     size: 'variable',
     type: 'string',
-    span: 3,
+    span: 4,
     description: 'Conditional: only if `CommandFlags` bit 13. What a press of a button sends, in place of the empty payload a bare press carries. Arguments are comma separated, written as any command sent to the device is written, so a button labelled "Activate all DUTs" can stand for a call with `1,40` already filled in and the handler reads the parameters as it would from any other sender. Meaningful only on a button; a device leaves the bit clear on every other kind, where the value a host sends is the payload and a fixed one would overwrite it. Unvalidated: a button is the one kind whose parameters have no declared signature to check against, so a payload with the wrong separator or too few arguments reaches the handler as written',
   },
   CommandIcon: {
@@ -428,7 +428,7 @@ const elements = {
     size: '4 bytes',
     type: 'uint32',
     span: 3,
-    description: 'FNV-1a 32 hash of the command string as received, identifying which command is acknowledged',
+    description: 'FNV-1a 32 hash of the command after its message id, identifying which command is acknowledged',
   },
   CmdNameHash: {
     size: '4 bytes',
@@ -439,20 +439,20 @@ const elements = {
   AckStatus: {
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: '`0` = accepted, `1` = rejected',
   },
   AckReason: {
     size: '1 byte',
     type: 'uint8',
-    span: 2,
+    span: 3,
     description: 'Reason code. See [Status Codes](status-codes)',
   },
   SignalMetaFlags: {
     size: '2 bytes',
     type: 'uint16',
     span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions, 11 = hasDisplayName. Bits 12–15 reserved',
+    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions, 11 = hasDisplayName. Bits 12–15 reserved. Optional fields follow in bit order',
   },
   SignalUnit: {
     label: 'Unit',
@@ -483,17 +483,45 @@ const elements = {
   },
 };
 
+// Widest row, in spans. A frame up to this wide is drawn in one row. PacketDiagram lowers it
+// to what the page has room for.
+const MAX_ROW = 34;
+
 /**
- * Generate a Mermaid packet-beta diagram from a frame's elements and bitsPerRow.
+ * The row width for these spans: all of them if they fit in maxRow, otherwise the widest row
+ * up to maxRow that ends every row at an element boundary, so no element is split. If no such
+ * row fits, the narrowest wider one; Mermaid then scales that diagram down to the page.
  */
-function generateMermaid(frameElements, bitsPerRow, repeat) {
+function rowWidth(spans, maxRow) {
+  const total = spans.reduce((a, b) => a + b, 0);
+  if (total <= maxRow) return total;
+  const whole = (width) => {
+    let start = 0;
+    return spans.every((span) => {
+      const fits = Math.floor(start / width) === Math.floor((start + span - 1) / width);
+      start += span;
+      return fits;
+    });
+  };
+  for (let width = maxRow; width > 0; width--)
+    if (whole(width)) return width;
+  for (let width = maxRow + 1; width < total; width++)
+    if (whole(width)) return width;
+  return total;
+}
+
+/**
+ * Generate a Mermaid packet-beta diagram from a frame's elements.
+ */
+function generateMermaid(frameElements, repeat, maxRow = MAX_ROW) {
+  const known = frameElements.filter((key) => elements[key]);
+  const bitsPerRow = rowWidth(known.map((key) => elements[key].span), maxRow);
   const header = `---\nconfig:\n  packet:\n    showBits: false\n    bitsPerRow: ${bitsPerRow}\n---\npacket-beta`;
   const repeatSet = new Set(repeat || []);
   let pos = 0;
   const lines = [];
-  frameElements.forEach((key) => {
+  known.forEach((key) => {
     const el = elements[key];
-    if (!el) return;
     const raw = el.label || key;
     const label = repeatSet.has(key) ? `[${raw}]` : raw;
     const start = pos;
@@ -504,4 +532,4 @@ function generateMermaid(frameElements, bitsPerRow, repeat) {
   return header + '\n' + lines.join('\n');
 }
 
-module.exports = { elements, generateMermaid };
+module.exports = { elements, generateMermaid, MAX_ROW };

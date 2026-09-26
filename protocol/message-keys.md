@@ -27,7 +27,7 @@ superseded revisions still in the field.
 | `95`–`98` | `95` | [State](frames/states) |
 | `A0`–`A4` | `A0` | [Command List](frames/commands) |
 | `A5`–`A8` | `A5` | [Command Ack](frames/commands) |
-| `B2`–`B7` | `B7` | [Device List](frames/devices) |
+| `B2`–`BF` | `B7` | [Device List](frames/devices) |
 | `C0`–`C3` | `C1` | [Device Notification](frames/control) |
 | `D1`–`D7` | `D2` | [Data](frames/data) |
 | `E0`–`E3` | `B0` † | [Symbol List](frames/signals) |

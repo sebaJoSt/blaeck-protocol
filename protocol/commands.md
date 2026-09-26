@@ -40,6 +40,35 @@ an id, same-named commands in flight together cannot be told apart.
 
 **The acknowledgement's `CmdHash` covers the command after the message id.**
 
+## Acknowledgement
+
+Every command produces exactly one acknowledgement, `BLAECK.*` included. A command that also has an
+answer sends the acknowledgement first, then the response frame. A name the device does not have is
+answered `UNKNOWN_COMMAND`.
+
+`CmdHash` covers the command as written — the payload after any [message id](#message-id)
+— so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
+alone, which sits before the first comma and so survives a frame the device could not take in full.
+
+The header's Message ID carries back the [message id](#message-id) the command was
+sent with, or `0` when it carried none. An id present decides which command is being answered; the
+hashes then say only how it arrived:
+
+| Message ID | CmdHash | Meaning |
+|------------|---------|---------|
+| a command still outstanding | match | Acknowledged that command, received intact |
+| a command still outstanding | no match | That command, different bytes: it did not arrive as sent |
+| not one this sender issued | — | Not ours; ignore |
+
+Without an id there is nothing to pair on but the hashes, and a burst of same-named commands
+cannot be told apart:
+
+| CmdHash | CmdNameHash | Meaning |
+|---------|-------------|---------|
+| match | match | Acknowledged command received intact |
+| no match | match | Same command, different bytes: it did not arrive as sent |
+| no match | no match | Not a command this sender issued |
+
 ## Built-in Commands
 
 | Command | Parameters | Description | Response |

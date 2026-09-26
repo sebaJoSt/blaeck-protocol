@@ -1,8 +1,8 @@
 import React from 'react';
-import Mermaid from '@theme/Mermaid';
 import Link from '@docusaurus/Link';
 import { frames } from '@site/src/data/frames';
-import { elements, generateMermaid } from '@site/src/data/elements';
+import { elements } from '@site/src/data/elements';
+import PacketDiagram from '@site/src/components/PacketDiagram';
 
 function renderDescription(text) {
   // Split on markdown links [label](url) and inline code `code`
@@ -25,15 +25,13 @@ export default function Frame({ id, showElements = false }) {
   const f = frames[id];
   if (!f) return null;
 
-  const mermaidValue = generateMermaid(f.elements, f.bitsPerRow, f.repeat);
-
   return (
     <div style={{ marginBottom: '2rem' }}>
       <h2 id={f.anchor}>
         {f.key} — {f.name} (<code>{f.hex}</code>)
       </h2>
       <p>{f.description}</p>
-      <Mermaid value={mermaidValue} />
+      <PacketDiagram elements={f.elements} repeat={f.repeat} />
       {showElements && f.elements && (
         <table>
           <thead>
