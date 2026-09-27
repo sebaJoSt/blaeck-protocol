@@ -4,11 +4,8 @@ sidebar_position: 3
 
 # Message Keys
 
-The **Message Key** is the single byte after `<blaeck:` that identifies a frame:
-
-```
-<blaeck: MSGKEY(1B) : MSGID(4B) : FRAME />\r\n
-```
+The **Message Key** is the single byte after `<blaeck:` that identifies a frame (see the envelope in the
+[Introduction](intro)).
 
 A key fully determines the layout of the payload that follows. Decoders therefore switch on the key
 alone and never need prior state to know how to read a frame.

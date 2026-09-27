@@ -24,6 +24,7 @@ const sidebars = {
     'ack-reasons',
     'datatypes',
     'schema-hash',
+    'escaping',
     'crc32',
   ],
 };
