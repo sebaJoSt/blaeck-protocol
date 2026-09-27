@@ -60,7 +60,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA` (D2 only). Bit 2 = includes a host-interval report, also when mixed with change reports (D2 only). Bits 1 and 2 never both set; explicit writes and change reports leave both clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
+    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA` (D2 and D3). Bit 2 = includes a host-interval report, also when mixed with change reports (D2 and D3). Bits 1 and 2 never both set; explicit writes and change reports leave both clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
   },
   TimestampMode: {
     size: '1 byte',

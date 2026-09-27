@@ -24,6 +24,15 @@ This is the same CRC-32 used by Ethernet, PKZIP, and many other protocols (often
 
 The bytes included in the CRC calculation depend on the message key:
 
+### D3
+
+```
+CRC scope: MsgKey → last data byte
+├── MsgKey (1B)
+├── ... all elements ...
+└── last signal DATA byte
+```
+
 ### D2
 
 ```

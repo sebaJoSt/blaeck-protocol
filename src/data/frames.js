@@ -90,6 +90,18 @@ const frames = {
     repeat: ['SymbolID', 'DATA'],
   },
 
+  D3: {
+    key: 'D3',
+    hex: '0xD3',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values with SchemaHash, 8-byte Timestamp, and CRC32.',
+    page: '/blaeck-protocol/protocol/frames/data',
+    anchor: 'd3--data-0xd3',
+    elements: ['FrameFlags', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
+  },
+
   B2: {
     key: 'B2',
     hex: '0xB2',

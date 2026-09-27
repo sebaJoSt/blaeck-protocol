@@ -29,7 +29,7 @@ superseded revisions still in the field.
 | `A5`–`A8` | `A5` | [Command Ack](frames/commands) |
 | `B2`–`BF` | `B7` | [Device List](frames/devices) |
 | `C0`–`C3` | `C1` | [Device Notification](frames/control) |
-| `D1`–`D7` | `D2` | [Data](frames/data) |
+| `D1`–`D7` | `D3` | [Data](frames/data) |
 | `E0`–`E3` | `E0` | [Symbol List](frames/signals) |
 | `F0`–`F3` | `F0` | [Signal Config](frames/signals) |
 
@@ -39,8 +39,8 @@ These predate the block scheme and cannot be moved without breaking released lib
 
 | Key | Frame | Moved to |
 | --- | --- | --- |
-| `B0` | [Symbol List](frames/signals) | `E0`–`E3` — superseded by `E0` |
-| `B1` | [Data](frames/data) | `D1`–`D7` — superseded by `D2` |
+| `B0` | [Symbol List](frames/signals) | `E0`–`E3` |
+| `B1` | [Data](frames/data) | `D1`–`D7` |
 
 ## Allocating a Key
 

@@ -14,7 +14,7 @@ Every Blaeck message is wrapped in a fixed envelope:
 <BLAECK: MSGKEY(1B) : MSGID(4B) : FRAME /BLAECK>\r\n
 ```
 
-- **Message Key** identifies the frame (e.g., `0xD2` for data with 8-byte timestamps).
+- **Message Key** identifies the frame (e.g., `0xD3` for data with 8-byte timestamps).
 - **Message ID** is a user-defined uint32.
 - **Frame** carries the key-specific payload.
 
