@@ -4,11 +4,11 @@ sidebar_position: 8
 
 # Schema Hash
 
-The **SchemaHash** is a 2-byte field in data frames that allows receivers to detect signal schema changes without requiring a full [B0](frames/signals) retransmission.
+The **SchemaHash** is a 2-byte field in data frames that allows receivers to detect signal schema changes without requiring a full [Symbol List](frames/signals) retransmission.
 
 ## Purpose
 
-When a device's signal schema changes (signals added, removed, renamed, or retyped), the SchemaHash changes. The receiver can compare the incoming hash against a stored value and request a fresh B0 only when they differ. This avoids unnecessary B0 requests on every data frame.
+When a device's signal schema changes (signals added, removed, renamed, or retyped), the SchemaHash changes. The receiver can compare the incoming hash against a stored value and request a fresh Symbol List only when they differ. This avoids unnecessary Symbol List requests on every data frame.
 
 ## Algorithm
 
@@ -30,9 +30,9 @@ FrameFlags(1B) : SchemaHash(2B) : TimestampMode(1B) ...
 
 ## Usage Pattern
 
-1. On first connection, the receiver requests a B0 frame and stores the schema along with the SchemaHash from subsequent data frames.
+1. On first connection, the receiver requests the Symbol List and stores the schema along with the SchemaHash from subsequent data frames.
 2. On each data frame, the receiver compares the SchemaHash against the stored value.
-3. If the hash differs, the receiver requests a new B0 frame to update its signal definitions.
+3. If the hash differs, the receiver requests a new Symbol List to update its signal definitions.
 
 
 

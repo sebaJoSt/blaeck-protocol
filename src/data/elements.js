@@ -36,7 +36,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Zero-based signal index (matches B0 order)',
+    description: 'Zero-based signal index, in Symbol List order',
   },
   DATA: {
     size: 'variable',
@@ -162,7 +162,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: '`0` = the board; `1`–`254` = a sub-device, the same number as `SlaveID` in the catalogs. `255` is reserved',
+    description: '`0` = the board; `1`–`254` = a sub-device. `255` is reserved',
   },
   ParentID: {
     size: '1 byte',
@@ -322,7 +322,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Zero-based index of the channel in the catalog of the device named by `MasterSlaveConfig` and `SlaveID`',
+    description: 'Zero-based index of the channel in the catalog of the device named by `DeviceID`',
   },
   EventIndex: {
     size: '2 bytes',

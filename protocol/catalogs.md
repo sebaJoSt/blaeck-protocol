@@ -9,7 +9,7 @@ the first entry to the last, and addressed afterwards by position. Five frames a
 
 | catalog | declares | addressed afterwards by |
 |---|---|---|
-| [`B0` Symbol List](frames/signals) | the signals a device samples | `SymbolId` in [`F0`](frames/signals) and [data frames](frames/data) |
+| [`E0` Symbol List](frames/signals) | the signals a device samples | `SymbolId` in [`F0`](frames/signals) and [data frames](frames/data) |
 | [`F0` Signal Config](frames/signals) | what each signal says about itself | — |
 | [`90` State Channel List](frames/states) | the channels a device reports values on | `ChannelIndex` in a [`95` push](frames/states) |
 | [`80` Event Channel List](frames/events) | the channels and the occurrences each may report | `ChannelIndex` and `EventIndex` in an [`85`](frames/events) |
@@ -37,8 +37,8 @@ catalog of its own.
 
 ## The symbol list is not announced
 
-**A changed `B0` is never sent unasked.** The other four describe how a device presents itself;
-`B0` describes what a host stores, one column per signal, fixed when logging began. A signal list
+**A changed `E0` is never sent unasked.** The other four describe how a device presents itself;
+`E0` describes what a host stores, one column per signal, fixed when logging began. A signal list
 that moves mid-session has no correct reading, and a host that adopted a fresh one would go on
 writing into a table whose columns no longer describe the data. The mismatch is meant to stop the
 session, so the protocol offers no way to paper over it.

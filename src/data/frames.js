@@ -21,6 +21,16 @@ const frames = {
     anchor: 'b0--symbol-list-0xb0',
     elements: ['MasterSlaveConfig', 'SlaveID', 'SymbolName', 'DTYPE'],
   },
+  E0: {
+    key: 'E0',
+    hex: '0xE0',
+    category: 'signals',
+    name: 'Symbol List',
+    description: 'Signal schema: names and types, each with its DeviceID.',
+    page: '/blaeck-protocol/protocol/frames/signals',
+    anchor: 'e0--symbol-list-0xe0',
+    elements: ['DeviceID', 'SymbolName', 'DTYPE'],
+  },
 
   B0_v1: {
     key: 'B0',
@@ -178,7 +188,7 @@ const frames = {
     description: 'Event channel catalog: name, flags, optional icon, and the closed list of event types each channel may emit.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '80--event-channel-list-0x80',
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventDeviceClass', 'EventTypeCount', 'EventType'],
+    elements: ['DeviceID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventDeviceClass', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
 
@@ -190,7 +200,7 @@ const frames = {
     description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '85--event-0x85',
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'EventIndex'],
+    elements: ['DeviceID', 'ChannelIndex', 'EventIndex'],
   },
 
   '90': {
@@ -201,7 +211,7 @@ const frames = {
     description: 'State channel catalog: name, flags, datatype, optional icon, optional current value, and optional numeric metadata.',
     page: '/blaeck-protocol/protocol/frames/states',
     anchor: '90--state-channel-list-0x90',
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelName', 'StateChannelFlags', 'StateValueType', 'Icon', 'StateValue', 'StateDeviceClass', 'StateOptions', 'StateUnit', 'StateDisplayPrecision'],
+    elements: ['DeviceID', 'ChannelName', 'StateChannelFlags', 'StateValueType', 'Icon', 'StateValue', 'StateDeviceClass', 'StateOptions', 'StateUnit', 'StateDisplayPrecision'],
   },
 
   '95': {
@@ -212,7 +222,7 @@ const frames = {
     description: 'Current value of a declared state channel, typed. Pushed when it changes; not telemetry and not stored.',
     page: '/blaeck-protocol/protocol/frames/states',
     anchor: '95--state-0x95',
-    elements: ['MasterSlaveConfig', 'SlaveID', 'ChannelIndex', 'StateValueType', 'StateChannelValue'],
+    elements: ['DeviceID', 'ChannelIndex', 'StateValueType', 'StateChannelValue'],
   },
 
   A0: {
@@ -223,8 +233,8 @@ const frames = {
     description: 'Command catalog: every command the device accepts, with kind, flags, how long a command the device can receive, and optional metadata.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a0--command-list-0xa0',
-    elements: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
-    repeat: ['MasterSlaveConfig', 'SlaveID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
+    elements: ['DeviceID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
+    repeat: ['DeviceID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
   },
 
   A5: {
