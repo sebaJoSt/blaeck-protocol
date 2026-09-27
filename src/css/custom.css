@@ -107,11 +107,53 @@
   display: none !important;
 }
 
-html.plugin-id-blaeck .navbar__item.version-blaeck,
-html.plugin-id-blaeck .navbar__item:has(.version-blaeck),
-html.plugin-id-blaeckserial .navbar__item:has(.version-blaeckserial),
-html.plugin-id-blaecktcp .navbar__item:has(.version-blaecktcp),
-html.plugin-id-blaecktcpy .navbar__item:has(.version-blaecktcpy) {
+/* Desktop only: below 997px Docusaurus moves every navbar entry into the mobile menu. */
+@media (min-width: 997px) {
+  html.plugin-id-blaeck .navbar__item.version-blaeck,
+  html.plugin-id-blaeck .navbar__item:has(.version-blaeck),
+  html.plugin-id-blaeckserial .navbar__item:has(.version-blaeckserial),
+  html.plugin-id-blaecktcp .navbar__item:has(.version-blaecktcp),
+  html.plugin-id-blaecktcpy .navbar__item:has(.version-blaecktcpy) {
+    display: flex !important;
+  }
+}
+
+/* The heading above the libraries in the mobile menu. */
+.navbar-sidebar__heading {
+  padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+  font-size: 0.8rem;
+  font-weight: var(--ifm-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* The protocol version in the mobile menu's header, next to the logo. */
+.navbar-sidebar__brand .navbar__item.dropdown:has(> .navbar-sidebar__protocol) {
   display: flex !important;
 }
 
+/* The GitHub link in the mobile menu's header, spaced like the theme button next to it. */
+.navbar-sidebar__github {
+  margin-right: 0.5rem;
+}
+
+/* The line between the libraries and the spec's entries in the sidebar. */
+.site-sidebar__divider {
+  margin: 0.5rem var(--ifm-menu-link-padding-horizontal);
+  border-top: 1px solid var(--ifm-toc-border-color);
+}
+
+/* Wide screens reach the libraries through the navbar, so the sidebar shows only the spec. */
+@media (min-width: 997px) {
+  .site-sidebar__libraries {
+    display: none;
+  }
+}
+
+/* A library with a single version gets a link instead of a version dropdown, and Docusaurus
+   marks it active on its own page. It reads as the version, like the dropdowns, not as a
+   highlighted link. */
+.navbar__link.version-blaeck.navbar__link--active {
+  color: var(--ifm-navbar-link-color);
+}

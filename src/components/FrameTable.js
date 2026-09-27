@@ -1,8 +1,9 @@
 import React from 'react';
-import { frames } from '@site/src/data/frames';
 import PacketDiagram from '@site/src/components/PacketDiagram';
+import useProtocol from '@site/src/components/useProtocol';
 
 export default function FrameTable({ keys, showDiagrams = false }) {
+  const { frames } = useProtocol();
   const selected = keys
     ? keys.map((k) => frames[k]).filter(Boolean)
     : Object.values(frames);

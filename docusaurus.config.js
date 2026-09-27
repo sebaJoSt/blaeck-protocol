@@ -1,6 +1,11 @@
 // @ts-check
 import { themes as prismThemes } from 'prism-react-renderer';
 
+// Protocol v1 libraries are no longer maintained in any version, so none of their versions
+// carries Docusaurus's "no longer actively maintained" banner.
+const withoutBanner = (versionsFile) =>
+  Object.fromEntries(require(versionsFile).map((version) => [version, { banner: 'none' }]));
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Blaeck Protocol',
@@ -63,6 +68,11 @@ const config = {
           path: 'protocol',
           routeBasePath: 'protocol',
           sidebarPath: './sidebars-protocol.js',
+          lastVersion: 'current',
+          versions: {
+            current: { label: 'v2', path: '', badge: false },
+            1: { label: 'v1', path: '1', banner: 'none', badge: false },
+          },
         },
         blog: false,
         theme: {
@@ -73,6 +83,7 @@ const config = {
   ],
 
   plugins: [
+    './plugins/spec-sidebars.js',
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -94,6 +105,7 @@ const config = {
         path: 'blaeckserial',
         routeBasePath: 'blaeckserial',
         includeCurrentVersion: false,
+        versions: withoutBanner('./blaeckserial_versions.json'),
       },
     ],
     [
@@ -103,6 +115,7 @@ const config = {
         path: 'blaecktcp',
         routeBasePath: 'blaecktcp',
         includeCurrentVersion: false,
+        versions: withoutBanner('./blaecktcp_versions.json'),
       },
     ],
     [
@@ -115,6 +128,7 @@ const config = {
         lastVersion: 'current',
         versions: {
           current: { label: '2.0.0', path: '' },
+          ...withoutBanner('./blaecktcpy_versions.json'),
         },
       },
     ],
@@ -135,21 +149,12 @@ const config = {
         },
         items: [
           {
-            to: '/protocol/intro',
-            label: 'Protocol Spec',
+            type: 'custom-protocol',
             position: 'left',
           },
           {
-            type: 'dropdown',
-            label: 'Libraries',
+            type: 'custom-libraries',
             position: 'left',
-            activeBaseRegex: '/blaeck/|blaeckserial|blaecktcp|blaecktcpy',
-            items: [
-              { label: 'blaeck', to: '/blaeck/overview' },
-              { label: 'blaecktcpy', to: '/blaecktcpy/overview' },
-              { label: 'BlaeckSerial (until 6.0.0)', to: '/blaeckserial/overview' },
-              { label: 'BlaeckTCP (until 6.0.0)', to: '/blaecktcp/overview' },
-            ],
           },
           {
             type: 'custom-libraryLabel',

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Mermaid from '@theme/Mermaid';
 import { generateMermaid, MAX_ROW } from '@site/src/data/elements';
+import useProtocol from '@site/src/components/useProtocol';
 
 // Mermaid draws each span 32 px wide.
 const SPAN_PX = 32;
 
 // A frame's packet diagram, wrapped to the width it has on the page.
 export default function PacketDiagram({ elements, repeat }) {
+  const { elements: elementMap } = useProtocol();
   const ref = useRef(null);
   const [maxRow, setMaxRow] = useState(MAX_ROW);
 
@@ -25,7 +27,7 @@ export default function PacketDiagram({ elements, repeat }) {
 
   return (
     <div ref={ref}>
-      <Mermaid value={generateMermaid(elements, repeat, maxRow)} />
+      <Mermaid value={generateMermaid(elements, repeat, maxRow, elementMap)} />
     </div>
   );
 }

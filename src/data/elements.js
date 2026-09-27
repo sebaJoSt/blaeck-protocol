@@ -1,5 +1,5 @@
 /**
- * Single source of truth for all Blaeck protocol elements.
+ * The elements of protocol 2, the current one; protocol 1 has its own in ./v1/.
  *
  * Used by:
  *   - protocol/elements.mdx  (canonical element reference)
@@ -8,18 +8,6 @@
  */
 
 const elements = {
-  MasterSlaveConfig: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 5,
-    description: '`0x00` = single, `0x01` = master, `0x02` = slave',
-  },
-  SlaveID: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 3,
-    description: '`0x00` for single and master; for a slave, its `DeviceID` in the [B7](frames/devices) device list',
-  },
   SymbolName: {
     size: 'variable',
     type: 'string',
@@ -44,12 +32,6 @@ const elements = {
     span: 2,
     description: 'Signal value, size per [DTYPE](datatypes). Fixed width except DTYPE `0x0A`, which is length-prefixed',
   },
-  StatusByte: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 3,
-    description: 'Device/hub status. See [Status Codes](status-codes)',
-  },
   CRC32: {
     size: '4 bytes',
     type: 'uint32',
@@ -68,12 +50,6 @@ const elements = {
     span: 4,
     description: '`0` = none, `1` = micros, `2` = UNIX',
   },
-  Timestamp32: {
-    size: '4 bytes',
-    type: 'uint32',
-    span: 3,
-    description: 'Conditional: only if TimestampMode > 0',
-  },
   Timestamp64: {
     size: '8 bytes',
     type: 'uint64',
@@ -85,12 +61,6 @@ const elements = {
     type: 'uint16',
     span: 3,
     description: 'CRC16-CCITT over signal schema. See [Schema Hash](schema-hash)',
-  },
-  StatusPayload: {
-    size: '4 bytes',
-    type: 'raw bytes',
-    span: 4,
-    description: 'Status-specific data',
   },
   DeviceName: {
     size: 'variable',
@@ -121,36 +91,6 @@ const elements = {
     type: 'string',
     span: 3,
     description: 'Library name',
-  },
-  ClientNo: {
-    size: 'variable',
-    type: 'string',
-    span: 2,
-    description: 'Client number',
-  },
-  ClientDataEnabled: {
-    size: 'variable',
-    type: 'string',
-    span: 4,
-    description: 'Data streaming enabled (`"true"` / `"false"`)',
-  },
-  ServerRestarted: {
-    size: 'variable',
-    type: 'string',
-    span: 4,
-    description: 'Whether server restarted since client connected',
-  },
-  DeviceType: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: '`"server"` or `"hub"`',
-  },
-  Parent: {
-    size: 'variable',
-    type: 'string',
-    span: 2,
-    description: 'Parent device in topology',
   },
   DeviceCount: {
     size: '1 byte',
@@ -446,7 +386,7 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Reason code. See [Status Codes](status-codes)',
+    description: 'Reason code. See [Ack Reasons](ack-reasons)',
   },
   SignalMetaFlags: {
     size: '2 bytes',
@@ -513,15 +453,15 @@ function rowWidth(spans, maxRow) {
 /**
  * Generate a Mermaid packet-beta diagram from a frame's elements.
  */
-function generateMermaid(frameElements, repeat, maxRow = MAX_ROW) {
-  const known = frameElements.filter((key) => elements[key]);
-  const bitsPerRow = rowWidth(known.map((key) => elements[key].span), maxRow);
+function generateMermaid(frameElements, repeat, maxRow = MAX_ROW, elementMap = elements) {
+  const known = frameElements.filter((key) => elementMap[key]);
+  const bitsPerRow = rowWidth(known.map((key) => elementMap[key].span), maxRow);
   const header = `---\nconfig:\n  packet:\n    showBits: false\n    bitsPerRow: ${bitsPerRow}\n---\npacket-beta`;
   const repeatSet = new Set(repeat || []);
   let pos = 0;
   const lines = [];
   known.forEach((key) => {
-    const el = elements[key];
+    const el = elementMap[key];
     const raw = el.label || key;
     const label = repeatSet.has(key) ? `[${raw}]` : raw;
     const start = pos;

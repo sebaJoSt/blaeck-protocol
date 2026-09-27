@@ -25,7 +25,7 @@ A sub-device's signal is hashed as `<sub-device name>/<signal name>`.
 ## Position in Frame
 
 ```
-FrameFlags(1B) : SchemaHash(2B) : TimestampMode(1B) ...
+FrameFlags(1B) SchemaHash(2B) TimestampMode(1B) ...
 ```
 
 ## Usage Pattern

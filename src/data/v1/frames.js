@@ -1,0 +1,143 @@
+/**
+ * Protocol 1: the frames of BlaeckSerial and BlaeckTCP up to 6.0.1 and blaecktcpy up to 2.0.1.
+ */
+
+const frames = {
+  B0: {
+    key: 'B0',
+    hex: '0xB0',
+    category: 'signals',
+    name: 'Symbol List',
+    description: 'Signal schema: names, types, master/slave config.',
+    page: '/blaeck-protocol/protocol/1/frames/signals',
+    anchor: 'b0--symbol-list-0xb0',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'SymbolName', 'DTYPE'],
+  },
+
+  B0_v1: {
+    key: 'B0',
+    hex: '0xB0',
+    category: 'signals',
+    name: 'Symbol List',
+    description: 'Signal schema: ID, name, and type. No multi-device support.',
+    page: '/blaeck-protocol/protocol/1/frames/signals',
+    anchor: 'b0--symbol-list-0xb0',
+    elements: ['SymbolID', 'SymbolName', 'DTYPE'],
+  },
+
+  B1: {
+    key: 'B1',
+    hex: '0xB1',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values with StatusByte and CRC32.',
+    page: '/blaeck-protocol/protocol/1/frames/data',
+    anchor: 'b1--data-0xb1',
+    elements: ['SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
+  },
+
+  B1_noCRC: {
+    key: 'B1',
+    hex: '0xB1',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values without integrity check.',
+    page: '/blaeck-protocol/protocol/1/frames/data',
+    anchor: 'b1--data-0xb1',
+    elements: ['SymbolID', 'DATA'],
+  },
+
+  D1: {
+    key: 'D1',
+    hex: '0xD1',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values with RestartFlag, 4-byte Timestamp, StatusByte, and CRC32.',
+    page: '/blaeck-protocol/protocol/1/frames/data',
+    anchor: 'd1--data-0xd1',
+    elements: ['RestartFlag', 'TimestampMode', 'Timestamp32', 'SymbolID', 'DATA', 'StatusByte', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
+  },
+
+  D2: {
+    key: 'D2',
+    hex: '0xD2',
+    category: 'data',
+    name: 'Data',
+    description: 'Signal values with SchemaHash, 8-byte Timestamp, StatusByte, StatusPayload, and CRC32.',
+    page: '/blaeck-protocol/protocol/1/frames/data',
+    anchor: 'd2--data-0xd2',
+    elements: ['RestartFlag', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'StatusByte', 'StatusPayload', 'CRC32'],
+    repeat: ['SymbolID', 'DATA'],
+  },
+
+  B2: {
+    key: 'B2',
+    hex: '0xB2',
+    category: 'devices',
+    name: 'Devices',
+    description: 'Device identity: name, hardware, firmware, and library version.',
+    page: '/blaeck-protocol/protocol/1/frames/devices',
+    anchor: 'b2--devices-0xb2',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion'],
+  },
+
+  B3: {
+    key: 'B3',
+    hex: '0xB3',
+    category: 'devices',
+    name: 'Devices',
+    description: 'Device identity with LibName.',
+    page: '/blaeck-protocol/protocol/1/frames/devices',
+    anchor: 'b3--devices-0xb3',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
+  },
+
+  B4: {
+    key: 'B4',
+    hex: '0xB4',
+    category: 'devices',
+    name: 'Devices',
+    description: 'Device identity with LibName, ClientNo, and ClientDataEnabled.',
+    page: '/blaeck-protocol/protocol/1/frames/devices',
+    anchor: 'b4--devices-0xb4',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled'],
+  },
+
+  B5: {
+    key: 'B5',
+    hex: '0xB5',
+    category: 'devices',
+    name: 'Devices',
+    description: 'Device identity with LibName, ClientNo, ClientDataEnabled, and ServerRestarted.',
+    page: '/blaeck-protocol/protocol/1/frames/devices',
+    anchor: 'b5--devices-0xb5',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ClientNo', 'ClientDataEnabled', 'ServerRestarted'],
+  },
+
+  B6: {
+    key: 'B6',
+    hex: '0xB6',
+    category: 'devices',
+    name: 'Devices',
+    description: 'Device identity with DeviceCount, per-device fields, and client trailer (ClientNo, ClientDataEnabled, ClientName, ClientType).',
+    page: '/blaeck-protocol/protocol/1/frames/devices',
+    anchor: 'b6--devices-0xb6',
+    elements: ['DeviceCount', 'MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent', 'ClientNo', 'ClientDataEnabled', 'ClientName', 'ClientType'],
+    repeat: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName', 'ServerRestarted', 'DeviceType', 'Parent'],
+  },
+
+  C0: {
+    key: 'C0',
+    hex: '0xC0',
+    category: 'control',
+    name: 'Restart Notification',
+    description: 'Notifies that a device restarted. Same layout as B3.',
+    page: '/blaeck-protocol/protocol/1/frames/control',
+    anchor: 'c0--restart-notification-0xc0',
+    elements: ['MasterSlaveConfig', 'SlaveID', 'DeviceName', 'HWVersion', 'FWVersion', 'LibVersion', 'LibName'],
+  },
+};
+
+module.exports = { frames };

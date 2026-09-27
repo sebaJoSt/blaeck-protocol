@@ -21,7 +21,7 @@ const sidebars = {
     },
     'catalogs',
     'elements',
-    'status-codes',
+    'ack-reasons',
     'datatypes',
     'schema-hash',
     'crc32',

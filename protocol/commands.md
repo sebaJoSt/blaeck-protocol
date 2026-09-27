@@ -136,7 +136,7 @@ A built-in that answers with a frame echoes the id from the prefix in that frame
 
 ```
 Command:  <#1:BLAECK.WRITE_SYMBOLS>
-Response: <BLAECK: E0 : 01 00 00 00 : …………… /BLAECK>\r\n
+Response: <blaeck: E0 : 01 00 00 00 : …………… />\r\n
                    Key  Message ID    Frame
 ```
 

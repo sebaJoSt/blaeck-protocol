@@ -4,10 +4,10 @@ sidebar_position: 3
 
 # Message Keys
 
-The **Message Key** is the single byte after `<BLAECK:` that identifies a frame:
+The **Message Key** is the single byte after `<blaeck:` that identifies a frame:
 
 ```
-<BLAECK: MSGKEY(1B) : MSGID(4B) : FRAME /BLAECK>\r\n
+<blaeck: MSGKEY(1B) : MSGID(4B) : FRAME />\r\n
 ```
 
 A key fully determines the layout of the payload that follows. Decoders therefore switch on the key
@@ -16,8 +16,7 @@ alone and never need prior state to know how to read a frame.
 ## Assigned Keys
 
 Each frame owns a small block of keys. Keys within a block are taken in ascending order as the frame
-is revised, so the **highest assigned key in a block is the current version** and the lower ones are
-superseded revisions still in the field.
+is revised.
 
 | Block | Current | Frame |
 | --- | --- | --- |
@@ -32,15 +31,6 @@ superseded revisions still in the field.
 | `D1`–`D7` | `D3` | [Data](frames/data) |
 | `E0`–`E3` | `E0` | [Symbol List](frames/signals) |
 | `F0`–`F3` | `F0` | [Signal Config](frames/signals) |
-
-## Legacy Keys
-
-These predate the block scheme and cannot be moved without breaking released libraries.
-
-| Key | Frame | Moved to |
-| --- | --- | --- |
-| `B0` | [Symbol List](frames/signals) | `E0`–`E3` |
-| `B1` | [Data](frames/data) | `D1`–`D7` |
 
 ## Allocating a Key
 

@@ -1,16 +1,15 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { frames } from '@site/src/data/frames';
-import { elements } from '@site/src/data/elements';
 import PacketDiagram from '@site/src/components/PacketDiagram';
+import useProtocol from '@site/src/components/useProtocol';
 
-function renderDescription(text) {
+function renderDescription(text, base) {
   // Split on markdown links [label](url) and inline code `code`
   const parts = text.split(/(\[.*?\]\(.*?\)|`[^`]+`)/g);
   return parts.map((part, i) => {
     const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
     if (linkMatch) {
-      const href = linkMatch[2].startsWith('/') ? linkMatch[2] : `/protocol/${linkMatch[2]}`;
+      const href = linkMatch[2].startsWith('/') ? linkMatch[2] : `${base}/${linkMatch[2]}`;
       return <Link key={i} to={href}>{linkMatch[1]}</Link>;
     }
     const codeMatch = part.match(/^`([^`]+)`$/);
@@ -22,6 +21,7 @@ function renderDescription(text) {
 }
 
 export default function Frame({ id, showElements = false }) {
+  const { frames, elements, base } = useProtocol();
   const f = frames[id];
   if (!f) return null;
 
@@ -51,7 +51,7 @@ export default function Frame({ id, showElements = false }) {
                   <td>{el.label || key}</td>
                   <td>{el.size}</td>
                   <td><code>{el.type}</code></td>
-                  <td>{renderDescription(el.description)}</td>
+                  <td>{renderDescription(el.description, base)}</td>
                 </tr>
               );
             })}

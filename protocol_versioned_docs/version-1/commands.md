@@ -1,0 +1,64 @@
+---
+sidebar_position: 2
+---
+
+# Commands
+
+Commands are sent from the host to the device as ASCII text, delimited by angle brackets:
+
+```
+<COMMAND,Param0,Param1,…>
+```
+
+Parameters are comma-separated tokens. An empty field between commas preserves its position and is delivered as an empty string, allowing callers to skip parameters without shifting subsequent values:
+
+```
+<MYCMD,10,,20>   → Param0="10", Param1="", Param2="20"
+```
+
+## Built-in Commands
+
+| Command | Parameters | Description | Response |
+|---------|-----------|-------------|----------|
+| `BLAECK.WRITE_SYMBOLS` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request signal schema | [Signals](frames/signals) |
+| `BLAECK.GET_DEVICES` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3], ClientName, ClientType</small> | Request device identity | [Device frames](frames/devices) |
+| `BLAECK.WRITE_DATA` | <small>MsgID[0], MsgID[1], MsgID[2], MsgID[3]</small> | Request single data frame | [Data frame](frames/data) |
+| `BLAECK.ACTIVATE` | <small>Interval[0], Interval[1], Interval[2], Interval[3]</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
+| `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
+
+Bracketed parameters encode a uint32 in little-endian byte order as four comma-separated bytes.
+
+The `BLAECK.` prefix is reserved for built-in commands.
+
+## Custom Commands
+
+Any command name without the `BLAECK.` prefix is user-defined. Parameters are delivered as string tokens; the device handler decides how to interpret them (e.g. convert to integer, use as text, or apply a default when empty).
+
+```
+<SwitchLED,1>        → turn LED on
+<Print,Hello,1>      → string parameter with mode
+<MyCmd,10,,20>       → skip second parameter
+```
+
+## Response with Message ID
+
+`WRITE_SYMBOLS`, `GET_DEVICES` and `WRITE_DATA`: `MsgID[0]`–`MsgID[3]` sends the Message ID to the device, and the response echoes it back to the sender. For example, requesting signal schema with Message ID 1:
+
+```
+Command:  <BLAECK.WRITE_SYMBOLS,1,0,0,0>
+Response: <BLAECK: B0 : 01 00 00 00 : …………… /BLAECK>\r\n
+                   Key  Message ID    Frame
+```
+
+See [Frames](category/frames) for all frame types.
+
+## Client Identity
+
+`GET_DEVICES` has two parameters — `ClientName` and `ClientType` — that let TCP clients identify themselves to the server:
+
+| Field | Description |
+|-------|-------------|
+| ClientName | Human-readable name of the client application |
+| ClientType | Type of client (e.g., `"app"`, `"hub"`, `"script"`) |
+
+The server stores this identity per TCP connection for logging, management UIs, and diagnostics. The [B6](frames/devices) response echoes these values back as `ClientName` and `ClientType`, alongside the server-assigned `ClientNo` and `ClientDataEnabled` fields.

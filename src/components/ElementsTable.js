@@ -1,21 +1,14 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { elements } from '@site/src/data/elements';
+import useProtocol from '@site/src/components/useProtocol';
 
-const defined = {
-  datatypes: '/blaeck-protocol/protocol/datatypes',
-  'status-codes': '/blaeck-protocol/protocol/status-codes',
-  crc32: '/blaeck-protocol/protocol/crc32',
-  'schema-hash': '/blaeck-protocol/protocol/schema-hash',
-};
-
-function renderDescription(desc) {
+function renderDescription(desc, base) {
   // Convert markdown links [text](key) to <Link> components
   const parts = desc.split(/(\[[^\]]+\]\([^)]+\))/g);
   return parts.map((part, i) => {
     const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (m) {
-      const href = defined[m[2]] || m[2];
+      const href = m[2].startsWith('/') ? m[2] : `${base}/${m[2]}`;
       return <Link key={i} to={href}>{m[1]}</Link>;
     }
     // Convert inline code
@@ -29,10 +22,10 @@ function renderDescription(desc) {
   });
 }
 
-// Sort alphabetically by element name
-const sorted = Object.entries(elements).sort(([a], [b]) => a.localeCompare(b));
-
 export function ElementsTable() {
+  const { elements, base } = useProtocol();
+  // Sorted alphabetically by element name
+  const sorted = Object.entries(elements).sort(([a], [b]) => a.localeCompare(b));
   return (
     <table>
       <thead>
@@ -49,7 +42,7 @@ export function ElementsTable() {
             <td>{el.label || name}</td>
             <td>{el.size}</td>
             <td><code>{el.type}</code></td>
-            <td>{renderDescription(el.description)}</td>
+            <td>{renderDescription(el.description, base)}</td>
           </tr>
         ))}
       </tbody>

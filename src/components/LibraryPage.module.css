@@ -1,0 +1,41 @@
+/* The look of Docusaurus's category overview pages and their cards (DocCard), which only
+   work inside the docs. */
+
+.page {
+  padding-top: var(--ifm-spacing-vertical);
+}
+
+@media (min-width: 997px) {
+  .page {
+    max-width: 75% !important;
+  }
+}
+
+.title {
+  --ifm-h1-font-size: 3rem;
+  margin-bottom: calc(1.25 * var(--ifm-leading));
+}
+
+.card {
+  --ifm-link-color: var(--ifm-color-emphasis-800);
+  --ifm-link-hover-color: var(--ifm-color-emphasis-700);
+  --ifm-link-hover-decoration: none;
+
+  box-shadow: 0 1.5px 3px 0 rgb(0 0 0 / 15%);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: all var(--ifm-transition-fast) ease;
+  transition-property: border, box-shadow;
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 3px 6px 0 rgb(0 0 0 / 20%);
+}
+
+.card *:last-child {
+  margin-bottom: 0;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+}

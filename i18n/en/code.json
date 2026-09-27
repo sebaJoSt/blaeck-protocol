@@ -1,0 +1,10 @@
+{
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "This is documentation for version {versionLabel}, which is no longer actively maintained.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "This is unreleased documentation for version {versionLabel}.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  }
+}
