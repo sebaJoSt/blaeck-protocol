@@ -56,8 +56,7 @@ be pointed at a device.
 
 ### Device state
 
-All frames go to the host: data, state values, events, catalogs, the device frame and every
-acknowledgement. State set by `ACTIVATE`, `DEACTIVATE` and `PAUSE_WRITES` belongs to the device,
+All frames go to the host: data, property values, events, catalogs and every acknowledgement. State set by `ACTIVATE`, `DEACTIVATE` and `PAUSE_WRITES` belongs to the device,
 not to a connection, so it outlasts a change of host. A new host should set what it needs rather
 than assume the defaults.
 

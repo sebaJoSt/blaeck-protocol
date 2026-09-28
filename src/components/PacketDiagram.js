@@ -7,7 +7,7 @@ import useProtocol from '@site/src/components/useProtocol';
 const SPAN_PX = 32;
 
 // A frame's packet diagram, wrapped to the width it has on the page.
-export default function PacketDiagram({ elements, repeat }) {
+export default function PacketDiagram({ elements, repeat, repeatNested }) {
   const { elements: elementMap } = useProtocol();
   const ref = useRef(null);
   const [maxRow, setMaxRow] = useState(MAX_ROW);
@@ -27,7 +27,7 @@ export default function PacketDiagram({ elements, repeat }) {
 
   return (
     <div ref={ref}>
-      <Mermaid value={generateMermaid(elements, repeat, maxRow, elementMap)} />
+      <Mermaid value={generateMermaid(elements, repeat, maxRow, elementMap, repeatNested)} />
     </div>
   );
 }

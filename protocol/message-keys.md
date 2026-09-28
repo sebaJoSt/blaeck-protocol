@@ -17,17 +17,15 @@ is revised.
 
 | Block | Current | Frame |
 | --- | --- | --- |
-| `80`–`84` | `80` | [Event Channel List](frames/events) |
 | `85`–`88` | `85` | [Event](frames/events) |
-| `90`–`94` | `90` | [State Channel List](frames/states) |
-| `95`–`98` | `95` | [State](frames/states) |
-| `A0`–`A4` | `A0` | [Command List](frames/commands) |
+| `90`–`94` | `90` | [Entity List](frames/entities) |
+| `95`–`98` | `95` | [Property](frames/properties) |
 | `A5`–`A8` | `A5` | [Command Ack](frames/commands) |
 | `B2`–`BF` | `B7` | [Device List](frames/devices) |
 | `C0`–`C3` | `C1` | [Device Notification](frames/control) |
 | `D1`–`D7` | `D3` | [Data](frames/data) |
-| `E0`–`E3` | `E0` | [Symbol List](frames/signals) |
-| `F0`–`F3` | `F0` | [Signal Config](frames/signals) |
+
+`80`–`84`, `A0`–`A4`, `E0`–`E3` and `F0`–`F3` are unassigned.
 
 ## Allocating a Key
 

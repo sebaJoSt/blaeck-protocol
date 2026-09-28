@@ -1,11 +1,14 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 import Frame from '@site/src/components/Frame';
 
 # Devices
 
-Repeated per device. See [Elements](../elements) for field details.
+Repeated per device; within a device, `SignalName` and `DTYPE` repeat per signal. The signals are
+the schema a host logs: one column each, numbered across all devices in the order this frame
+lists them. See [Catalogs](../catalogs) for when it is sent and [Elements](../elements) for field
+details.
 
 <Frame id="B7" />

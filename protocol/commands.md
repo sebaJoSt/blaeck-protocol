@@ -21,8 +21,8 @@ Parameters are comma-separated tokens. An empty field between commas preserves i
 A command may start with `#<id>:`. A command name may not begin with `#`.
 
 ```
-<SET_AMP,0.9>          no message id
-<#42:SET_AMP,0.9>      message id 42
+<Amplitude,0.9>          no message id
+<#42:Amplitude,0.9>      message id 42
 ```
 
 The device echoes the id in the header of whatever it sends back — a response frame, or the
@@ -73,13 +73,9 @@ cannot be told apart:
 
 | Command | Parameters | Description | Response |
 |---------|-----------|-------------|----------|
-| `BLAECK.WRITE_SYMBOLS` | — | Request signal schema | [Signals](frames/signals) |
-| `BLAECK.GET_DEVICES` | — | Request the board and its sub-devices | [Device List](frames/devices) |
-| `BLAECK.WRITE_SIGNAL_CONFIG` | — | Request signal presentation metadata | [Signal Config](frames/signals) |
+| `BLAECK.GET_DEVICES` | — | Request the board, its sub-devices and their signals | [Device List](frames/devices) |
+| `BLAECK.WRITE_ENTITIES` | — | Request the properties, events and buttons | [Entity List](frames/entities) |
 | `BLAECK.WRITE_DATA` | — | Request single data frame | [Data frame](frames/data) |
-| `BLAECK.WRITE_COMMANDS` | — | Request command catalog | [Command List](frames/commands) |
-| `BLAECK.WRITE_STATE_CHANNELS` | — | Request state channel catalog | [State Channel List](frames/states) |
-| `BLAECK.WRITE_EVENT_CHANNELS` | — | Request event channel catalog | [Event Channel List](frames/events) |
 | `BLAECK.ACTIVATE` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
 | `BLAECK.PAUSE_WRITES` | <small>Duration or `FOREVER`</small> | Send no frames for a period | n/a |
@@ -93,7 +89,7 @@ cannot be told apart:
 
 ## Pausing Writes
 
-`PAUSE_WRITES` stops every frame leaving the device — data, states, events, catalogs and
+`PAUSE_WRITES` stops every frame leaving the device — data, properties, events, catalogs and
 acknowledgements alike — for a duration in milliseconds.
 
 ```
@@ -120,14 +116,37 @@ pause are executed but not acknowledged.
 No built-in takes a message id as a parameter; the `#` prefix carries it, as for any command. The
 `BLAECK.` prefix is reserved for built-ins.
 
-## Custom Commands
+## Device Commands
 
-Any command name without the `BLAECK.` prefix is user-defined. Parameters are delivered as string tokens; the device handler decides how to interpret them (e.g. convert to integer, use as text, or apply a default when empty).
+Any command name without the `BLAECK.` prefix belongs to the device. One name reaches exactly one
+target on the board, sub-devices included; names compare case-sensitively.
+
+| Target | Listed in | Sent as | Accepted when |
+|---|---|---|---|
+| Input (READWRITE property) | [Entity List](frames/entities) | `<Name,value>` | the value fits the property, see below |
+| Sensor (READ property) | [Entity List](frames/entities) | — | never: `READ_ONLY` |
+| Button | [Entity List](frames/entities) | `<Name>` | always |
+| Plain command | nowhere | `<Name,Param0,…>` | always; the device's handler reads the parameters |
+
+A value for an input is checked against its entry before it is stored, so an invalid one is
+refused and changes nothing:
+
+| Value kind | Accepts |
+|---|---|
+| number | a decimal within `RangeMin`–`RangeMax`, if declared; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
+| bool | `0` or `1` |
+| enum | an index into `Options`, or an option name matched exactly with case |
+| text | up to `TextMaxLen` bytes; `<Name,>` clears it |
+
+An accepted value is acknowledged, then written as a [Property](frames/properties) frame. See
+[Ack Reasons](ack-reasons) for what a refusal says.
 
 ```
-<SwitchLED,1>        → turn LED on
-<Print,Hello,1>      → string parameter with mode
-<MyCmd,10,,20>       → skip second parameter
+<Setpoint,21.5>      → input: number
+<OutputEnabled,1>    → input: bool
+<Mode,Heat>          → input: enum, by name
+<STATUS>             → button
+<SET_RANGE,1,40>     → plain command, parameters for its handler
 ```
 
 ## Response with Message ID
@@ -135,8 +154,8 @@ Any command name without the `BLAECK.` prefix is user-defined. Parameters are de
 A built-in that answers with a frame echoes the id from the prefix in that frame's header:
 
 ```
-Command:  <#1:BLAECK.WRITE_SYMBOLS>
-Response: <blaeck: E0 : 01 00 00 00 : …………… /> LF
+Command:  <#1:BLAECK.GET_DEVICES>
+Response: <blaeck: B7 : 01 00 00 00 : …………… /> LF
                    Key  Message ID    Frame
 ```
 

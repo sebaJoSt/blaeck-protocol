@@ -1,13 +1,13 @@
 import { useLocation } from '@docusaurus/router';
 import { useActivePluginAndVersion } from '@docusaurus/plugin-content-docs/client';
-import { frames } from '@site/src/data/frames';
+import { frames, entries } from '@site/src/data/frames';
 import { elements } from '@site/src/data/elements';
 import { frames as framesV1 } from '@site/src/data/v1/frames';
 import { elements as elementsV1 } from '@site/src/data/v1/elements';
 
 const protocols = {
-  1: { version: '1', frames: framesV1, elements: elementsV1, base: '/protocol/1' },
-  2: { version: '2', frames, elements, base: '/protocol' },
+  1: { version: '1', frames: framesV1, entries: {}, elements: elementsV1, base: '/protocol/1' },
+  2: { version: '2', frames, entries, elements, base: '/protocol' },
 };
 
 // The protocol each library speaks. blaecktcpy moves to 2 with its next release.

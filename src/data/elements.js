@@ -3,82 +3,17 @@
  *
  * Used by:
  *   - protocol/elements.mdx  (canonical element reference)
- *   - src/components/Frame.js (element table under each frame)
+ *   - src/components/Frame.js (element table under each frame and entry)
  *   - library overview pages  (element details per version)
  */
 
 const elements = {
-  SymbolName: {
+  // ----- Device List (B7) -----
+  LibName: {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Signal name',
-  },
-  DTYPE: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 2,
-    description: 'Datatype code (`0x00`–`0x0A`). See [Datatypes](datatypes)',
-  },
-  SymbolID: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Zero-based signal index, in Symbol List order',
-  },
-  DATA: {
-    size: 'variable',
-    type: 'raw bytes',
-    span: 2,
-    description: 'Signal value, size per [DTYPE](datatypes). Fixed width except DTYPE `0x0A`, which is length-prefixed',
-  },
-  CRC32: {
-    size: '4 bytes',
-    type: 'uint32',
-    span: 2,
-    description: 'Integrity checksum. See [CRC32](crc32)',
-  },
-  FrameFlags: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 3,
-    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA` (D2 and D3). Bit 2 = includes a host-interval report, also when mixed with change reports (D2 and D3). Bits 1 and 2 never both set; explicit writes and change reports leave both clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
-  },
-  TimestampMode: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 4,
-    description: '`0` = none, `1` = micros, `2` = UNIX',
-  },
-  Timestamp64: {
-    size: '8 bytes',
-    type: 'uint64',
-    span: 3,
-    description: 'Conditional: only if TimestampMode > 0',
-  },
-  SchemaHash: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'CRC16-CCITT over signal schema. See [Schema Hash](schema-hash)',
-  },
-  DeviceName: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'User-defined device name',
-  },
-  HWVersion: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Hardware version',
-  },
-  FWVersion: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Firmware version',
+    description: 'Library name',
   },
   LibVersion: {
     size: 'variable',
@@ -86,17 +21,17 @@ const elements = {
     span: 3,
     description: 'Library version (e.g., `"7.0.0"`)',
   },
-  LibName: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Library name',
+  CommandPayloadMax: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 5,
+    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised',
   },
   DeviceCount: {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: 'Number of device entries in the frame. In B7: `1`–`255`, the board plus its sub-devices',
+    description: 'Number of device entries in the frame: `1`–`255`, the board plus its sub-devices',
   },
   DeviceID: {
     size: '1 byte',
@@ -122,6 +57,24 @@ const elements = {
     span: 3,
     description: 'Bit 0 NotResponding (marked missing now); bit 1 Restarted (a restart not yet reported to a host). Bits 2–7 reserved, `0`',
   },
+  DeviceName: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'User-defined device name',
+  },
+  HWVersion: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Hardware version',
+  },
+  FWVersion: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Firmware version',
+  },
   DeviceOptionalFields: {
     label: 'OptionalFields',
     size: 'variable',
@@ -129,241 +82,76 @@ const elements = {
     span: 4,
     description: 'One null-terminated string per bit set in `DeviceFlags`, in bit order. None are defined yet',
   },
+  SignalCount: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Number of signals the device logs; that many `SignalName` and `DTYPE` pairs follow',
+  },
+  SignalName: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Signal name, unique within its device',
+  },
+  DTYPE: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 2,
+    description: 'Datatype code (`0x00`–`0x0B`). See [Datatypes](datatypes)',
+  },
   DeviceEvent: {
     size: '1 byte',
     type: 'uint8',
     span: 3,
     description: '`0x01` restarted, `0x02` not responding, `0x03` responding again. `0x00` and `0x04`–`0xFF` reserved',
   },
-  CommandPayloadMax: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 5,
-    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised. The same on every entry',
-  },
-  ChannelName: {
-    size: 'variable',
-    type: 'string',
+
+  // ----- Data (D3) -----
+  FrameFlags: {
+    size: '1 byte',
+    type: 'uint8',
     span: 3,
-    description: 'Channel name, unique per device',
+    description: 'Bit 0 = first frame after restart. Bit 1 = answers `BLAECK.WRITE_DATA`. Bit 2 = includes a host-interval report, also when mixed with change reports. Bits 1 and 2 never both set; explicit writes and change reports leave both clear. Bits 3-7 reserved, sent clear. Test the bits; do not compare the byte',
   },
-  // Both catalogs call this field ChannelFlags on the wire and share bits 0-1, but
-  // diverge from bit 2, so each frame documents its own.
-  StateChannelFlags: {
-    label: 'ChannelFlags',
+  SchemaHash: {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasStateValue, bit 3 = hasDeviceClass, bit 4 = disabledByDefault, bit 5 = forceUpdate, bit 6 = hasOptions, bit 7 = hasUnit, bits 8–10 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), bit 11 = hasDisplayPrecision. Bits 12–15 reserved',
+    description: 'CRC16-CCITT over the signal schema. See [Schema Hash](schema-hash)',
   },
-  EventChannelFlags: {
-    label: 'ChannelFlags',
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Bit 0 = hasIcon, bit 1 = isDiagnostic, bit 2 = hasDeviceClass, bit 3 = disabledByDefault. Bits 4–15 reserved',
-  },
-  // Three frames carry a comma-separated option list, and they are not the same thing. These two
-  // describe what a read-only value may be - they label a sensor, and a host sends nothing back.
-  // A0's list is the other kind: the choices a select command accepts. Keeping that straight is
-  // what decides whether a host builds a control or a display, so each says which it is.
-  SignalOptions: {
-    label: 'Options',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 10. Comma-separated closed set of values the signal reports. Read-only: it names what may arrive, not choices a host may send - the writable list is a command\'s `SelectOptions`',
-  },
-  SignalDisplayName: {
-    label: 'DisplayName',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 11. Label a host shows in place of the signal\'s name, for a name doing a second job - carrying a unit into a logged column, say - that reads poorly on screen. Presentation only: the name stays what the symbol list gives, what a stored column is called, and what any identity a host derives is built from',
-  },
-  StateOptions: {
-    label: 'Options',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 6. Comma-separated closed set of values the channel reports. Read-only, like a signal\'s `Options`. A channel a select command owns is given that command\'s list, so it can report an index as the option it names',
-  },
-  StateDeviceClass: {
-    label: 'DeviceClass',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 3. What the value is, for a host that renders it (`"timestamp"`, `"date"`, `"voltage"`)',
-  },
-  // Unit, state class and display precision are what make a host treat a channel as a number
-  // rather than as text, so they only mean anything on a channel whose ValueType is numeric.
-  StateUnit: {
-    label: 'Unit',
-    size: 'variable',
-    type: 'string',
-    span: 2,
-    description: 'Conditional: only if `ChannelFlags` bit 7',
-  },
-  StateDisplayPrecision: {
-    label: 'DisplayPrecision',
+  TimestampMode: {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: 'Conditional: only if `ChannelFlags` bit 11. Decimal places to display',
+    description: '`0` = none, `1` = micros, `2` = UNIX',
   },
-  EventDeviceClass: {
-    label: 'DeviceClass',
-    size: 'variable',
-    type: 'string',
+  Timestamp64: {
+    size: '8 bytes',
+    type: 'uint64',
     span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 2. What the channel reports (`"button"`, `"doorbell"`, `"motion"`)',
+    description: 'Conditional: only if TimestampMode > 0',
   },
-  Icon: {
-    size: 'variable',
-    type: 'string',
-    span: 2,
-    description: 'Conditional: only if `ChannelFlags` bit 0. Material Design Icons name (e.g. `"mdi:script-text"`)',
-  },
-  // A channel declares one datatype and reports it in both frames, so the catalog and the
-  // pushes cannot disagree about how the value is read.
-  StateValueType: {
-    label: 'ValueType',
-    size: '1 byte',
-    type: 'uint8',
+  SignalIndex: {
+    size: '2 bytes',
+    type: 'uint16',
     span: 3,
-    description: 'Datatype code (`0x00`–`0x0A`) of this channel\'s value. See [Datatypes](datatypes)',
+    description: 'Zero-based signal index, counted across all devices in [Device List](frames/devices) order',
   },
-  StateValue: {
-    size: 'variable',
-    type: 'raw bytes',
-    span: 3,
-    description: 'Conditional: only if `ChannelFlags` bit 2. The channel\'s value when the frame was built, size per `ValueType`. Fixed width except `0x0A`, which is NUL-terminated like every other string in this frame',
-  },
-  StateChannelValue: {
-    label: 'Value',
+  DATA: {
     size: 'variable',
     type: 'raw bytes',
     span: 2,
-    description: 'The channel\'s value, size per `ValueType`. Fixed width except `0x0A`, which is a 1-byte length followed by that many UTF-8 bytes - the same rule [DATA](datatypes) follows, so a value is read identically wherever it appears. Values longer than 255 bytes are truncated by the sender',
+    description: 'Signal value, size per [DTYPE](datatypes). Fixed width except DTYPE `0x0A`, which is length-prefixed',
   },
-  EventTypeCount: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 4,
-    description: 'Number of `EventType` entries that follow',
-  },
-  EventType: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Declared event type. Repeated `EventTypeCount` times; position defines its index. A declared channel lists at least one, and none of them is blank: an event names its type by position, so a channel with none can neither report nor be shown, and a blank one holds an index nothing can be reported under',
-  },
-  ChannelIndex: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Zero-based index of the channel in the catalog of the device named by `DeviceID`',
-  },
-  EventIndex: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Zero-based index into the channel\'s `EventType` list',
-  },
-  CommandName: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Command name as accepted in `<COMMAND,…>`',
-  },
-  CommandKind: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 3,
-    description: '`0` plain, `1` number, `2` switch, `3` select, `4` button, `5` text',
-  },
-  CommandFlags: {
+  CRC32: {
     size: '4 bytes',
     type: 'uint32',
-    span: 4,
-    description: 'Bit 0 = hasRange (a range was declared, not that the entry is a number), 1 = hasUnit, 2 = hasOptions, 3 = hasStateSignal, 4 = isText, 5–6 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 7 = hasStep, 8 = hasDisplayName, 9–10 = input mode, 11 = hasDeviceClass, 12 = hasIcon, 13 = hasPressPayload, 14 = disabledByDefault (create the control switched off; the command still runs). Optional fields follow in bit order. The input mode is read against `CommandKind`, which is what lets one pair of bits serve two kinds - no entry is ever both. On a number command it says how the value is most usefully entered (`0` auto, `1` box, `2` slider, `3` reserved); on a text command whether the field should be masked while it is typed (`0` plain, `1` password, `2`–`3` reserved). A hint about presentation only, and on a text command a hint about presentation alone: the value still travels the wire as the characters it is, so masking hides it from someone watching the screen and from nothing on the network. `0` is what a command that declares nothing carries, so an undeclared mode occupies no bits and leaves a host its own default rather than being handed one that says nothing. Meaningful only on a number or a text command; a device sets these bits to `0` on every other kind. Bits 15–31 reserved',
-  },
-  RangeMin: {
-    size: '4 bytes',
-    type: 'float32',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 0. Lowest value the command accepts, inclusive. Without bit 0 both limits are absent and any value is accepted; do not read them as `0`',
-  },
-  RangeMax: {
-    size: '4 bytes',
-    type: 'float32',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 0. Highest value the command accepts, inclusive. A command that sets the bit declares a `RangeMax` above its `RangeMin`: the bit says a range was declared, and a window admitting a single value or none is not one',
-  },
-  Unit: {
-    size: 'variable',
-    type: 'string',
     span: 2,
-    description: 'Conditional: only if `CommandFlags` bit 1',
+    description: 'Integrity checksum. See [CRC32](crc32)',
   },
-  SelectOptions: {
-    size: 'variable',
-    type: 'string',
-    span: 4,
-    description: 'Conditional: only if `CommandFlags` bit 2. Comma-separated set of options a select command accepts, in the order their indices follow. Writable, unlike the `Options` a signal or a state channel declares: a host builds the control from this list, and the device takes either an option name, matched exactly with case, or its index. A command that sets the bit lists at least one option and none of them is blank: every value is checked against the list, so an empty one accepts nothing and leaves a host with nothing to offer, and a blank one is a choice that shows nothing. Positions fix the indices values are carried as, so a blank option is refused at the source rather than dropped from the list',
-  },
-  StateSignal: {
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. Name of the signal or state channel reflecting this command\'s state; which of the two is given by `StateSource`. What the named source carries is read in the command\'s own vocabulary: a switch\'s state is `1` or `0`, the two values its handler accepts, and a select\'s is an option name rather than an index. A device reporting a switch some other way - `ON`, `true` - leaves a host matching against payloads it was never given, so the state is not read at all. A button carries no state: a press is not a value, and a host has nowhere to show one, so a device leaves bit 3 clear on a button entry',
-  },
-  StateSource: {
-    size: '1 byte',
-    type: 'uint8',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 3. What `StateSignal` names: `0` a signal, `1` a state channel',
-  },
-  TextMaxLen: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 4. Maximum accepted text length, in decoded bytes, with `0` meaning no limit. The field is a `uint16`, but a device should keep the value at `255` or below: Home Assistant caps any entity state at 255 characters and its MQTT text schema refuses a larger maximum outright, dropping the whole control rather than shortening it. A host bridging to one should leave the key out and say so rather than pass a larger value on',
-  },
-  RangeStep: {
-    size: '4 bytes',
-    type: 'float32',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 7. Display resolution: never rounded to and never validated, so a value falling between two steps is still accepted. Carried on its own bit rather than with the range because the two are independently optional - a range with no step is ordinary, and the bit is what distinguishes that from a declared step of 0. A device may set bit 7 without bit 0, so do not assume a range is present whenever a step is',
-  },
-  CommandDisplayName: {
-    label: 'DisplayName',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 8. Label a host shows in place of `CommandName`, for a command whose name is an identifier a host sends back rather than something worth reading. Presentation only: the name stays what `<COMMAND,…>` carries and what any identity a host derives is built from',
-  },
-  CommandDeviceClass: {
-    label: 'DeviceClass',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 11. What kind of thing the control acts on, drawn from the host\'s own vocabulary. The vocabulary differs by `CommandKind` and is narrower than a signal\'s: a number takes a measurable quantity, a switch takes only `outlet` or `switch`, and a button takes only `restart`, `identify` or `update`. Presentation for the most part - an icon, the wording of on and off - but for a number a host may also convert the value into the reader\'s own units. That conversion runs in both directions and never reaches the device: a control declared in Celsius is entered in Fahrenheit and arrives converted back, so `RangeMin`, `RangeMax` and every value on the wire stay in the unit the device declared. Declare `Unit` alongside a converting class, or a host converts from an assumption. A name the host does not know fails its check and costs that one entity, so a device declares nothing rather than guessing',
-  },
-  CommandPressPayload: {
-    label: 'Press payload',
-    size: 'variable',
-    type: 'string',
-    span: 4,
-    description: 'Conditional: only if `CommandFlags` bit 13. What a press of a button sends, in place of the empty payload a bare press carries. Arguments are comma separated, written as any command sent to the device is written, so a button labelled "Activate all DUTs" can stand for a call with `1,40` already filled in and the handler reads the parameters as it would from any other sender. Meaningful only on a button; a device leaves the bit clear on every other kind, where the value a host sends is the payload and a fixed one would overwrite it. Unvalidated: a button is the one kind whose parameters have no declared signature to check against, so a payload with the wrong separator or too few arguments reaches the handler as written',
-  },
-  CommandIcon: {
-    label: 'Icon',
-    size: 'variable',
-    type: 'string',
-    span: 3,
-    description: 'Conditional: only if `CommandFlags` bit 12. Material Design Icons name, such as `mdi:tune`, shown beside the control. Accepted on every `CommandKind`, unlike `CommandDeviceClass`, and purely a picture: it says nothing about what the control accepts or reports. Where a device class fits it is the better declaration, since a host derives an icon from it along with the wording and units that go with it',
-  },
+
+  // ----- Command Ack (A5) -----
   CmdHash: {
     size: '4 bytes',
     type: 'uint32',
@@ -388,38 +176,165 @@ const elements = {
     span: 3,
     description: 'Reason code. See [Ack Reasons](ack-reasons)',
   },
-  SignalMetaFlags: {
-    size: '2 bytes',
-    type: 'uint16',
-    span: 4,
-    description: 'Bit 0 = hasUnit, 1 = hasDeviceClass, 2 = hasIcon, 3–5 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 6 = isDiagnostic, 7 = disabledByDefault, 8 = forceUpdate, 9 = hasDisplayPrecision, 10 = hasOptions, 11 = hasDisplayName. Bits 12–15 reserved. Optional fields follow in bit order',
+
+  // ----- Entity List (90) -----
+  EntryKind: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: '`0` property, `1` event, `2` button. `3`–`255` reserved',
   },
-  SignalUnit: {
-    label: 'Unit',
+  EntryFields: {
+    size: 'variable',
+    type: 'raw bytes',
+    span: 4,
+    description: 'The fields of the entry\'s kind. See [Entities](frames/entities)',
+  },
+  PropertyName: {
+    label: 'Name',
     size: 'variable',
     type: 'string',
     span: 2,
-    description: 'Conditional: only if `SignalMetaFlags` bit 0',
+    description: 'Property name, as a host sends it in `<Name,value>`. Unique on the board among properties, buttons and plain commands',
   },
-  SignalDeviceClass: {
-    label: 'DeviceClass',
+  ValueKind: {
+    size: '1 byte',
+    type: 'uint8',
+    span: 3,
+    description: '`0` number, `1` bool, `2` enum, `3` text. `4`–`255` reserved. With the access, it is what the sketch declared: a READ number is a sensor, a READWRITE one a number input, a READ bool an on/off indicator, a READWRITE one a switch, a READ enum an enum sensor, a READWRITE one a select, a READ text a text sensor, a READWRITE one a text input',
+  },
+  PropertyFlags: {
+    label: 'Flags',
+    size: '4 bytes',
+    type: 'uint32',
+    span: 3,
+    description: 'Bits 0–1 = access: `01` READ, `11` READWRITE; `10` (write only) and `00` reserved. Bit 2 = hasRange, 3 = hasStep, 4 = hasUnit, 5 = hasDisplayName, 6 = hasIcon, 7 = hasDeviceClass, 8–10 = state class (`0` none, `1` measurement, `2` total, `3` total\\_increasing, `4` measurement\\_angle), 11 = hasDisplayPrecision, 12–13 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 14 = disabledByDefault, 15 = forceUpdate, 16–17 = input mode (number: `0` auto, `1` box, `2` slider; text: `0` plain, `1` password; `3` reserved). Bits 18–31 reserved, sent clear',
+  },
+  Value: {
+    size: 'variable',
+    type: 'raw bytes',
+    span: 2,
+    description: 'The property\'s value, size per `DTYPE`. Fixed width except `0x0A`, which is a 1-byte length followed by that many UTF-8 bytes, as in [DATA](datatypes). An enum\'s value is its index',
+  },
+  Options: {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Conditional: only if `SignalMetaFlags` bit 1',
+    description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank. An input accepts an index or an option name, matched exactly with case',
   },
-  SignalIcon: {
-    label: 'Icon',
+  TextMaxLen: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Text only, always present. Longest value, in bytes. Keep it at `255` or below: Home Assistant caps any entity state at 255 characters',
+  },
+  RangeMin: {
+    size: '4 bytes',
+    type: 'float32',
+    span: 3,
+    description: 'Conditional: only if `Flags` bit 2. Lowest value an input accepts, inclusive. Without bit 2 both limits are absent; do not read them as `0`',
+  },
+  RangeMax: {
+    size: '4 bytes',
+    type: 'float32',
+    span: 3,
+    description: 'Conditional: only if `Flags` bit 2. Highest value an input accepts, inclusive, and above `RangeMin`',
+  },
+  RangeStep: {
+    size: '4 bytes',
+    type: 'float32',
+    span: 3,
+    description: 'Conditional: only if `Flags` bit 3. The step a number input stores on, counted from `RangeMin`. A value within a thousandth of a step of one is snapped to it; a value further off is kept as sent',
+  },
+  Unit: {
     size: 'variable',
     type: 'string',
     span: 2,
-    description: 'Conditional: only if `SignalMetaFlags` bit 2. Material Design Icons name (e.g. `"mdi:sine-wave"`)',
+    description: 'Conditional: only if `Flags` bit 4',
+  },
+  DisplayName: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if the entry\'s display-name bit is set. Label a host shows in place of the name. Presentation only: the name stays what a host sends and what any identity it derives is built from',
+  },
+  Icon: {
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Conditional: only if the entry\'s icon bit is set. Material Design Icons name (e.g. `"mdi:tune"`)',
+  },
+  DeviceClass: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Conditional: only if the entry\'s device-class bit is set. What the value, event or button is, in the host\'s vocabulary (`"temperature"`, `"door"`, `"restart"`). A name the host does not know costs that one entity, so a device declares nothing rather than guessing',
   },
   DisplayPrecision: {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: 'Conditional: only if `SignalMetaFlags` bit 9. Decimal places to display',
+    description: 'Conditional: only if `Flags` bit 11. Decimal places to display',
+  },
+  EventName: {
+    label: 'Name',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Event name, unique among the events of its device',
+  },
+  EventFlags: {
+    label: 'Flags',
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Bit 0 = hasIcon, 1 = isDiagnostic, 2 = hasDeviceClass, 3 = disabledByDefault. Bits 4–15 reserved',
+  },
+  EventTypeCount: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 4,
+    description: 'Number of `EventType` entries that follow; at least one',
+  },
+  EventType: {
+    size: 'variable',
+    type: 'string',
+    span: 3,
+    description: 'Declared event type, not blank. Position defines its index',
+  },
+  ButtonName: {
+    label: 'Name',
+    size: 'variable',
+    type: 'string',
+    span: 2,
+    description: 'Button name, as a host sends it in `<Name>`. Unique on the board among properties, buttons and plain commands',
+  },
+  ButtonFlags: {
+    label: 'Flags',
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Bit 0 = hasDisplayName, 1 = hasIcon, 2 = hasDeviceClass, 3–4 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 5 = disabledByDefault. Bits 6–15 reserved',
+  },
+
+  // ----- Property (95) and Event (85) -----
+  PropertyIndex: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Zero-based position of the property among the properties of the [Entity List](frames/entities)',
+  },
+  EventIndex: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Zero-based position of the event among the events of the [Entity List](frames/entities)',
+  },
+  EventTypeIndex: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Zero-based index into the event\'s `EventType` list',
   },
 };
 
@@ -453,17 +368,18 @@ function rowWidth(spans, maxRow) {
 /**
  * Generate a Mermaid packet-beta diagram from a frame's elements.
  */
-function generateMermaid(frameElements, repeat, maxRow = MAX_ROW, elementMap = elements) {
+function generateMermaid(frameElements, repeat, maxRow = MAX_ROW, elementMap = elements, repeatNested = []) {
   const known = frameElements.filter((key) => elementMap[key]);
   const bitsPerRow = rowWidth(known.map((key) => elementMap[key].span), maxRow);
   const header = `---\nconfig:\n  packet:\n    showBits: false\n    bitsPerRow: ${bitsPerRow}\n---\npacket-beta`;
   const repeatSet = new Set(repeat || []);
+  const nestedSet = new Set(repeatNested || []);
   let pos = 0;
   const lines = [];
   known.forEach((key) => {
     const el = elementMap[key];
     const raw = el.label || key;
-    const label = repeatSet.has(key) ? `[${raw}]` : raw;
+    const label = nestedSet.has(key) ? `[[${raw}]]` : repeatSet.has(key) ? `[${raw}]` : raw;
     const start = pos;
     const end = pos + el.span - 1;
     pos += el.span;

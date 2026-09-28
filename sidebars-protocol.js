@@ -10,13 +10,16 @@ const sidebars = {
       label: 'Frames',
       link: { type: 'generated-index', description: 'All frame types by category.' },
       items: [
-        'frames/signals',
-        'frames/devices',
-        'frames/data',
-        'frames/control',
-        'frames/states',
-        'frames/events',
-        'frames/commands',
+        {
+          type: 'category',
+          label: 'Logging',
+          items: ['frames/devices', 'frames/data', 'frames/control', 'frames/commands'],
+        },
+        {
+          type: 'category',
+          label: 'IoT',
+          items: ['frames/entities', 'frames/properties', 'frames/events'],
+        },
       ],
     },
     'catalogs',

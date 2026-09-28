@@ -7,19 +7,22 @@
  *   - src/components/FrameTable.js
  *
  * Mermaid diagrams are generated from the elements by generateMermaid() in elements.js,
- * which also picks the row width.
+ * which also picks the row width. `repeat` marks what repeats once, `repeatNested` what
+ * repeats inside it.
  */
 
 const frames = {
-  E0: {
-    key: 'E0',
-    hex: '0xE0',
-    category: 'signals',
-    name: 'Symbol List',
-    description: 'Signal schema: names and types, each with its DeviceID.',
-    page: '/blaeck-protocol/protocol/frames/signals',
-    anchor: 'e0--symbol-list-0xe0',
-    elements: ['DeviceID', 'SymbolName', 'DTYPE'],
+  B7: {
+    key: 'B7',
+    hex: '0xB7',
+    category: 'devices',
+    name: 'Device List',
+    description: 'The board and its sub-devices: library, command length, then per device its ID, parent, flags, state, names and signals.',
+    page: '/blaeck-protocol/protocol/frames/devices',
+    anchor: 'b7--device-list-0xb7',
+    elements: ['LibName', 'LibVersion', 'CommandPayloadMax', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount', 'SignalName', 'DTYPE'],
+    repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount'],
+    repeatNested: ['SignalName', 'DTYPE'],
   },
 
   D3: {
@@ -30,20 +33,8 @@ const frames = {
     description: 'Signal values with SchemaHash, 8-byte Timestamp, and CRC32.',
     page: '/blaeck-protocol/protocol/frames/data',
     anchor: 'd3--data-0xd3',
-    elements: ['FrameFlags', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SymbolID', 'DATA', 'CRC32'],
-    repeat: ['SymbolID', 'DATA'],
-  },
-
-  B7: {
-    key: 'B7',
-    hex: '0xB7',
-    category: 'devices',
-    name: 'Device List',
-    description: 'The board and its sub-devices: library, then per device its ID, parent, flags, state and names.',
-    page: '/blaeck-protocol/protocol/frames/devices',
-    anchor: 'b7--device-list-0xb7',
-    elements: ['LibName', 'LibVersion', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
-    repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields'],
+    elements: ['FrameFlags', 'SchemaHash', 'TimestampMode', 'Timestamp64', 'SignalIndex', 'DATA', 'CRC32'],
+    repeat: ['SignalIndex', 'DATA'],
   },
 
   C1: {
@@ -57,63 +48,6 @@ const frames = {
     elements: ['DeviceID', 'DeviceEvent'],
   },
 
-  '80': {
-    key: '80',
-    hex: '0x80',
-    category: 'events',
-    name: 'Event Channel List',
-    description: 'Event channel catalog: name, flags, optional icon, and the closed list of event types each channel may emit.',
-    page: '/blaeck-protocol/protocol/frames/events',
-    anchor: '80--event-channel-list-0x80',
-    elements: ['DeviceID', 'ChannelName', 'EventChannelFlags', 'Icon', 'EventDeviceClass', 'EventTypeCount', 'EventType'],
-    repeat: ['EventType'],
-  },
-
-  '85': {
-    key: '85',
-    hex: '0x85',
-    category: 'events',
-    name: 'Event',
-    description: 'A single occurrence on an event channel, identified by its index in the declared event type list.',
-    page: '/blaeck-protocol/protocol/frames/events',
-    anchor: '85--event-0x85',
-    elements: ['DeviceID', 'ChannelIndex', 'EventIndex'],
-  },
-
-  '90': {
-    key: '90',
-    hex: '0x90',
-    category: 'state',
-    name: 'State Channel List',
-    description: 'State channel catalog: name, flags, datatype, optional icon, optional current value, and optional numeric metadata.',
-    page: '/blaeck-protocol/protocol/frames/states',
-    anchor: '90--state-channel-list-0x90',
-    elements: ['DeviceID', 'ChannelName', 'StateChannelFlags', 'StateValueType', 'Icon', 'StateValue', 'StateDeviceClass', 'StateOptions', 'StateUnit', 'StateDisplayPrecision'],
-  },
-
-  '95': {
-    key: '95',
-    hex: '0x95',
-    category: 'state',
-    name: 'State',
-    description: 'Current value of a declared state channel, typed. Pushed when it changes; not telemetry and not stored.',
-    page: '/blaeck-protocol/protocol/frames/states',
-    anchor: '95--state-0x95',
-    elements: ['DeviceID', 'ChannelIndex', 'StateValueType', 'StateChannelValue'],
-  },
-
-  A0: {
-    key: 'A0',
-    hex: '0xA0',
-    category: 'commands',
-    name: 'Command List',
-    description: 'Command catalog: every command the device accepts, with kind, flags, how long a command the device can receive, and optional metadata.',
-    page: '/blaeck-protocol/protocol/frames/commands',
-    anchor: 'a0--command-list-0xa0',
-    elements: ['DeviceID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
-    repeat: ['DeviceID', 'CommandPayloadMax', 'CommandName', 'CommandKind', 'CommandFlags', 'RangeMin', 'RangeMax', 'Unit', 'SelectOptions', 'StateSignal', 'StateSource', 'TextMaxLen', 'RangeStep', 'CommandDisplayName', 'CommandDeviceClass', 'CommandIcon', 'CommandPressPayload'],
-  },
-
   A5: {
     key: 'A5',
     hex: '0xA5',
@@ -125,17 +59,65 @@ const frames = {
     elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason'],
   },
 
-  F0: {
-    key: 'F0',
-    hex: '0xF0',
-    category: 'signals',
-    name: 'Signal Config',
-    description: 'Presentation metadata for signals that declare any: unit, device class, icon, state class, display precision, and the label to show in place of the name.',
-    page: '/blaeck-protocol/protocol/frames/signals',
-    anchor: 'f0--signal-config-0xf0',
-    elements: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
-    repeat: ['SymbolID', 'SignalMetaFlags', 'SignalUnit', 'SignalDeviceClass', 'SignalIcon', 'DisplayPrecision', 'SignalOptions', 'SignalDisplayName'],
+  '90': {
+    key: '90',
+    hex: '0x90',
+    category: 'entities',
+    name: 'Entity List',
+    description: 'What a host shows and controls: properties, events and buttons, each entry with its DeviceID and kind.',
+    page: '/blaeck-protocol/protocol/frames/entities',
+    anchor: '90--entity-list-0x90',
+    elements: ['DeviceID', 'EntryKind', 'EntryFields'],
+    repeat: ['DeviceID', 'EntryKind', 'EntryFields'],
+  },
+
+  '95': {
+    key: '95',
+    hex: '0x95',
+    category: 'properties',
+    name: 'Property',
+    description: 'Current value of a property, written when it changes and after a host sets it. Not logged.',
+    page: '/blaeck-protocol/protocol/frames/properties',
+    anchor: '95--property-0x95',
+    elements: ['PropertyIndex', 'DTYPE', 'Value'],
+  },
+
+  '85': {
+    key: '85',
+    hex: '0x85',
+    category: 'events',
+    name: 'Event',
+    description: 'One occurrence of an event, identified by its index among the events and the index of its type.',
+    page: '/blaeck-protocol/protocol/frames/events',
+    anchor: '85--event-0x85',
+    elements: ['EventIndex', 'EventTypeIndex'],
   },
 };
 
-module.exports = { frames };
+/**
+ * The entry kinds of the 90 Entity List. Not frames: each is what follows DeviceID and
+ * EntryKind in one entry.
+ */
+const entries = {
+  property: {
+    kind: 0,
+    name: 'Property entry',
+    description: 'A value a host shows (a sensor) or shows and sets (an input). Kind-bound fields follow the value; optional fields follow in flag-bit order.',
+    elements: ['PropertyName', 'ValueKind', 'PropertyFlags', 'DTYPE', 'Value', 'Options', 'TextMaxLen', 'RangeMin', 'RangeMax', 'RangeStep', 'Unit', 'DisplayName', 'Icon', 'DeviceClass', 'DisplayPrecision'],
+  },
+  event: {
+    kind: 1,
+    name: 'Event entry',
+    description: 'A moment the device reports, with the closed list of its types.',
+    elements: ['EventName', 'EventFlags', 'Icon', 'DeviceClass', 'EventTypeCount', 'EventType'],
+    repeat: ['EventType'],
+  },
+  button: {
+    kind: 2,
+    name: 'Button entry',
+    description: 'A moment a host triggers by sending the button\'s name.',
+    elements: ['ButtonName', 'ButtonFlags', 'DisplayName', 'Icon', 'DeviceClass'],
+  },
+};
+
+module.exports = { frames, entries };

@@ -38,7 +38,7 @@ export default function FrameTable({ keys, showDiagrams = false }) {
               {f.key} — {f.name} (<code>{f.hex}</code>)
             </h3>
             <p>{f.description}</p>
-            <PacketDiagram elements={f.elements} repeat={f.repeat} />
+            <PacketDiagram elements={f.elements} repeat={f.repeat} repeatNested={f.repeatNested} />
           </div>
         ))}
     </>
