@@ -16,9 +16,45 @@ Parameters are comma-separated tokens. An empty field between commas preserves i
 <MYCMD,10,,20>   → Param0="10", Param1="", Param2="20"
 ```
 
+## Names
+
+A name a host sends (an input, a sensor, a button or a plain command) uses ASCII letters, digits,
+`_`, `-` and `.` only. It may not start with `BLAECK.`, which is reserved for the built-ins. A
+label with spaces or other characters belongs in the entry's display name.
+
+## Encoding
+
+Any parameter may be percent-encoded: a byte written as `%` and two hex digits. The device decodes
+every parameter before it uses it. A host must encode `,` `<` `>` `%`, bytes below `0x20` and bytes
+from `0x80` up; anything else it may send as it is. A `%` not followed by two hex digits is kept as
+it is.
+
+```
+<Label,hello%2C world>   → Param0="hello, world"
+<Label,Gr%C3%BC%C3%9Fe>  → Param0="Grüße"
+```
+
+Lengths are counted in two ways: a text input's `TextMaxLen` counts the bytes after decoding, and
+the device's `CommandPayloadMax` counts the characters as sent.
+
+## Numbers
+
+A number is written as in JSON ([RFC 8259, section 6](https://www.rfc-editor.org/rfc/rfc8259#section-6)),
+with an optional leading `+`: an optional sign, digits without leading zeros, an optional fraction
+and an optional exponent. No spaces, no hex, no `NaN` or `Infinity`.
+
+```
+21.5   -3   +3   0.25   1e3   2.5E-2       numbers
+.5   5.   007   0x1A   " 3"   nan          not numbers
+```
+
+A number input bound to an integer type accepts a whole value in any of these forms, so `1e3` and
+`12.0` are accepted. An input bound to a 64-bit integer accepts only a sign and digits.
+
 ## Message Id
 
-A command may start with `#<id>:`. A command name may not begin with `#`.
+A command may start with one `#<id>:`. A command name may not begin with `#`, so a second prefix
+makes the command unknown.
 
 ```
 <Amplitude,0.9>          no message id
@@ -42,9 +78,11 @@ an id, same-named commands in flight together cannot be told apart.
 
 ## Acknowledgement
 
-Every command produces exactly one acknowledgement, `BLAECK.*` included. A command that also has an
+The host gets exactly one acknowledgement for each command it sends, built-ins included. There are
+two exceptions: commands received while writes are paused are carried out without an
+acknowledgement, and commands from a terminal are never acknowledged. A command that also has an
 answer sends the acknowledgement first, then the response frame. A name the device does not have is
-answered `UNKNOWN_COMMAND`.
+answered `UNKNOWN`.
 
 `CmdHash` covers the command as written — the payload after any [message id](#message-id)
 — so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
@@ -125,18 +163,22 @@ target on the board, sub-devices included; names compare case-sensitively.
 |---|---|---|---|
 | Input (READWRITE property) | [Entity List](frames/entities) | `<Name,value>` | the value fits the property, see below |
 | Sensor (READ property) | [Entity List](frames/entities) | — | never: `READ_ONLY` |
-| Button | [Entity List](frames/entities) | `<Name>` | always |
+| Button | [Entity List](frames/entities) | `<Name>` | always; parameters, if any, are ignored |
 | Plain command | nowhere | `<Name,Param0,…>` | always; the device's handler reads the parameters |
+
+A device may also have a catch-all handler, which sees every command, built-ins and refused ones
+included. When no target has the name, the catch-all may take the command, which is then
+accepted; otherwise it is answered `UNKNOWN`.
 
 A value for an input is checked against its entry before it is stored, so an invalid one is
 refused and changes nothing:
 
 | Value kind | Accepts |
 |---|---|
-| number | a decimal within `RangeMin`–`RangeMax`, if declared; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
+| number | a [number](#numbers) within `RangeMin`–`RangeMax`, if declared, and within what its variable holds; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
 | bool | `0` or `1` |
 | enum | an index into `Options`, or an option name matched exactly with case |
-| text | up to `TextMaxLen` bytes; `<Name,>` clears it |
+| text | up to `TextMaxLen` bytes after decoding; `<Name,>` clears it |
 
 An accepted value is acknowledged, then written as a [Property](frames/properties) frame. See
 [Ack Reasons](ack-reasons) for what a refusal says.

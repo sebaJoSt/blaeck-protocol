@@ -25,25 +25,32 @@ The DTYPE code in the [Device List](frames/devices) identifies each signal's dat
 
 DTYPE 11 is signed and 8 bytes on every platform. `unsigned long long` has no DTYPE.
 
-blaecktcpy uses the same mapping as 32-bit platforms.
+blaeckpy maps Python's types to `bool` DTYPE 0, `int` DTYPE 11, `float` DTYPE 9 and `str` DTYPE 10.
 
-## Strings (DTYPE 10)
+## Bool (DTYPE 0)
 
-DTYPE 10 is the only variable-width type. In [data frames](frames/data) its value is a 1-byte
-length followed by that many UTF-8 bytes, **not** null-terminated:
+One byte: `0` false, `1` true.
+
+## Text (DTYPE 10)
+
+DTYPE 10 is the only variable-width type. Its value is a 1-byte length followed by that many UTF-8
+bytes, **not** null-terminated, in [data frames](frames/data), the
+[Entity List](frames/entities) and [Property](frames/properties) frames alike:
 
 ```
 LEN(1B) BYTES(LEN)
 ```
 
-An empty string is a single `0x00` length byte with no bytes after it. Values longer than 255 bytes
-are truncated to 255 by the sender, so `LEN` needs no escaping.
+An empty text is a single `0x00` length byte with no bytes after it. A text is at most 255 bytes.
+Like every byte of a frame, the length byte is [escaped](escaping) when it needs to be: a text of
+10 bytes has the length `0x0A`, which is sent as `5C 2A`.
 
 Because the width is not implied by the type, a decoder cannot compute signal offsets from the
 [Device List](frames/devices) alone: it must read each value in order and consume `LEN` before
 advancing. The length byte is inside the [CRC32](crc32) scope, like the bytes it prefixes.
 
-The protocol automatically handles platform differences in data type sizes:
+The library chooses the DTYPE that matches the variable's size on the board, so an `int` is
+DTYPE 4 on AVR and DTYPE 6 on 32-bit boards:
 
 **AVR** (Arduino Uno, Nano, Mega, etc.):
 - `int` and `unsigned int` are 2 bytes

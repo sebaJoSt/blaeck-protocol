@@ -25,7 +25,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 5,
-    description: 'Longest command the device can receive, in characters between the delimiters and excluding the terminator. `0` = not advertised',
+    description: 'Longest command the device can receive: the characters between `<` and `>` as sent, the `#id:` prefix and percent-encoding included. `0` = not advertised',
   },
   DeviceCount: {
     size: '1 byte',
@@ -61,7 +61,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'User-defined device name',
+    description: 'Device name. Not empty, no control characters, and unique on the board: no two devices, the board included, share a name',
   },
   HWVersion: {
     size: 'variable',
@@ -92,7 +92,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Signal name, unique within its device',
+    description: 'Signal name. Not empty, unique among the signals of its device, no control characters',
   },
   DTYPE: {
     size: '1 byte',
@@ -118,13 +118,13 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'CRC16-CCITT over the signal schema. See [Schema Hash](schema-hash)',
+    description: 'CRC-16/XMODEM over the signal list of the [Device List](frames/devices). See [Schema Hash](schema-hash)',
   },
   TimestampMode: {
     size: '1 byte',
     type: 'uint8',
     span: 4,
-    description: '`0` = none, `1` = micros, `2` = UNIX',
+    description: '`0` = none. `1` = micros: microseconds since the device started; it never wraps and never goes back, except at a restart, where it begins again near `0` and `FrameFlags` bit 0 is set. `2` = UNIX: microseconds since 1970-01-01 00:00:00 UTC, without leap seconds, as the device\'s clock tells it; it may jump when that clock is set',
   },
   Timestamp64: {
     size: '8 bytes',
@@ -148,7 +148,7 @@ const elements = {
     size: '4 bytes',
     type: 'uint32',
     span: 2,
-    description: 'Integrity checksum. See [CRC32](crc32)',
+    description: 'Integrity checksum over the unescaped bytes from the message key to the last field. Every frame ends with it. See [CRC32](crc32)',
   },
 
   // ----- Command Ack (A5) -----
@@ -182,7 +182,13 @@ const elements = {
     size: '1 byte',
     type: 'uint8',
     span: 3,
-    description: '`0` property, `1` event, `2` button. `3`–`255` reserved',
+    description: '`0` property, `1` event, `2` button. `3`–`255` reserved: a host skips an entry of a kind it does not know',
+  },
+  EntryLength: {
+    size: '2 bytes',
+    type: 'uint16',
+    span: 3,
+    description: 'Number of bytes that follow in this entry, from its name to its last field, before escaping. `DeviceID`, `EntryKind` and `EntryLength` are not counted. The next entry starts right after them',
   },
   EntryFields: {
     size: 'variable',
@@ -195,7 +201,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 2,
-    description: 'Property name, as a host sends it in `<Name,value>`. Unique on the board among properties, buttons and plain commands',
+    description: 'Property name, as a host sends it in `<Name,value>`. ASCII letters, digits, `_`, `-` and `.` only. Unique on the board among properties, buttons and plain commands',
   },
   ValueKind: {
     size: '1 byte',
@@ -214,7 +220,7 @@ const elements = {
     size: 'variable',
     type: 'raw bytes',
     span: 2,
-    description: 'The property\'s value, size per `DTYPE`. Fixed width except `0x0A`, which is a 1-byte length followed by that many UTF-8 bytes, as in [DATA](datatypes). An enum\'s value is its index',
+    description: 'The property\'s value, size per `DTYPE`. Fixed width except `0x0A`, which is a 1-byte length followed by that many UTF-8 bytes, at most 255, as in [DATA](datatypes). An enum\'s value is its index',
   },
   Options: {
     size: 'variable',
@@ -223,26 +229,26 @@ const elements = {
     description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank. An input accepts an index or an option name, matched exactly with case',
   },
   TextMaxLen: {
-    size: '2 bytes',
-    type: 'uint16',
+    size: '1 byte',
+    type: 'uint8',
     span: 3,
-    description: 'Text only, always present. Longest value, in bytes. Keep it at `255` or below: Home Assistant caps any entity state at 255 characters',
+    description: 'Text only, always present. Longest value, in bytes after percent-decoding: `0`–`255`',
   },
   RangeMin: {
-    size: '4 bytes',
-    type: 'float32',
+    size: '8 bytes',
+    type: 'float64',
     span: 3,
     description: 'Conditional: only if `Flags` bit 2. Lowest value an input accepts, inclusive. Without bit 2 both limits are absent; do not read them as `0`',
   },
   RangeMax: {
-    size: '4 bytes',
-    type: 'float32',
+    size: '8 bytes',
+    type: 'float64',
     span: 3,
     description: 'Conditional: only if `Flags` bit 2. Highest value an input accepts, inclusive, and above `RangeMin`',
   },
   RangeStep: {
-    size: '4 bytes',
-    type: 'float32',
+    size: '8 bytes',
+    type: 'float64',
     span: 3,
     description: 'Conditional: only if `Flags` bit 3. The step a number input stores on, counted from `RangeMin`. A value within a thousandth of a step of one is snapped to it; a value further off is kept as sent',
   },
@@ -281,14 +287,14 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 2,
-    description: 'Event name, unique among the events of its device',
+    description: 'Event name. Not empty, unique among the events of its device, no control characters',
   },
   EventFlags: {
     label: 'Flags',
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Bit 0 = hasIcon, 1 = isDiagnostic, 2 = hasDeviceClass, 3 = disabledByDefault. Bits 4–15 reserved',
+    description: 'Bit 0 = hasDisplayName, 1 = hasIcon, 2 = hasDeviceClass, 3–4 = entity category (`0` none, `1` config, `2` diagnostic, `3` reserved), 5 = disabledByDefault. Bits 6–15 reserved',
   },
   EventTypeCount: {
     size: '2 bytes',
@@ -307,7 +313,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 2,
-    description: 'Button name, as a host sends it in `<Name>`. Unique on the board among properties, buttons and plain commands',
+    description: 'Button name, as a host sends it in `<Name>`. ASCII letters, digits, `_`, `-` and `.` only. Unique on the board among properties, buttons and plain commands',
   },
   ButtonFlags: {
     label: 'Flags',

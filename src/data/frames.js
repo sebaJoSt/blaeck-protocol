@@ -20,7 +20,7 @@ const frames = {
     description: 'The board and its sub-devices: library, command length, then per device its ID, parent, flags, state, names and signals.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b7--device-list-0xb7',
-    elements: ['LibName', 'LibVersion', 'CommandPayloadMax', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount', 'SignalName', 'DTYPE'],
+    elements: ['LibName', 'LibVersion', 'CommandPayloadMax', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount', 'SignalName', 'DTYPE', 'CRC32'],
     repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount'],
     repeatNested: ['SignalName', 'DTYPE'],
   },
@@ -45,7 +45,7 @@ const frames = {
     description: 'A device restarted, stopped responding, or responds again.',
     page: '/blaeck-protocol/protocol/frames/control',
     anchor: 'c1--device-notification-0xc1',
-    elements: ['DeviceID', 'DeviceEvent'],
+    elements: ['DeviceID', 'DeviceEvent', 'CRC32'],
   },
 
   A5: {
@@ -56,7 +56,7 @@ const frames = {
     description: 'Outcome of a dispatched command. The header MessageID echoes the message id the command carried in its # prefix, or 0 when it carried none; the hashes then say whether the bytes arrived as written.',
     page: '/blaeck-protocol/protocol/frames/commands',
     anchor: 'a5--command-ack-0xa5',
-    elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason'],
+    elements: ['CmdHash', 'CmdNameHash', 'AckStatus', 'AckReason', 'CRC32'],
   },
 
   '90': {
@@ -64,11 +64,11 @@ const frames = {
     hex: '0x90',
     category: 'entities',
     name: 'Entity List',
-    description: 'What a host shows and controls: properties, events and buttons, each entry with its DeviceID and kind.',
+    description: 'What a host shows and controls: properties, events and buttons, each entry with its DeviceID, kind and length.',
     page: '/blaeck-protocol/protocol/frames/entities',
     anchor: '90--entity-list-0x90',
-    elements: ['DeviceID', 'EntryKind', 'EntryFields'],
-    repeat: ['DeviceID', 'EntryKind', 'EntryFields'],
+    elements: ['DeviceID', 'EntryKind', 'EntryLength', 'EntryFields', 'CRC32'],
+    repeat: ['DeviceID', 'EntryKind', 'EntryLength', 'EntryFields'],
   },
 
   '95': {
@@ -79,7 +79,7 @@ const frames = {
     description: 'Current value of a property, written when it changes and after a host sets it. Not logged.',
     page: '/blaeck-protocol/protocol/frames/properties',
     anchor: '95--property-0x95',
-    elements: ['PropertyIndex', 'DTYPE', 'Value'],
+    elements: ['PropertyIndex', 'DTYPE', 'Value', 'CRC32'],
   },
 
   '85': {
@@ -90,13 +90,13 @@ const frames = {
     description: 'One occurrence of an event, identified by its index among the events and the index of its type.',
     page: '/blaeck-protocol/protocol/frames/events',
     anchor: '85--event-0x85',
-    elements: ['EventIndex', 'EventTypeIndex'],
+    elements: ['EventIndex', 'EventTypeIndex', 'CRC32'],
   },
 };
 
 /**
- * The entry kinds of the 90 Entity List. Not frames: each is what follows DeviceID and
- * EntryKind in one entry.
+ * The entry kinds of the 90 Entity List. Not frames: each is what follows DeviceID,
+ * EntryKind and EntryLength in one entry.
  */
 const entries = {
   property: {
@@ -109,7 +109,7 @@ const entries = {
     kind: 1,
     name: 'Event entry',
     description: 'A moment the device reports, with the closed list of its types.',
-    elements: ['EventName', 'EventFlags', 'Icon', 'DeviceClass', 'EventTypeCount', 'EventType'],
+    elements: ['EventName', 'EventFlags', 'DisplayName', 'Icon', 'DeviceClass', 'EventTypeCount', 'EventType'],
     repeat: ['EventType'],
   },
   button: {

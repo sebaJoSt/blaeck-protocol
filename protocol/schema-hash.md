@@ -4,37 +4,45 @@ sidebar_position: 8
 
 # Schema Hash
 
-The **SchemaHash** is a 2-byte field in data frames that allows receivers to detect signal schema changes without requiring a full [Device List](frames/devices) retransmission.
-
-## Purpose
-
-When a device's signal schema changes (signals added, removed, renamed, or retyped), the SchemaHash changes. The receiver can compare the incoming hash against a stored value and request a fresh Device List only when they differ. This avoids unnecessary Device List requests on every data frame.
+The **SchemaHash** is a 2-byte field in [data frames](frames/data). It identifies the signal list a
+data frame was written with, and equals the hash of the [Device List](frames/devices) the device
+sends. A different hash means the device's signals have changed since that list.
 
 ## Algorithm
 
 | Property | Value |
 |----------|-------|
-| Algorithm | CRC16-CCITT |
-| Size | 2 bytes |
-| Type | uint16 |
+| Algorithm | CRC-16/XMODEM |
+| Polynomial | `0x1021` |
+| Initial value | `0x0000` |
+| Reflect input/output | `false` |
+| XOR out | `0x0000` |
+| Size, byte order | 2 bytes, little-endian |
+| Check (`"123456789"`) | `0x31C3` |
 
-The hash is computed over the **signal names and datatype codes** that make up the schema.
+## What is hashed
 
-A sub-device's signal is hashed as `<sub-device name>/<signal name>`.
+The signals in Device List order: the board's first, then each sub-device's. For each signal, the
+bytes the Device List sends for it, preceded by its sub-device's name for a sub-device:
 
-## Position in Frame
+| Signal of | Bytes hashed |
+|-----------|--------------|
+| the board | `SignalName`, `0x00`, `DTYPE` |
+| a sub-device | `DeviceName`, `0x00`, `SignalName`, `0x00`, `DTYPE` |
+
+A device without signals has the hash `0x0000`.
+
+### Example
+
+The board logs `Temperature` (`float`, DTYPE `0x08`) and its sub-device `Zone A` logs `Flow`
+(`unsigned long`, DTYPE `0x07`). The hash is taken over:
 
 ```
-FrameFlags(1B) SchemaHash(2B) TimestampMode(1B) ...
+54 65 6D 70 65 72 61 74 75 72 65 00 08          Temperature, 0x00, DTYPE
+5A 6F 6E 65 20 41 00 46 6C 6F 77 00 07          Zone A, 0x00, Flow, 0x00, DTYPE
 ```
 
-## Usage Pattern
-
-1. On first connection, the receiver requests the Device List and stores the schema along with the SchemaHash from subsequent data frames.
-2. On each data frame, the receiver compares the SchemaHash against the stored value.
-3. If the hash differs, the receiver requests a new Device List to update its signal definitions.
-
-
+The SchemaHash is `0xE658`, sent as `58 E6`.
 
 ## See Also
 

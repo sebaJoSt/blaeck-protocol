@@ -8,16 +8,16 @@ The **Blaeck protocol** is a lightweight binary protocol for streaming typed sig
 
 ## Protocol at a Glance
 
-Every Blaeck message is wrapped in a fixed envelope:
+Every frame has the same envelope:
 
 ```
-<blaeck: MSGKEY(1B) : MSGID(4B) : FRAME /> LF
+<blaeck: KEY(1B) : MSGID(4B) : FRAME CRC32(4B) /> LF
 ```
 
-- **Message Key** identifies the frame (e.g., `0xD3` for data with 8-byte timestamps).
-- **Message ID** is a user-defined uint32.
-- **Frame** carries the key-specific payload.
+- **KEY** says which frame follows, and so how to read it.
+- **MSGID** is the message id of the command this frame answers, or `0` if no command asked for it.
+- **CRC32** covers everything from KEY to the end of FRAME, before escaping.
 
-All multi-byte integers throughout the protocol are **little-endian**.
+All multi-byte numbers are little-endian.
 
 See [Frames](category/frames) for all frame definitions.
