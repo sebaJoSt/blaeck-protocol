@@ -78,9 +78,8 @@ an id, same-named commands in flight together cannot be told apart.
 
 ## Acknowledgement
 
-The host gets exactly one acknowledgement for each command it sends, built-ins included. There are
-two exceptions: commands received while writes are paused are carried out without an
-acknowledgement, and commands from a terminal are never acknowledged. A command that also has an
+The host gets exactly one acknowledgement for each command it sends, built-ins included. There is
+one exception: commands from a terminal are never acknowledged. A command that also has an
 answer sends the acknowledgement first, then the response frame. A name the device does not have is
 answered `UNKNOWN`.
 
@@ -114,42 +113,46 @@ cannot be told apart:
 | `BLAECK.GET_DEVICES` | — | Request the board, its sub-devices and their signals | [Device List](frames/devices) |
 | `BLAECK.WRITE_ENTITIES` | — | Request the properties, events and buttons | [Entity List](frames/entities) |
 | `BLAECK.WRITE_DATA` | — | Request single data frame | [Data frame](frames/data) |
-| `BLAECK.ACTIVATE` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
-| `BLAECK.DEACTIVATE` | — | Stop timed data streaming | n/a |
-| `BLAECK.PAUSE_WRITES` | <small>Duration or `FOREVER`</small> | Send no frames for a period | n/a |
-| `BLAECK.RESUME_WRITES` | — | End a pause early | n/a |
+| `BLAECK.DATA_START` | — | Send data frames on its own again, and every on-change value anew | n/a |
+| `BLAECK.DATA_STOP` | — | Stop the interval, then send no data frames on its own | n/a |
+| `BLAECK.ENTITIES_START` | — | Send property values and events on its own | n/a |
+| `BLAECK.ENTITIES_STOP` | — | Send no property values or events on its own | n/a |
+| `BLAECK.INTERVAL_START` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
+| `BLAECK.INTERVAL_STOP` | — | Stop timed data streaming | n/a |
 
-`ACTIVATE` takes one parameter: the interval in milliseconds, as a plain decimal.
-
-```
-<BLAECK.ACTIVATE,1000>     one second
-```
-
-## Pausing Writes
-
-`PAUSE_WRITES` stops every frame leaving the device — data, properties, events, catalogs and
-acknowledgements alike — for a duration in milliseconds.
+`INTERVAL_START` takes one parameter: the interval in milliseconds, as a plain decimal.
 
 ```
-<BLAECK.PAUSE_WRITES,1000>        one second of silence
-<BLAECK.PAUSE_WRITES>             the device's default duration
-<BLAECK.PAUSE_WRITES,FOREVER>     until resumed or reset
-<BLAECK.RESUME_WRITES>            end it now
+<BLAECK.INTERVAL_START,1000>     one second
 ```
 
-Without a duration, or with `0`, the device uses its own default. Each device also has a
-maximum, and a longer duration is shortened to it, so a timed pause always ends on its own.
-Use `FOREVER` if you want the pause unlimited.
+## Data, Entities and Interval
 
-`DEACTIVATE` stops timed streaming only. A device that writes frames on its own schedule keeps
-writing through it, and `PAUSE_WRITES` is what stops that.
+A host controls what a device sends on its own in two parts: data frames, and property values and
+events (entities). The interval is the timed data among the data frames.
 
-The pause takes effect after the device has read the command, and frames already in flight still
-arrive. A host that pauses in order to close the connection safely must wait for the link to fall
-silent rather than close on the command alone.
+```
+<BLAECK.ENTITIES_START>           send property values and events on your own
+<BLAECK.DATA_START>               send data on your own; every on-change value is sent again
+<BLAECK.INTERVAL_START,1000>      plus timed data every second
+<BLAECK.INTERVAL_STOP>            no more timed data; on-change data continues
+<BLAECK.DATA_STOP>                stop the interval, then no data on your own
+<BLAECK.ENTITIES_STOP>            no property values or events on your own
+```
 
-The acknowledgement of `PAUSE_WRITES` is sent before the pause begins. Commands received during a
-pause are executed but not acknowledged.
+After a restart a device sends both, without an interval. `DATA_START` also makes every signal
+that reports on change send its current value, changed or not, so a host that starts logging
+learns all of them.
+
+While data is stopped, the device sends no data frames on its own. While entities are stopped, it
+sends no property values or events on its own; changed property values wait for `ENTITIES_START`,
+events are lost. Device notices and catalog updates are not affected. Answers to commands always go
+out: every acknowledgement, the device and entity lists, the data frame for `WRITE_DATA`, the new
+value of a property the host sets, and whatever the device sends while carrying out a command.
+
+A stop takes effect after the device has read the command, and frames already in flight still
+arrive. A host that sends `DATA_STOP` and `ENTITIES_STOP` in order to close the connection safely
+must wait for the link to fall silent rather than close on the commands alone.
 
 No built-in takes a message id as a parameter; the `#` prefix carries it, as for any command. The
 `BLAECK.` prefix is reserved for built-ins.
