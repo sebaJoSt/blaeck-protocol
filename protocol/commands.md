@@ -83,6 +83,12 @@ one exception: commands from a terminal are never acknowledged. A command that a
 answer sends the acknowledgement first, then the response frame. A name the device does not have is
 answered `UNKNOWN`.
 
+A device does not read commands while it writes. What arrives in the meantime waits in its input
+buffer, which may hold as little as 64 bytes, and anything beyond that is lost. A long frame, such
+as the entity list after a restart, keeps it writing for tens of milliseconds. A host should
+therefore send the next command only after the previous one is acknowledged, or after a timeout if
+none comes, and keep each command under 64 bytes.
+
 `CmdHash` covers the command as written — the payload after any [message id](#message-id)
 — so it matches only when those are the bytes the sender wrote. `CmdNameHash` covers the name
 alone, which sits before the first comma and so survives a frame the device could not take in full.
@@ -140,9 +146,10 @@ events (entities). The interval is the timed data among the data frames.
 <BLAECK.ENTITIES_STOP>            no property values or events on your own
 ```
 
-After a restart a device sends both, without an interval. `DATA_START` also makes every signal
-that reports on change send its current value, changed or not, so a host that starts logging
-learns all of them.
+After a restart a device sends neither, and has no interval: a device nobody listens to stays
+quiet. The restart notice and the entity list after it still go out. `DATA_START` also makes every
+signal that reports on change send its current value, changed or not, so a host that starts
+logging learns all of them.
 
 While data is stopped, the device sends no data frames on its own. While entities are stopped, it
 sends no property values or events on its own; changed property values wait for `ENTITIES_START`,
