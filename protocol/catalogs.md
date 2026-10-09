@@ -18,10 +18,10 @@ frame says otherwise.
 
 ## The device list
 
-**Sent on request**, with `BLAECK.GET_DEVICES`, and **when the firmware replaces its signals while
-running**. A device never sends it on its own otherwise; a restart or a sub-device going missing is
-reported by the [Device Notification](frames/control), and a host that wants the list again asks
-for it.
+**Sent on request only**, with `BLAECK.GET_DEVICES`. A device never sends it on its own: a restart
+or a sub-device going missing is reported by the [Device Notification](frames/control), a changed
+signal list shows in the [SchemaHash](schema-hash) of the next data frame, and a host that wants
+the list again asks for it.
 
 Its signals are what data frames carry, numbered by their position in this list. A data frame's
 [SchemaHash](schema-hash) says which signal list it was written with, so a host can tell when the
