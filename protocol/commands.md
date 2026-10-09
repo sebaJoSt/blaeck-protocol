@@ -121,7 +121,7 @@ cannot be told apart:
 | `BLAECK.WRITE_DATA` | — | Request single data frame | [Data frame](frames/data) |
 | `BLAECK.DATA_START` | — | Send data frames on its own again, and every on-change value anew | n/a |
 | `BLAECK.DATA_STOP` | — | Stop the interval, then send no data frames on its own | n/a |
-| `BLAECK.ENTITIES_START` | — | Send property values and events on its own | n/a |
+| `BLAECK.ENTITIES_START` | — | Send property values and events on its own, and every property value anew | n/a |
 | `BLAECK.ENTITIES_STOP` | — | Send no property values or events on its own | n/a |
 | `BLAECK.INTERVAL_START` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.INTERVAL_STOP` | — | Stop timed data streaming | n/a |
@@ -149,11 +149,12 @@ events (entities). The interval is the timed data among the data frames.
 After a restart a device sends neither, and has no interval: a device nobody listens to stays
 quiet. The restart notice and the entity list after it still go out. `DATA_START` also makes every
 signal that reports on change send its current value, changed or not, so a host that starts
-logging learns all of them.
+logging learns all of them. `ENTITIES_START` does the same for every property, so a host that starts
+a bridge learns all their values.
 
 While data is stopped, the device sends no data frames on its own. While entities are stopped, it
-sends no property values or events on its own; changed property values wait for `ENTITIES_START`,
-events are lost. Device notices and catalog updates are not affected. Answers to commands always go
+sends no property values or events on its own; `ENTITIES_START` then sends every property value,
+and events raised meanwhile are lost. Device notices and catalog updates are not affected. Answers to commands always go
 out: every acknowledgement, the device and entity lists, the data frame for `WRITE_DATA`, the new
 value of a property the host sets, and whatever the device sends while carrying out a command.
 
