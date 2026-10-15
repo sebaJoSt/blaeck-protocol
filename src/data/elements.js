@@ -232,7 +232,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank, none with leading or trailing spaces. An input accepts an index or an option name, matched exactly with case',
+    description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank, none with leading or trailing spaces. Each option is percent-encoded (%2C a comma, %25 a percent sign; %00 is not an escape): a host splits on the commas, then decodes, then drops outer spaces. An input accepts an index or a decoded option name, matched exactly with case',
   },
   TextMaxLen: {
     size: '1 byte',
@@ -312,7 +312,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Declared event type, not blank, no leading or trailing spaces. Position defines its index',
+    description: 'Declared event type, plain text (not percent-encoded), not blank, no leading or trailing spaces. Position defines its index',
   },
   ButtonName: {
     label: 'Name',
