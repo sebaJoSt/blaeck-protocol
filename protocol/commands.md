@@ -29,9 +29,13 @@ every parameter before it uses it. A host must encode `,` `<` `>` `%`, bytes bel
 from `0x80` up; anything else it may send as it is. A `%` not followed by two hex digits is kept as
 it is.
 
+After decoding, the device drops spaces, tabs, CR and LF at the start and end of each parameter,
+encoded or not. Inner ones stay. A value can't start or end with a space.
+
 ```
 <Label,hello%2C world>   → Param0="hello, world"
 <Label,Gr%C3%BC%C3%9Fe>  → Param0="Grüße"
+<Label, Hallway %20>     → Param0="Hallway"
 ```
 
 Lengths are counted in two ways: a text input's `TextMaxLen` counts the bytes after decoding, and
@@ -41,11 +45,12 @@ the device's `CommandPayloadMax` counts the characters as sent.
 
 A number is written as in JSON ([RFC 8259, section 6](https://www.rfc-editor.org/rfc/rfc8259#section-6)),
 with an optional leading `+`: an optional sign, digits without leading zeros, an optional fraction
-and an optional exponent. No spaces, no hex, no `NaN` or `Infinity`.
+and an optional exponent. No spaces inside, no hex, no `NaN` or `Infinity`. Spaces around it are
+dropped first, as for every parameter.
 
 ```
 21.5   -3   +3   0.25   1e3   2.5E-2       numbers
-.5   5.   007   0x1A   " 3"   nan          not numbers
+.5   5.   007   0x1A   "3 000"   nan       not numbers
 ```
 
 A number input bound to an integer type accepts a whole value in any of these forms, so `1e3` and
@@ -188,7 +193,7 @@ refused and changes nothing:
 |---|---|
 | number | a [number](#numbers) within `RangeMin`–`RangeMax`, if declared, and within what its variable holds; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
 | bool | `0` or `1` |
-| enum | an index into `Options`, or an option name matched with case; spaces around it are ignored |
+| enum | an index into `Options`, or an option name matched exactly with case |
 | text | up to `TextMaxLen` bytes after decoding; `<Name,>` clears it |
 
 An accepted value is acknowledged, then written as a [Property](frames/properties) frame. See

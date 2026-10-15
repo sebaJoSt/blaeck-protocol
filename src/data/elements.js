@@ -232,7 +232,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank, none with leading or trailing spaces. An input accepts an index or an option name, matched with case; spaces around the name are ignored',
+    description: 'Enum only, always present. Comma-separated options in index order; at least one, none blank, none with leading or trailing spaces. An input accepts an index or an option name, matched exactly with case',
   },
   TextMaxLen: {
     size: '1 byte',
