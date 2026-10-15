@@ -188,7 +188,7 @@ refused and changes nothing:
 |---|---|
 | number | a [number](#numbers) within `RangeMin`–`RangeMax`, if declared, and within what its variable holds; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
 | bool | `0` or `1` |
-| enum | an index into `Options`, or an option name matched exactly with case |
+| enum | an index into `Options`, or an option name matched with case; spaces around it are ignored |
 | text | up to `TextMaxLen` bytes after decoding; `<Name,>` clears it |
 
 An accepted value is acknowledged, then written as a [Property](frames/properties) frame. See
