@@ -20,9 +20,9 @@ const frames = {
     description: 'The board and its sub-devices: library, command length, then per device its ID, parent, flags, state, names and signals.',
     page: '/blaeck-protocol/protocol/frames/devices',
     anchor: 'b7--device-list-0xb7',
-    elements: ['LibName', 'LibVersion', 'CommandPayloadMax', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount', 'SignalName', 'DTYPE', 'CRC32'],
+    elements: ['LibName', 'LibVersion', 'CommandPayloadMax', 'DeviceCount', 'DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields',     'SignalCount', 'SignalName', 'SignalUnit', 'DTYPE', 'CRC32'],
     repeat: ['DeviceID', 'ParentID', 'DeviceFlags', 'DeviceState', 'DeviceName', 'HWVersion', 'FWVersion', 'DeviceOptionalFields', 'SignalCount'],
-    repeatNested: ['SignalName', 'DTYPE'],
+        repeatNested: ['SignalName', 'SignalUnit', 'DTYPE'],
   },
 
   D3: {

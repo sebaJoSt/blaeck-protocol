@@ -86,7 +86,7 @@ const elements = {
     size: '2 bytes',
     type: 'uint16',
     span: 3,
-    description: 'Number of signals the device logs; that many `SignalName` and `DTYPE` pairs follow',
+    description: 'Number of signals the device logs;     that many `SignalName`, `SignalUnit` and `DTYPE` groups follow',
   },
   SignalName: {
     size: 'variable',
@@ -94,6 +94,12 @@ const elements = {
     span: 3,
     description: 'Signal name. Not empty, unique among the signals of its device, no control characters',
   },
+      SignalUnit: {
+        size: 'variable',
+        type: 'string',
+        span: 3,
+        description: 'Unit of the signal\'s values, such as `V`, `mA` or `°C`. Empty for none. No control characters. Use the spelling Home Assistant uses, so a host can convert between units',
+      },
   DTYPE: {
     size: '1 byte',
     type: 'uint8',
