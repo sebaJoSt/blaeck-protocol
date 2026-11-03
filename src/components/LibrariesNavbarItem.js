@@ -4,6 +4,7 @@ import useProtocol, { libraries } from '@site/src/components/useProtocol';
 
 const entries = [
   { id: 'blaeck', label: 'blaeck', activeBaseRegex: '/blaeck/' },
+  { id: 'blaeckpy', label: 'blaeckpy', activeBaseRegex: '/blaeckpy/' },
   { id: 'blaecktcpy', label: 'blaecktcpy', activeBaseRegex: '/blaecktcpy/' },
   { id: 'blaeckserial', label: 'BlaeckSerial', activeBaseRegex: '/blaeckserial/' },
   { id: 'blaecktcp', label: 'BlaeckTCP', activeBaseRegex: '/blaecktcp/' },

@@ -97,6 +97,19 @@ const config = {
         },
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'blaeckpy',
+        path: 'blaeckpy',
+        routeBasePath: 'blaeckpy',
+        sidebarPath: './sidebars-blaeckpy.js',
+        lastVersion: 'current',
+        versions: {
+          current: { label: '1.0.0', path: '' },
+        },
+      },
+    ],
     // BlaeckSerial and BlaeckTCP end at 6.0.0; version 7 is the unified blaeck library.
     [
       '@docusaurus/plugin-content-docs',
@@ -165,6 +178,12 @@ const config = {
             docsPluginId: 'blaeck',
             position: 'left',
             className: 'version-blaeck',
+          },
+          {
+            type: 'docsVersionDropdown',
+            docsPluginId: 'blaeckpy',
+            position: 'left',
+            className: 'version-blaeckpy',
           },
           {
             type: 'docsVersionDropdown',

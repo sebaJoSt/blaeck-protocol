@@ -13,6 +13,7 @@ const protocols = {
 // The protocol each library speaks. blaecktcpy moves to 2 with its next release.
 export const libraries = {
   blaeck: '2',
+  blaeckpy: '2',
   blaeckserial: '1',
   blaecktcp: '1',
   blaecktcpy: '1',

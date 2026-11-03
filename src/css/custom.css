@@ -101,6 +101,8 @@
 /* With a single version, the dropdown renders as a plain link carrying the class itself. */
 .navbar__item.version-blaeck,
 .navbar__item:has(.version-blaeck),
+.navbar__item.version-blaeckpy,
+.navbar__item:has(.version-blaeckpy),
 .navbar__item:has(.version-blaeckserial),
 .navbar__item:has(.version-blaecktcp),
 .navbar__item:has(.version-blaecktcpy) {
@@ -111,6 +113,8 @@
 @media (min-width: 997px) {
   html.plugin-id-blaeck .navbar__item.version-blaeck,
   html.plugin-id-blaeck .navbar__item:has(.version-blaeck),
+  html.plugin-id-blaeckpy .navbar__item.version-blaeckpy,
+  html.plugin-id-blaeckpy .navbar__item:has(.version-blaeckpy),
   html.plugin-id-blaeckserial .navbar__item:has(.version-blaeckserial),
   html.plugin-id-blaecktcp .navbar__item:has(.version-blaecktcp),
   html.plugin-id-blaecktcpy .navbar__item:has(.version-blaecktcpy) {
