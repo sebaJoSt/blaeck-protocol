@@ -19,7 +19,7 @@ const elements = {
     size: 'variable',
     type: 'string',
     span: 3,
-    description: 'Library version (e.g., `"7.0.0"`)',
+    description: 'Library version (e.g., `"1.0.0"`)',
   },
   CommandPayloadMax: {
     size: '2 bytes',
