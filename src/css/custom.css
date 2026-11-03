@@ -158,6 +158,7 @@
 /* A library with a single version gets a link instead of a version dropdown, and Docusaurus
    marks it active on its own page. It reads as the version, like the dropdowns, not as a
    highlighted link. */
-.navbar__link.version-blaeck.navbar__link--active {
+.navbar__link.version-blaeck.navbar__link--active,
+.navbar__link.version-blaeckpy.navbar__link--active {
   color: var(--ifm-navbar-link-color);
 }
