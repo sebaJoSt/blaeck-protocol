@@ -27,7 +27,7 @@ label with spaces or other characters belongs in the entry's display name.
 Any parameter may be percent-encoded: a byte written as `%` and two hex digits. The device decodes
 every parameter before it uses it. A host must encode `,` `<` `>` `%`, bytes below `0x20` and bytes
 from `0x80` up; anything else it may send as it is. A `%` not followed by two hex digits is kept as
-it is.
+it is, and so is `%00`: a parameter holds no null byte.
 
 After decoding, the device drops spaces, tabs, CR and LF at the start and end of each parameter,
 encoded or not. Inner ones stay. A value can't start or end with a space.
@@ -54,7 +54,8 @@ dropped first, as for every parameter.
 ```
 
 A number input bound to an integer type accepts a whole value in any of these forms, so `1e3` and
-`12.0` are accepted. An input bound to a 64-bit integer accepts only a sign and digits.
+`12.0` are accepted. An input bound to a 64-bit integer accepts only a sign and digits, and so does
+one bound to a 32-bit integer on a board whose `double` has 32 bits, as on AVR.
 
 ## Message Id
 
