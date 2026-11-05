@@ -195,7 +195,7 @@ refused and changes nothing:
 
 | Value kind | Accepts |
 |---|---|
-| number | a [number](#numbers) within `RangeMin`–`RangeMax`, if declared, and within what its variable holds; for an integer type, no fraction. Stored on its `RangeStep`, if declared |
+| number | a [number](#numbers) within `RangeMin`–`RangeMax`, if declared, and within what its variable holds; for an integer type, no fraction. If it declares a `RangeStep`, a value within a thousandth of a step of one is stored on it; a value further off is kept as sent |
 | bool | `0` or `1` |
 | enum | an index into `Options`, or an option name matched exactly with case |
 | text | up to `TextMaxLen` bytes after decoding; `<Name,>` clears it |
