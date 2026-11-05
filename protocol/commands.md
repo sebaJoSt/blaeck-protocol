@@ -131,7 +131,10 @@ cannot be told apart:
 | `BLAECK.INTERVAL_START` | <small>Interval</small> | Start timed data streaming | [Data frame](frames/data) (in intervals) |
 | `BLAECK.INTERVAL_STOP` | — | Stop timed data streaming | n/a |
 
-`INTERVAL_START` takes one parameter: the interval in milliseconds, as a plain decimal.
+`INTERVAL_START` takes one parameter: the interval in milliseconds, as plain digits, up to
+4294967295. Anything else is refused and changes nothing, so an interval already running goes on:
+no value gets `MISSING_VALUE`, anything but digits `NOT_A_NUMBER`, and a larger number
+`OUT_OF_RANGE`.
 
 ```
 <BLAECK.INTERVAL_START,1000>     one second

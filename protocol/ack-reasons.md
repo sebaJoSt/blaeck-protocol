@@ -21,8 +21,9 @@ The [AckReason](elements) byte in an [A5](frames/commands) frame explains the [A
 | `10` | READ_ONLY | rejected | The name is a sensor, which a host cannot set. |
 | `11` | NOT_A_NUMBER | rejected | A number input received a value that is not a [number](commands#numbers). |
 
-Codes `2`–`6`, `9` and `11` are only produced for inputs, since validation is driven by their
-entries in the [Entity List](frames/entities).
+Codes `2`–`6`, `9` and `11` are produced for inputs, since validation is driven by their
+entries in the [Entity List](frames/entities). `BLAECK.INTERVAL_START` also uses `2`, `6` and `11`
+for [its interval](commands).
 
 Code `7` applies to every command, plain included: it reports that what the device parsed is
 not what was sent, so no handler runs.
