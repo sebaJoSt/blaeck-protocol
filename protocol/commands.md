@@ -184,7 +184,8 @@ target on the board, sub-devices included; names compare case-sensitively.
 
 A device may also have a catch-all handler, which sees every command, built-ins and refused ones
 included. When no target has the name, the catch-all may take the command, which is then
-accepted; otherwise it is answered `UNKNOWN`.
+accepted; otherwise it is answered `UNKNOWN`. A command with no name, such as `<>` or `<#7:>`,
+reaches neither and is answered `UNKNOWN` with `CmdNameHash` 0.
 
 A value for an input is checked against its entry before it is stored, so an invalid one is
 refused and changes nothing:
